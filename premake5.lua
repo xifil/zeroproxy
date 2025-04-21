@@ -316,7 +316,7 @@ workspace "ZeroProxy"
 		}
 
 		prebuildcommands {
-			"cd ../../ && premake5 generate-buildinfo"
+			"cd ../../ && ./tools/premake/premake5.exe generate-buildinfo"
 		}
 
 		dependencies.imports()
