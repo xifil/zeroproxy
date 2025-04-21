@@ -7,6 +7,8 @@ namespace component_loader {
 
 	void register_component(registration_functor functor, component_type type);
 
+	bool should_load();
+
 	bool activate(bool server);
 	bool post_load();
 	void post_unpack();

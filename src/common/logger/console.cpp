@@ -1,10 +1,14 @@
 ﻿#include "common_core.hpp"
 #include "logger/console.hpp"
 
+#include "identification/client.hpp"
+#include "identification/game.hpp"
 #include "utils/nt.hpp"
 
+#include <version.hpp>
+
 namespace logger {
-	void console::init(const std::string& title) {
+	void console::init() {
 		if (utils::nt::registry_key console_reg = utils::nt::open_or_create_registry_key(HKEY_CURRENT_USER, "Console")) {
 			DWORD target_val = 1;
 			RegSetValueExA(console_reg, "VirtualTerminalLevel", 0, REG_DWORD, PTR_AS(BYTE*, &target_val), sizeof(DWORD));
@@ -13,7 +17,7 @@ namespace logger {
 		AllocConsole();
 		freopen_s(PTR_AS(FILE**, stdout), "CONOUT$", "w", stdout);
 		freopen_s(PTR_AS(FILE**, stdin), "CONIN$", "r", stdin);
-		SetConsoleTitleA(title.data());
+		SetConsoleTitleA(identification::client::get_client_name());
 		SetConsoleOutputCP(CP_UTF8);
 	}
 
@@ -21,6 +25,17 @@ namespace logger {
 		fclose(stdin);
 		fclose(stdout);
 		FreeConsole();
+	}
+
+	void console::set_full_title() {
+		auto client_name = identification::client::get_client_name();
+		auto version = identification::game::get_version();
+		if (identification::game::is_game(identification::game::get_target_game())) {
+			SetConsoleTitleA(std::format("{}: " GIT_DESCRIBE " - {}", client_name, version.get_full_display_name()).c_str());
+		}
+		else {
+			SetConsoleTitleA(std::format("{}: " GIT_DESCRIBE " - unknown-{:08X}", client_name, version.checksum_).c_str());
+		}
 	}
 	
 	HANDLE console::get_output_handle() {

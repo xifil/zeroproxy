@@ -1,5 +1,8 @@
 ﻿#include "common_core.hpp"
 #include "loader/component_loader.hpp"
+
+#include "identification/client.hpp"
+#include "identification/game.hpp"
 #include "utils/nt.hpp"
 
 namespace component_loader {
@@ -40,6 +43,25 @@ namespace component_loader {
 		}
 
 		get_registration_functors().emplace_back(std::move(functor), type);
+	}
+
+	bool should_load() {
+		auto target_game = identification::game::get_target_game();
+		if (identification::game::is_game(target_game)) {
+			return true;
+		}
+
+		auto client_name = identification::client::get_client_name();
+		auto version = identification::game::get_version();
+		if (version.version_ == "0.0.0.0") {
+			return MessageBoxA(nullptr, "This client has been launched on an unknown game/game version. Try to load anyway?", client_name, MB_YESNO) == IDYES;
+		}
+
+		std::string message = std::format("You are trying to launch {} for {} on {}. Please delete {} download the correct client for {}.",
+			client_name, target_game, version.game_, client_name, version.game_);
+
+		MessageBoxA(nullptr, message.c_str(), client_name, MB_OK);
+		return false;
 	}
 
 	bool activate(bool server) {

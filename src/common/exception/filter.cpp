@@ -1,5 +1,6 @@
 ﻿#include "common_core.hpp"
 #include "exception/filter.hpp"
+#include "identification/client.hpp"
 #include "utils/nt.hpp"
 
 namespace exception {
@@ -26,75 +27,37 @@ namespace exception {
 	long WINAPI filter(EXCEPTION_POINTERS* inf) {
 		ensure_dbg_help();
 
-		const char* exception_code_name;
-		switch (inf->ExceptionRecord->ExceptionCode) {
-		case EXCEPTION_ACCESS_VIOLATION:
-			exception_code_name = "Access violation";
-			break;
-		case EXCEPTION_ARRAY_BOUNDS_EXCEEDED:
-			exception_code_name = "Array bounds exceeded";
-			break;
-		case EXCEPTION_BREAKPOINT:
-			exception_code_name = "Breakpoint";
-			break;
-		case EXCEPTION_DATATYPE_MISALIGNMENT:
-			exception_code_name = "Data type misalignment";
-			break;
-		case EXCEPTION_FLT_DENORMAL_OPERAND:
-			exception_code_name = "Float denormal operand";
-			break;
-		case EXCEPTION_FLT_DIVIDE_BY_ZERO:
-			exception_code_name = "Float / 0";
-			break;
-		case EXCEPTION_FLT_INEXACT_RESULT:
-			exception_code_name = "Float inexact result";
-			break;
-		case EXCEPTION_FLT_INVALID_OPERATION:
-			exception_code_name = "Float invalid operation";
-			break;
-		case EXCEPTION_FLT_OVERFLOW:
-			exception_code_name = "Float overflow";
-			break;
-		case EXCEPTION_FLT_STACK_CHECK:
-			exception_code_name = "Float stack check";
-			break;
-		case EXCEPTION_FLT_UNDERFLOW:
-			exception_code_name = "Float underflow";
-			break;
-		case EXCEPTION_ILLEGAL_INSTRUCTION:
-			exception_code_name = "Illegal instruction";
-			break;
-		case EXCEPTION_IN_PAGE_ERROR:
-			exception_code_name = "In-page error";
-			break;
-		case EXCEPTION_INT_DIVIDE_BY_ZERO:
-			exception_code_name = "Int / 0";
-			break;
-		case EXCEPTION_INT_OVERFLOW:
-			exception_code_name = "Integer overflow";
-			break;
-		case EXCEPTION_INVALID_DISPOSITION:
-			exception_code_name = "Invalid disposition";
-			break;
-		case EXCEPTION_NONCONTINUABLE_EXCEPTION:
-			exception_code_name = "Non-continuable exception";
-			break;
-		case EXCEPTION_PRIV_INSTRUCTION:
-			exception_code_name = "Private instruction";
-			break;
-		case EXCEPTION_SINGLE_STEP:
-			exception_code_name = "Single step";
-			break;
-		case EXCEPTION_STACK_OVERFLOW:
-			exception_code_name = "Stack overflow";
-			break;
-		default:
-			exception_code_name = "<unknown>";
-			break;
+		const char* exception_code_name = "<unknown>";
+		static std::map<DWORD, std::string> exception_names{
+			{ EXCEPTION_ACCESS_VIOLATION, "Access violation" },
+			{ EXCEPTION_ARRAY_BOUNDS_EXCEEDED, "Array bounds exceeded" },
+			{ EXCEPTION_BREAKPOINT, "Breakpoint" },
+			{ EXCEPTION_DATATYPE_MISALIGNMENT, "Data type misalignment" },
+			{ EXCEPTION_FLT_DENORMAL_OPERAND, "Float denormal operand" },
+			{ EXCEPTION_FLT_DIVIDE_BY_ZERO, "Float / 0" },
+			{ EXCEPTION_FLT_INEXACT_RESULT, "Float inexact result" },
+			{ EXCEPTION_FLT_INVALID_OPERATION, "Float invalid operation" },
+			{ EXCEPTION_FLT_OVERFLOW, "Float overflow" },
+			{ EXCEPTION_FLT_STACK_CHECK, "Float stack check" },
+			{ EXCEPTION_FLT_UNDERFLOW, "Float underflow" },
+			{ EXCEPTION_ILLEGAL_INSTRUCTION, "Illegal instruction" },
+			{ EXCEPTION_IN_PAGE_ERROR, "In-page error" },
+			{ EXCEPTION_INT_DIVIDE_BY_ZERO, "Int / 0" },
+			{ EXCEPTION_INT_OVERFLOW, "Integer overflow" },
+			{ EXCEPTION_INVALID_DISPOSITION, "Invalid disposition" },
+			{ EXCEPTION_NONCONTINUABLE_EXCEPTION, "Non-continuable exception" },
+			{ EXCEPTION_PRIV_INSTRUCTION, "Private instruction" },
+			{ EXCEPTION_SINGLE_STEP, "Single step" },
+			{ EXCEPTION_STACK_OVERFLOW, "Stack overflow" }
+		};
+		if (exception_names.contains(inf->ExceptionRecord->ExceptionCode)) {
+			exception_code_name = exception_names[inf->ExceptionRecord->ExceptionCode].c_str();
 		}
 
 		utils::nt::library game{};
 		utils::nt::library client = utils::nt::library(client_module);
+
+		std::string title = std::format("{} exception handler", identification::client::get_client_name());
 
 		std::string message = "Unhandled exception caught. Instead of giving you absolutely nothing:\n";
 		message += std::format("{} region: 0x" FMT_PTR " -> 0x" FMT_PTR "\n", game.get_name(),
@@ -209,7 +172,7 @@ namespace exception {
 			message += std::format("SegSs: 0x{:04X}\n", inf->ContextRecord->SegSs);
 #		endif
 
-		MessageBoxA(nullptr, message.c_str(), "iw8-mod exception handler", MB_OK);
+		MessageBoxA(nullptr, message.c_str(), title.c_str(), MB_OK);
 		return EXCEPTION_EXECUTE_HANDLER;
 	}
 }

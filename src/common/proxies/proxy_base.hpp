@@ -23,4 +23,6 @@ namespace proxy {
 		const auto lib = utils::nt::library::load(dir + "/"s + lib_name);
 		return lib.get_proc<T>(export_name.c_str());
 	}
+
+	void on_dll_process_attach(HMODULE h_mod, bool server);
 }

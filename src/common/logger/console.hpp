@@ -2,8 +2,10 @@
 #include "common_core.hpp"
 
 namespace logger::console {
-	void init(const std::string& title);
+	void init();
 	void destroy();
+
+	void set_full_title();
 
 	HANDLE get_output_handle();
 	DWORD get_console_mode();
