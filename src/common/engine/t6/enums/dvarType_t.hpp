@@ -1,0 +1,20 @@
+#pragma once
+
+namespace t6 {
+	enum class dvarType_t : int {
+		DVAR_TYPE_INVALID = 0x0,
+		DVAR_TYPE_BOOL = 0x1,
+		DVAR_TYPE_FLOAT = 0x2,
+		DVAR_TYPE_FLOAT_2 = 0x3,
+		DVAR_TYPE_FLOAT_3 = 0x4,
+		DVAR_TYPE_FLOAT_4 = 0x5,
+		DVAR_TYPE_INT = 0x6,
+		DVAR_TYPE_ENUM = 0x7,
+		DVAR_TYPE_STRING = 0x8,
+		DVAR_TYPE_COLOR = 0x9,
+		DVAR_TYPE_INT64 = 0xA,
+		DVAR_TYPE_LINEAR_COLOR_RGB = 0xB,
+		DVAR_TYPE_COLOR_XYZ = 0xC,
+		DVAR_TYPE_COUNT = 0xD
+	};
+}

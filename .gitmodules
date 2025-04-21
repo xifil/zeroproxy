@@ -1,0 +1,37 @@
+[submodule "vendor/backward-cpp"]
+	path = vendor/backward-cpp
+	url = https://gitlab.com/xifil/backward-cpp.git
+[submodule "vendor/discord-rpc"]
+	path = vendor/discord-rpc
+	url = https://github.com/EinTim23/discord-rpc.git
+[submodule "vendor/GSL"]
+	path = vendor/GSL
+	url = https://github.com/Microsoft/GSL.git
+[submodule "vendor/minhook"]
+	path = vendor/minhook
+	url = https://github.com/TsudaKageyu/minhook.git
+[submodule "vendor/rapidjson"]
+	path = vendor/rapidjson
+	url = https://github.com/Tencent/rapidjson.git
+[submodule "vendor/libtommath"]
+	path = vendor/libtommath
+	url = https://github.com/libtom/libtommath.git
+[submodule "vendor/libtomcrypt"]
+	path = vendor/libtomcrypt
+	url = https://github.com/libtom/libtomcrypt.git
+[submodule "vendor/asmjit"]
+	path = vendor/asmjit
+	url = https://github.com/asmjit/asmjit.git
+[submodule "vendor/stb"]
+	path = vendor/stb
+	url = https://github.com/nothings/stb.git
+[submodule "vendor/zlib"]
+	path = vendor/zlib
+	url = https://github.com/madler/zlib.git
+	branch = develop
+[submodule "vendor/curl"]
+	path = vendor/curl
+	url = https://github.com/curl/curl.git
+[submodule "vendor/udis86"]
+	path = vendor/udis86
+	url = https://github.com/vmt/udis86.git
