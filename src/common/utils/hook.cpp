@@ -368,16 +368,18 @@ namespace utils::hook {
 	}
 
 	void call(void* pointer, void* data) {
-		if (is_relatively_far(pointer, data)) {
-			auto* trampoline = get_memory_near(pointer, 14);
-			if (!trampoline) {
-				throw std::runtime_error("Too far away to create 32bit relative branch");
-			}
+#		if defined(_WIN64)
+			if (is_relatively_far(pointer, data)) {
+				auto* trampoline = get_memory_near(pointer, 14);
+				if (!trampoline) {
+					throw std::runtime_error("Too far away to create 32bit relative branch");
+				}
 
-			call(pointer, trampoline);
-			jump(trampoline, data, true, true);
-			return;
-		}
+				call(pointer, trampoline);
+				jump(trampoline, data, true, true);
+				return;
+			}
+#		endif
 
 		uint8_t copy_data[5];
 		copy_data[0] = 0xE8;
@@ -396,49 +398,55 @@ namespace utils::hook {
 	}
 
 	void jump(void* pointer, void* data, const bool use_far, const bool use_safe) {
-		static const unsigned char jump_data[] = {
-			0x48, 0xb8, 0x88, 0x77, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11, 0xff, 0xe0
-		};
+#		if defined(_WIN64)
+			static const unsigned char jump_data[] = {
+				0x48, 0xB8, 0x88, 0x77, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11, 0xFF, 0xE0
+			};
 
-		static const unsigned char jump_data_safe[] = {
-			0xFF, 0x25, 0x00, 0x00, 0x00, 0x00
-		};
+			static const unsigned char jump_data_safe[] = {
+				0xFF, 0x25, 0x00, 0x00, 0x00, 0x00
+			};
 
-		if (!use_far && is_relatively_far(pointer, data)) {
-			auto* trampoline = get_memory_near(pointer, 14);
-			if (!trampoline) {
-				throw std::runtime_error("Too far away to create 32bit relative branch");
+			if (!use_far && is_relatively_far(pointer, data)) {
+				auto* trampoline = get_memory_near(pointer, 14);
+				if (!trampoline) {
+					throw std::runtime_error("Too far away to create 32bit relative branch");
+				}
+				jump(pointer, trampoline, false, false);
+				jump(trampoline, data, true, true);
+				return;
 			}
-			jump(pointer, trampoline, false, false);
-			jump(trampoline, data, true, true);
-			return;
-		}
+#		endif
 
-		auto* patch_pointer = PBYTE(pointer);
+			auto* patch_pointer = PBYTE(pointer);
 
-		if (use_far) {
-			if (use_safe) {
-				uint8_t copy_data[sizeof(jump_data_safe) + sizeof(data)];
-				memcpy(copy_data, jump_data_safe, sizeof(jump_data_safe));
-				memcpy(copy_data + sizeof(jump_data_safe), &data, sizeof(data));
+#		if defined(_WIN64)
+			if (use_far) {
+				if (use_safe) {
+					uint8_t copy_data[sizeof(jump_data_safe) + sizeof(data)];
+					memcpy(copy_data, jump_data_safe, sizeof(jump_data_safe));
+					memcpy(copy_data + sizeof(jump_data_safe), &data, sizeof(data));
 
-				copy(patch_pointer, copy_data, sizeof(copy_data));
+					copy(patch_pointer, copy_data, sizeof(copy_data));
+				}
+				else {
+					uint8_t copy_data[sizeof(jump_data)];
+					memcpy(copy_data, jump_data, sizeof(jump_data));
+					memcpy(copy_data + 2, &data, sizeof(data));
+
+					copy(patch_pointer, copy_data, sizeof(copy_data));
+				}
 			}
 			else {
-				uint8_t copy_data[sizeof(jump_data)];
-				memcpy(copy_data, jump_data, sizeof(jump_data));
-				memcpy(copy_data + 2, &data, sizeof(data));
+#		endif
+				uint8_t copy_data[5];
+				copy_data[0] = 0xE9;
+				*reinterpret_cast<int32_t*>(&copy_data[1]) = int32_t(size_t(data) - (size_t(pointer) + 5));
 
 				copy(patch_pointer, copy_data, sizeof(copy_data));
+#		if defined(_WIN64)
 			}
-		}
-		else {
-			uint8_t copy_data[5];
-			copy_data[0] = 0xE9;
-			*reinterpret_cast<int32_t*>(&copy_data[1]) = int32_t(size_t(data) - (size_t(pointer) + 5));
-
-			copy(patch_pointer, copy_data, sizeof(copy_data));
-		}
+#		endif
 	}
 
 	void jump(const size_t pointer, void* data, const bool use_far, const bool use_safe) {
