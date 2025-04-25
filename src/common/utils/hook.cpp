@@ -1,3 +1,5 @@
+#include "common_core.hpp"
+
 #include "hook.hpp"
 
 #include <map>
@@ -300,6 +302,61 @@ namespace utils::hook {
 		if (!this->moved_data_.empty()) {
 			copy(this->place_, this->moved_data_.data(), this->moved_data_.size());
 		}
+	}
+
+	iat_detour::iat_detour(const utils::nt::library& library, const std::string& target_library, const std::string& process, void* target)
+		: iat_detour()
+	{
+		this->create(library, target_library, process, target);
+	}
+
+	iat_detour::~iat_detour() {
+		this->clear();
+	}
+
+	void iat_detour::enable() {
+		if (this->place_ == nullptr) {
+			return;
+		}
+
+		this->original_ = DEREF_PTR_AS(void*, this->place_);
+		set(this->place_, this->target_);
+	}
+
+	void iat_detour::disable() {
+		if (this->place_ == nullptr) {
+			return;
+		}
+
+		set(this->place_, this->original_);
+	}
+
+	void iat_detour::create(const utils::nt::library& library, const std::string& target_library, const std::string& process, void* target) {
+		this->clear();
+		this->place_ = library.get_iat_entry(target_library, process);
+		if (this->place_ == nullptr) {
+			return;
+		}
+
+		this->target_ = target;
+		this->enable();
+	}
+
+	void iat_detour::clear() {
+		if (this->place_) {
+			this->disable();
+		}
+
+		this->place_ = nullptr;
+		this->original_ = nullptr;
+	}
+
+	void* iat_detour::get_place() const {
+		return this->place_;
+	}
+
+	void* iat_detour::get_original() const {
+		return this->original_;
 	}
 
 	std::optional<std::pair<void*, void*>> iat(const nt::library& library, const std::string& target_library, const std::string& process, void* stub) {

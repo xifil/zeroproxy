@@ -133,6 +133,59 @@ namespace utils::hook {
 		void un_move();
 	};
 
+	class iat_detour {
+	public:
+		iat_detour() = default;
+		iat_detour(const utils::nt::library& library, const std::string& target_library, const std::string& process, void* target);
+		~iat_detour();
+
+		iat_detour(iat_detour&& other) noexcept {
+			this->operator=(std::move(other));
+		}
+
+		iat_detour& operator=(iat_detour&& other) noexcept {
+			if (this != &other) {
+				this->clear();
+
+				this->place_ = other.place_;
+				this->original_ = other.original_;
+
+				other.place_ = nullptr;
+				other.original_ = nullptr;
+			}
+
+			return *this;
+		}
+
+		iat_detour(const iat_detour&) = delete;
+		iat_detour& operator=(const iat_detour&) = delete;
+
+		void enable();
+		void disable();
+
+		void create(const utils::nt::library& library, const std::string& target_library, const std::string& process, void* target);
+		void clear();
+
+		void* get_place() const;
+
+		template <typename T>
+		T* get() const {
+			return static_cast<T*>(this->get_original());
+		}
+
+		template <typename T = void, typename... Args>
+		T invoke(Args ... args) {
+			return static_cast<T(*)(Args ...)>(this->get_original())(args...);
+		}
+
+		[[nodiscard]] void* get_original() const;
+
+	private:
+		void* place_{};
+		void* original_{};
+		void* target_{};
+	};
+
 	std::optional<std::pair<void*, void*>> iat(const nt::library& library, const std::string& target_library,
 	                                           const std::string& process, void* stub);
 

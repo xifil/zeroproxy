@@ -7,6 +7,8 @@
 
 namespace splash {
 	namespace {
+		utils::hook::iat_detour load_image_a_hook;
+
 		HANDLE load_image_a_stub(HINSTANCE h_inst, LPCSTR name, UINT type, int c_x, int c_y, UINT fu_load) {
 			if (PTR_AS(std::uintptr_t, name) == 0x64) {
 				while (!component_loader::is_post_unpack_phase_complete()) {
@@ -29,17 +31,16 @@ namespace splash {
 					id = IMAGE_SPLASH;
 					break;
 				}
-				return LoadImageA(client_module, MAKEINTRESOURCEA(id), 0, 0, 0, LR_COPYFROMRESOURCE);
+				return load_image_a_hook.invoke<HANDLE>(client_module, MAKEINTRESOURCEA(id), 0, 0, 0, LR_COPYFROMRESOURCE);
 			}
 
-			return LoadImageA(h_inst, name, type, c_x, c_y, fu_load);
+			return load_image_a_hook.invoke<HANDLE>(h_inst, name, type, c_x, c_y, fu_load);
 		}
 	}
 
 	struct component final : client_component {
 		void post_load() override {
-			utils::nt::library game{};
-			utils::hook::set(game.get_iat_entry("user32.dll", "LoadImageA"), load_image_a_stub);
+			load_image_a_hook.create({}, "user32.dll", "LoadImageA", load_image_a_stub);
 		}
 	};
 }
