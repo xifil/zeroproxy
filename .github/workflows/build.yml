@@ -35,6 +35,10 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild .\src\client-iw8\client-iw8.vcxproj /p:Configuration=Release /p:Platform=x64
 
+    - name: Build t9-mod
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild .\src\client-t9\client-t9.vcxproj /p:Configuration=Release /p:Platform=x64
+
     - name: Upload t6-mod artifact
       uses: actions/upload-artifact@v4
       with:
@@ -46,3 +50,9 @@ jobs:
       with:
         name: iw8-mod
         path: build/x64/Release/iw8/version.dll
+
+    - name: Upload t9-mod artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: t9-mod
+        path: build/x64/Release/t9/version.dll

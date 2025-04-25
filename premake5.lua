@@ -80,6 +80,12 @@ newoption {
 	value = "PATH"
 }
 
+newoption {
+	trigger = "t9-copy-to",
+	description = "Optional, copy the Black Ops Cold War DLL to a custom folder after build, define the path here if wanted.",
+	value = "PATH"
+}
+
 newaction {
 	trigger = "version",
 	description = "Returns the version string for the current commit of the source code.",
@@ -398,6 +404,47 @@ workspace "ZeroProxy"
 		if _OPTIONS["iw8-copy-to"] then
 			postbuildcommands {
 				"copy /y \"$(TargetPath)\" \"" .. _OPTIONS["iw8-copy-to"] .. "\""
+			}
+		end
+
+		dependencies.imports()
+
+	project "client-t9"
+		location "%{wks.location}/src/%{prj.name}"
+		objdir "%{wks.location}/build/obj/t9"
+		targetdir "%{wks.location}/build/%{cfg.platform}/%{cfg.buildcfg}/t9"
+		kind "SharedLib"
+		language "C++"
+
+		targetname "version"
+
+		pchheader "common.hpp"
+		pchsource "src/%{prj.name}/common.cpp"
+
+		files {
+			"./src/%{prj.name}/**.rc",
+			"./src/%{prj.name}/**.hpp",
+			"./src/%{prj.name}/**.cpp",
+			"./src/%{prj.name}/resources/**.*"
+		}
+
+		includedirs {
+			"./src/%{prj.name}",
+			"./src/common",
+			"./src/generated"
+		}
+
+		resincludedirs {
+			"./src/generated"
+		}
+
+		links {
+			"common"
+		}
+
+		if _OPTIONS["t9-copy-to"] then
+			postbuildcommands {
+				"copy /y \"$(TargetPath)\" \"" .. _OPTIONS["t9-copy-to"] .. "\""
 			}
 		end
 

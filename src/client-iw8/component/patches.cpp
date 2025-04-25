@@ -135,7 +135,6 @@ namespace patches {
 				std::uint64_t xuid_magic = 0x11CB1243B8D7C31E;
 				std::uint64_t xuid_id = xuid.id_ * xuid.id_;
 
-				LOG("Component/Patches", INFO, "Patching auth...");
 				game::unk_BNetClass->finished_auth_ = true;
 
 				*game::unk_XUIDCheck1 = xuid_magic | xuid_id;
@@ -161,6 +160,7 @@ namespace patches {
 				game::unk_BNetClass->var4_ = 0x1F;
 				game::unk_BNetClass->var5_ = 0x00000000;
 
+				LOG("Component/Patches", INFO, "Patched auth.");
 				finished_auth_patch = true;
 			}, scheduler::pipeline::renderer);
 		}
