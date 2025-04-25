@@ -14,6 +14,7 @@ namespace game {
     inline functions::Dvar_FindVarByNameT* Dvar_FindVarByName{};
     inline functions::Dvar_GetIntSafeT* Dvar_GetIntSafe{};
     inline functions::Dvar_GetStringSafeT* Dvar_GetStringSafe{};
+    inline functions::Dvar_RegisterBoolT* Dvar_RegisterBool{};
     inline functions::dwGetLogOnStatusT* dwGetLogOnStatus{};
     inline functions::Live_IsUserSignedInToDemonwareT* Live_IsUserSignedInToDemonware{};
 	inline functions::R_EndFrameT* R_EndFrame{};

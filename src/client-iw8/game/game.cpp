@@ -22,6 +22,8 @@ void game::init() {
 
 	batch.add(SETUP_POINTER(Dvar_GetStringSafe), "48 83 EC ? E8 ? ? ? ? 8B C8 E8 ? ? ? ? 48 85 C0 75 ? 48 8D 05 ? ? ? ? 48 83 C4 ? C3 80 78");
 
+	batch.add(SETUP_POINTER(Dvar_RegisterBool), "E8 ? ? ? ? 48 8B F0 F6 46", SETUP_MOD(add(1).rip()));
+
 	if (identification::game::is(identification::game::version::iw8::v1_20_4_7623265_REPLAY, identification::game::version::iw8::v1_20_4_7623265_SHIP, identification::game::version::iw8::v1_38_3_9489393)) {
 		batch.add(SETUP_POINTER(dwGetLogOnStatus), "40 53 48 83 EC ? 48 63 C1 BA");
 	}

@@ -16,6 +16,7 @@ namespace functions {
 	using Dvar_FindVarByNameT = iw8::dvar_t*(const char* dvar_name);
 	using Dvar_GetIntSafeT = int(const char* dvar_name);
 	using Dvar_GetStringSafeT = const char*(const char* dvar_name);
+	using Dvar_RegisterBoolT = iw8::dvar_t*(const char* dvar_name, bool value, std::uint32_t flags, const char* description);
 	using dwGetLogOnStatusT = iw8::DWOnlineStatus(int controller_index);
 	using Live_IsUserSignedInToDemonwareT = bool(int controller_index);
 	using R_EndFrameT = void();

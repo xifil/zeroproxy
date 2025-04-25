@@ -9,6 +9,7 @@
 namespace patches {
 	namespace {
 		utils::hook::detour cl_get_local_client_sign_in_state_hook;
+		utils::hook::detour dvar_register_bool_hook;
 		utils::hook::detour dw_get_log_on_status_hook;
 		utils::hook::detour live_is_user_signed_in_to_demonware_hook;
 		utils::hook::detour unk_is_user_signed_in_to_bnet_hook;
@@ -33,6 +34,50 @@ namespace patches {
 			return cl_get_local_client_sign_in_state_hook.invoke<int>(controller_index);
 		}
 
+		iw8::dvar_t* dvar_register_bool_stub(const char* dvar_name, bool value, std::uint32_t flags, const char* description) {
+			static std::map<std::pair<std::string, std::string>, bool> dvars_to_patch = {
+				{ { "cg_drawBuildName", "LSSSQMQPNL" }, true },
+				{ { "cg_drawFastfileDebugInfo", "MOSSSSTTNL" }, true },
+				{ { "cg_drawFPS", "OLNTNRTPPL" }, true },
+				{ { "cg_drawFrontendSceneDebugInfo", "OMPMKKTORN" }, true },
+				{ { "cg_viewedSplashScreen", "MLNMPQOON" }, true },
+				{ { "cl_waterMarkEnabled", "LRKNROSQPM" }, true },
+				{ { "com_checkIfGameModeInstalled", "RLSPOOTTT" }, false },
+				{ { "com_force_premium", "MROLPRPTPO" }, true },
+				{ { "com_lan_lobby_enabled", "LPNMMPKRL" }, true },
+				{ { "con_bindableGrave", "OKLQKPPKPQ" }, false },
+				{ { "con_minicon", "LMSLLSMONN" }, true },
+				{ { "force_offline_enabled", "MPSSOTQQPM" }, true },
+				{ { "force_offline_menus", "LSTQOKLTRN" }, true },
+				{ { "lui_cod_points_enabled", "LNTOKPTKS" }, false },
+				{ { "lui_enable_magma_blade_layout", "LRKPTLNQTT" }, false },
+				{ { "lui_force_online_menus", "LMMRONPQMO" }, false },
+				{ { "lui_wz_tutorial_optional", "LSPSKLPNQT" }, true },
+				{ { "online_lan_cross_play", "LTOQRQMMLQ" }, true },
+				{ { "ui_onlineRequired", "MTSTMKPMRM" }, false }
+			};
+
+			bool value_patched = value;
+			std::uint32_t flags_patched = flags;
+			for (const auto& [names, val] : dvars_to_patch) {
+				if (names.second == dvar_name == 0) {
+					const char* disclaimer = "";
+					if (value_patched == val) {
+						disclaimer = " - unnecessary";
+					}
+					LOG("Component/Patches/Dvar_RegisterBool", INFO, "Patched '{}' -> {}{}", names.first, val ? "true" : "false", disclaimer);
+					value_patched = val;
+				}
+			}
+
+			if ("LPSPMQSNPQ"s == dvar_name) {
+				LOG("Component/Patches/Dvar_RegisterBool", INFO, "Patched 'systemlink' flags");
+				flags_patched = 0x80;
+			}
+
+			return dvar_register_bool_hook.invoke<iw8::dvar_t*>(dvar_name, value_patched, flags_patched, description);
+		}
+
 		iw8::DWOnlineStatus dw_get_log_on_status_stub(int controller_index) {
 			return iw8::DWOnlineStatus::DW_LIVE_CONNECTED;
 		}
@@ -55,7 +100,7 @@ namespace patches {
 			// stop the game from crashing on launch by skipping this one function - still unclear what it actually does.
 			switch (identification::game::get_version()) {
 			case identification::game::version::iw8::v1_20_4_7623265_REPLAY:
-				utils::hook::jump(0x3061A0_b, mystery_function_stub);
+				utils::hook::set(0x2352548_b, mystery_function_stub);
 				break;
 			case identification::game::version::iw8::v1_20_4_7623265_SHIP:
 				utils::hook::set(0x3DF4548_b, mystery_function_stub);
@@ -69,6 +114,7 @@ namespace patches {
 		void post_unpack() override {
 			//cl_get_local_client_sign_in_state_hook.create(game::CL_GetLocalClientSignInState, cl_get_local_client_sign_in_state_stub);
 			dw_get_log_on_status_hook.create(game::dwGetLogOnStatus, dw_get_log_on_status_stub);
+			//dvar_register_bool_hook.create(game::Dvar_RegisterBool, dvar_register_bool_stub);
 			live_is_user_signed_in_to_demonware_hook.create(game::Live_IsUserSignedInToDemonware, live_is_user_signed_in_to_demonware_stub);
 			//unk_is_user_signed_in_to_bnet_hook.create(game::unk_IsUserSignedInToBnet, unk_is_user_signed_in_to_bnet_stub);
 
