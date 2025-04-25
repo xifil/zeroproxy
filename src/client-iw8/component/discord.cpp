@@ -135,4 +135,4 @@ namespace discord {
 	};
 }
 
-REGISTER_COMPONENT(discord::component)
+//REGISTER_COMPONENT(discord::component)

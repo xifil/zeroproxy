@@ -8,13 +8,24 @@ namespace game {
 	bool is_server();
 
 	// Functions
+	inline functions::CL_GetLocalClientSignInStateT* CL_GetLocalClientSignInState{};
 	inline functions::Com_GameInfo_GetGameTypeForInternalNameT* Com_GameInfo_GetGameTypeForInternalName{};
     inline functions::Com_GameInfo_GetMapInfoForLoadNameT* Com_GameInfo_GetMapInfoForLoadName{};
+    inline functions::Dvar_FindVarByNameT* Dvar_FindVarByName{};
     inline functions::Dvar_GetIntSafeT* Dvar_GetIntSafe{};
     inline functions::Dvar_GetStringSafeT* Dvar_GetStringSafe{};
+    inline functions::dwGetLogOnStatusT* dwGetLogOnStatus{};
+    inline functions::Live_IsUserSignedInToDemonwareT* Live_IsUserSignedInToDemonware{};
 	inline functions::R_EndFrameT* R_EndFrame{};
 	inline functions::SEH_StringEd_GetStringT* SEH_StringEd_GetString{};
+	inline functions::unk_IsUserSignedInToBnetT* unk_IsUserSignedInToBnet{};
 
 	// Fields
+	inline bool* s_isContentEnumerationFinished{};
 	inline bool* s_luaInFrontend{};
+	inline iw8::LocalUserPresenceData(*s_presenceData)[8]{};
+	inline int* unk_SignInState{};
+	inline std::uint64_t* unk_XUIDCheck1{};
+	inline std::uint64_t* unk_XUIDCheck2{};
+	inline iw8::bnet_class* unk_BNetClass{};
 }

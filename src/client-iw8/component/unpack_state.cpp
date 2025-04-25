@@ -3,7 +3,7 @@
 #include <loader/component_loader.hpp>
 #include <utils/hook.hpp>
 
-namespace exception_filter {
+namespace unpack_state {
 	namespace {
 		HANDLE create_file_a_stub(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile) {
 			component_loader::post_unpack();
@@ -19,4 +19,4 @@ namespace exception_filter {
 	};
 }
 
-REGISTER_COMPONENT(exception_filter::component)
+REGISTER_COMPONENT(unpack_state::component)
