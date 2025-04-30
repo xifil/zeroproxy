@@ -1,5 +1,7 @@
 ﻿#include "common.hpp"
 #include "component/scheduler.hpp"
+
+#include "component/dispatch_exception.hpp"
 #include "game/game.hpp"
 
 #include <loader/component_loader.hpp>
@@ -69,14 +71,7 @@ namespace scheduler {
 		std::thread async_thread;
 		task_pipeline pipelines[ENUM_UNDER(pipeline::count)];
 
-		utils::hook::detour r_end_frame_hook;
 		utils::hook::detour main_frame_hook;
-
-
-		void r_end_frame_stub() {
-			execute(pipeline::renderer);
-			r_end_frame_hook.invoke<void>();
-		}
 
 		void g_clear_vehicle_inputs_stub() {
 			//game::G_ClearVehicleInputs();
@@ -131,7 +126,19 @@ namespace scheduler {
 
 		void post_unpack() override {
 			if (!game::is_server()) {
-				//r_end_frame_hook.create(game::R_EndFrame, r_end_frame_stub);
+				static std::uintptr_t show_over_stack_handler_original = 0;
+
+				show_over_stack_handler_original = DEREF_PTR_AS(std::uintptr_t, game::Dvar_ShowOverStack);
+				DEREF_PTR_AS(std::uintptr_t, game::Dvar_ShowOverStack) = 1;
+
+				dispatch_exception::register_exception_hijack(EXCEPTION_ACCESS_VIOLATION, [](CONTEXT* ctx) {
+					return ctx->Rip == PTR_AS(std::uintptr_t, game::exception::Dvar_GetBool);
+				}, [](CONTEXT* ctx) {
+					ctx->Rcx = show_over_stack_handler_original;
+					return true;
+				}, []() {
+					execute(pipeline::renderer);
+				});
 			}
 
 			// Com_Frame_Try_Block_Function

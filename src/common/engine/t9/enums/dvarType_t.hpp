@@ -1,0 +1,24 @@
+#pragma once
+#include "engine/engine_common.hpp"
+
+namespace t9 {
+	enum class dvarType_t {
+		DVAR_TYPE_INVALID = 0,
+		DVAR_TYPE_BOOL = 1,
+		DVAR_TYPE_FLOAT = 2,
+		DVAR_TYPE_FLOAT_2 = 3,
+		DVAR_TYPE_FLOAT_3 = 4,
+		DVAR_TYPE_FLOAT_4 = 5,
+		DVAR_TYPE_INT = 6,
+		DVAR_TYPE_ENUM = 7,
+		DVAR_TYPE_STRING = 8,
+		DVAR_TYPE_COLOR = 9,
+		DVAR_TYPE_INT64 = 10,
+		DVAR_TYPE_UINT64 = 11,
+		DVAR_TYPE_LINEAR_COLOR_RGB = 12,
+		DVAR_TYPE_COLOR_XYZ = 13,
+		DVAR_TYPE_COLOR_LAB = 14,
+		DVAR_TYPE_SESSIONMODE_BASE_DVAR = 15,
+		DVAR_TYPE_COUNT = 16
+	};
+}

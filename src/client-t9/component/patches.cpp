@@ -1,6 +1,7 @@
 #include "common.hpp"
 
 #include "component/scheduler.hpp"
+#include "game/dvars.hpp"
 #include "game/game.hpp"
 
 #include <loader/component_loader.hpp>
@@ -9,7 +10,7 @@
 namespace patches {
 	namespace {
 		void disable_demonware() {
-			game::Dvar_SetBoolFromSource(*game::Dvar_NoDW, true, 0);
+			dvars::set_dvar_bool(dvars::get_dvar_by_name("noDW"), true);
 			game::CL_Disconnect(0, false, "");
 		}
 	}
@@ -22,6 +23,8 @@ namespace patches {
 				}
 
 				disable_demonware();
+				game::unk_SetUsername(game::LiveUser_GetUserDataForController(0), "the player");
+				game::set_mode(0, 10);
 
 				LOG("Component/Patches", DEBUG, "Patched auth.");
 
