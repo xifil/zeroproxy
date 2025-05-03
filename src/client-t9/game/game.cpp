@@ -18,6 +18,8 @@ void game::init() {
 		" 84 24 ? ? ? ? C6 44 24 ? ? C7 44 24 ? ? ? ? ? 89 44 24 48 48 8B 84 24 ? ? ? ? 48 89 44 24 ? F3 0F 11 44 24 ? F3 0F 10 84 24 ? ? ? ? F3 0F 11"
 		" 4C 24 ? F3 0F 10 8C 24 ? ? ? ? F3 0F 11 44 24 ? F3 0F 11 4C 24 ? E8 ? ? ? ? 48 83 C4 78 C3");
 
+	batch.add(SETUP_POINTER(Com_GametypeSettings_SetGametype), "E9 ? ? ? ? 48 8D 0D ? ? ? ? 45 33 C0 B2 01 48 83 C4 28 E9 ? ? ? ?", SETUP_MOD(add(1).rip()));
+
 	batch.add(SETUP_POINTER(Com_SessionMode_SetNetworkMode), "8B 05 ? ? ? ? 8B D0 33 D1 83 E2 0F 33 C2 89 05 ? ? ? ? C3");
 
 	batch.add(SETUP_POINTER(Dvar_FindVar), "48 89 5C 24 ? 48 89 4C 24 ? 57 48 83 EC ? 33 DB");
@@ -35,6 +37,11 @@ void game::init() {
 		" ? 89 85 ? ? ? ?", SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(LobbyBase_SetNetworkMode), "40 53 48 83 EC 20 8B D9 89 0D ? ? ? ? E8 ? ? ? ? 8B CB E8 ? ? ? ?");
+
+	batch.add(SETUP_POINTER(LobbyData_SetMap), "E8 ? ? ? ? 8B CB E8 ? ? ? ? 84 C0 74 13 8B CB E8 ? ? ? ? 8B C8 BA ? ? ? ?", SETUP_MOD(add(1).rip()));
+
+	batch.add(SETUP_POINTER(LobbySession_GetControllingLobbySession), "E8 ? ? ? ? 48 8B D7 8B C8 E8 ? ? ? ? 48 8B 7C 24 ? E8 ? ? ? ? 8B CB E8 ? ? ? ?",
+		SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(unk_SetScreen), "48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33"
 		" C4 48 89 45 27 0F B6 FA 48 63 D9 8B 05 ? ? ? ?");

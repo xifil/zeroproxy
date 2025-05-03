@@ -54,10 +54,17 @@ namespace memory {
 			this->signatures_.push_back(signature(this->library_, name, ptr, pattern, [](res r) { return r; }));
 		}
 
-		void scan_all() {
-			utils::concurrency::async_for_each<signature>(this->signatures_, [](auto& sig) {
-				sig.scan();
-			});
+		void scan_all(bool run_sync = false) {
+			if (run_sync) {
+				for (auto& sig : this->signatures_) {
+					sig.scan();
+				}
+			}
+			else {
+				utils::concurrency::async_for_each<signature>(this->signatures_, [](auto& sig) {
+					sig.scan();
+				});
+			}
 		}
 	private:
 		utils::nt::library library_;

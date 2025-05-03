@@ -70,9 +70,14 @@ using namespace std::literals;
 #define PTR_AS(type, ptr) reinterpret_cast<type>((ptr))
 #define DEREF_PTR_AS(type, ptr) *PTR_AS(type*, ptr)
 #define ENUM_UNDER(val) static_cast<std::underlying_type<decltype(val)>::type>(val)
+#define CLASS_ASSERT_SZ(cls, sz) static_assert(sizeof(cls) == sz, #cls " is not " #sz " bytes in size.")
 #if defined(_WIN64)
+#	define CLASS_ASSERT_SZ_64(cls, sz) CLASS_ASSERT_SZ(cls, sz)
+#	define CLASS_ASSERT_SZ_86(cls, sz) ;
 #	define FMT_PTR "{:016X}"
 #else
+#	define CLASS_ASSERT_SZ_64(cls, sz) ;
+#	define CLASS_ASSERT_SZ_86(cls, sz) CLASS_ASSERT_SZ(cls, sz)
 #	define FMT_PTR "{:08X}"
 #endif
 

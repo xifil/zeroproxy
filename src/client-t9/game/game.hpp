@@ -11,6 +11,7 @@ namespace game {
 	inline functions::BB_AlertT* BB_Alert{};
 	inline functions::CL_DisconnectT* CL_Disconnect{};
 	inline functions::CL_DrawTextPhysicalT* CL_DrawTextPhysical{};
+	inline functions::Com_GametypeSettings_SetGametypeT* Com_GametypeSettings_SetGametype{};
 	inline functions::Com_SessionMode_SetNetworkModeT* Com_SessionMode_SetNetworkMode{};
 	inline functions::Dvar_FindVarT* Dvar_FindVar{};
 	inline functions::Dvar_ResetT* Dvar_Reset{};
@@ -18,6 +19,8 @@ namespace game {
 	inline functions::Dvar_SetIntFromSourceT* Dvar_SetIntFromSource{};
 	inline functions::LiveUser_GetUserDataForControllerT* LiveUser_GetUserDataForController{};
 	inline functions::LobbyBase_SetNetworkModeT* LobbyBase_SetNetworkMode{};
+	inline functions::LobbyData_SetMapT* LobbyData_SetMap{};
+	inline functions::LobbySession_GetControllingLobbySessionT* LobbySession_GetControllingLobbySession{};
 	inline functions::unk_SetScreenT* unk_SetScreen{};
 	inline functions::unk_SetUsernameT* unk_SetUsername{};
 

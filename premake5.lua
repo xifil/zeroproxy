@@ -69,6 +69,12 @@ function dependencies.projects()
 end
 
 newoption {
+	trigger = "iw4-store-copy-to",
+	description = "Optional, copy the Modern Warfare 2 DLL to a custom folder after build, define the path here if wanted.",
+	value = "PATH"
+}
+
+newoption {
 	trigger = "t6-copy-to",
 	description = "Optional, copy the Black Ops II DLL to a custom folder after build, define the path here if wanted.",
 	value = "PATH"
@@ -324,6 +330,47 @@ workspace "ZeroProxy"
 		prebuildcommands {
 			"cd ../../ && .\\tools\\premake\\premake5.exe generate-buildinfo"
 		}
+
+		dependencies.imports()
+
+	project "client-iw4-store"
+		location "%{wks.location}/src/%{prj.name}"
+		objdir "%{wks.location}/build/obj/iw4-store"
+		targetdir "%{wks.location}/build/%{cfg.platform}/%{cfg.buildcfg}/iw4-store"
+		kind "SharedLib"
+		language "C++"
+
+		targetname "powrprof"
+
+		pchheader "common.hpp"
+		pchsource "src/%{prj.name}/common.cpp"
+
+		files {
+			"./src/%{prj.name}/**.rc",
+			"./src/%{prj.name}/**.hpp",
+			"./src/%{prj.name}/**.cpp",
+			"./src/%{prj.name}/resources/**.*"
+		}
+
+		includedirs {
+			"./src/%{prj.name}",
+			"./src/common",
+			"./src/generated"
+		}
+
+		resincludedirs {
+			"./src/generated"
+		}
+
+		links {
+			"common"
+		}
+
+		if _OPTIONS["iw4-store-copy-to"] then
+			postbuildcommands {
+				"copy /y \"$(TargetPath)\" \"" .. _OPTIONS["iw4-store-copy-to"] .. "\""
+			}
+		end
 
 		dependencies.imports()
 

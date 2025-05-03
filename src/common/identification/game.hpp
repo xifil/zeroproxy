@@ -13,6 +13,11 @@ namespace identification::game {
 	}
 	
 	namespace version {
+		namespace iw4_store {
+			inline constexpr std::uint32_t v1_0_0_SP = 0x19EC101E;
+			inline constexpr std::uint32_t v1_0_0_MP = 0x1A856332;
+		}
+
 		namespace iw5 {
 			inline constexpr std::uint32_t v1_9_388110_SP = 0x22886E14;
 			inline constexpr std::uint32_t v1_9_388110_MP = 0x1FE1222A;
@@ -90,6 +95,8 @@ namespace identification::game {
 	std::uint32_t get_checksum();
 	
 	inline std::vector<version::identifier> version_list = {
+		{ version::iw4_store::v1_0_0_SP, "Modern Warfare 2", "1.0.0", mode::SP },
+		{ version::iw4_store::v1_0_0_MP, "Modern Warfare 2", "1.0.0", mode::MP },
 		{ version::iw5::v1_9_388110_SP, "Modern Warfare 3", "1.9.388110", mode::SP },
 		{ version::iw5::v1_9_388110_MP, "Modern Warfare 3", "1.9.388110", mode::MP },
 		{ version::t6::v1_0_12_1468705_SP, "Black Ops II", "1.0.12.1468705", mode::SP },
