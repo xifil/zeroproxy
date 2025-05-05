@@ -1,6 +1,5 @@
 #include "common.hpp"
 
-#include "component/localized_strings.hpp"
 #include "component/scheduler.hpp"
 #include "game/game.hpp"
 
@@ -31,8 +30,8 @@ namespace patches {
 			HWND hwnd_parent, HMENU h_menu, HINSTANCE h_instance, LPVOID lp_param)
 		{
 			LPCSTR lp_window_name_patched = lp_window_name;
-			if (strcmp(lp_class_name, "IW4") == 0) {
-				lp_window_name_patched = "iw4s by lifix and luxploit | " GIT_DESCRIBE;
+			if (strcmp(lp_class_name, "CoDBlackOps") == 0) {
+				lp_window_name_patched = "t6s by lifix and luxploit | " GIT_DESCRIBE;
 			}
 
 			return create_window_ex_a_hook.invoke<HWND>(dw_ex_style, lp_class_name, lp_window_name_patched, dw_style, x, y, n_width, n_height, hwnd_parent,
@@ -45,13 +44,6 @@ namespace patches {
 			x_store_query_game_license_result_hook.create(game::XStoreQueryGameLicenseResult, x_store_query_game_license_result_stub);
 			
 			create_window_ex_a_hook.create(utils::nt::library(), "user32.dll", "CreateWindowExA", create_window_ex_a_stub);
-
-			/*
-			localized_strings::override(std::regex(".*"), [](const localized_strings::original_localization& original, const std::smatch&) {
-				//return std::format("{} ({})", original.text_, original.translation_key_);
-				return std::format("hi lifix, {}", original.translation_key_);
-			});
-			*/
 		}
 	};
 }

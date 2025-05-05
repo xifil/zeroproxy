@@ -16,6 +16,13 @@ void game::init() {
 
 	batch.add(SETUP_POINTER(Com_GameInfo_GetMapInfoForLoadName), "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 8B 3D ? ? ? ? 45 33 DB 48 8B E9");
 
+	if (identification::game::is(identification::game::version::iw8::v1_20_4_7623265_REPLAY, identification::game::version::iw8::v1_20_4_7623265_SHIP)) {
+		batch.add(SETUP_POINTER(DB_LoadXFile), "E8 ? ? ? ? 8B F8 44 38 AB", SETUP_MOD(add(1).rip()));
+	}
+	else if (identification::game::is(identification::game::version::iw8::v1_38_3_9489393, identification::game::version::iw8::v1_44_0_10435696)) {
+		batch.add(SETUP_POINTER(DB_LoadXFile), "E8 ? ? ? ? 8B F8 33 ED 40 38 B3", SETUP_MOD(add(1).rip()));
+	}
+
 	batch.add(SETUP_POINTER(Dvar_FindVarByName), "E8 ? ? ? ? 48 8B CB 48 63 50", SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(Dvar_GetIntSafe), "E8 ? ? ? ? 8B D0 85 C0 75 ? 38 05", SETUP_MOD(add(1).rip()));
@@ -30,6 +37,10 @@ void game::init() {
 	else if (identification::game::is(identification::game::version::iw8::v1_44_0_10435696)) {
 		batch.add(SETUP_POINTER(dwGetLogOnStatus), "40 53 48 83 EC ? 48 63 C1 BA ? ? ? ? 48 69 D8");
 	}
+
+	batch.add(SETUP_POINTER(GamerProfile_SetDataByName), "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 8B F1 0F 29 74 24");
+
+	batch.add(SETUP_POINTER(Info_ValueForKey), "48 89 74 24 ? 57 48 83 EC ? 48 8B FA 48 8B F1 48 85 C9 74");
 
 	batch.add(SETUP_POINTER(Live_IsUserSignedInToDemonware), "E8 ? ? ? ? 84 C0 74 ? 4C 8D 43 ? 8B D7", SETUP_MOD(add(1).rip()));
 
@@ -48,8 +59,21 @@ void game::init() {
 		batch.add(SETUP_POINTER(SEH_StringEd_GetString), "E8 ? ? ? ? 48 8B D0 80 FB", SETUP_MOD(add(1).rip()));
 	}
 
+	if (identification::game::is(identification::game::version::iw8::v1_20_4_7623265_REPLAY, identification::game::version::iw8::v1_20_4_7623265_SHIP)) {
+		batch.add(SETUP_POINTER(SV_Cmd_Argv), "E8 ? ? ? ? 4C 8B D0 4C 2B D3", SETUP_MOD(add(1).rip()));
+	}
+	else if (identification::game::is(identification::game::version::iw8::v1_38_3_9489393, identification::game::version::iw8::v1_44_0_10435696)) {
+		batch.add(SETUP_POINTER(SV_Cmd_Argv), "E8 ? ? ? ? 48 89 44 24 ? 33 F6 0F", SETUP_MOD(add(1).rip()));
+	}
+
+	batch.add(SETUP_POINTER(SV_UpdateUserinfo_f), "40 53 48 83 EC ? 48 8B D9 B9 ? ? ? ? E8 ? ? ? ? 48 8D 8B");
+
+	if (identification::game::is(identification::game::version::iw8::v1_20_4_7623265_REPLAY, identification::game::version::iw8::v1_20_4_7623265_SHIP)) {
+		batch.add(SETUP_POINTER(unk_IsUnsupportedGPU), "48 83 EC ? 0F B6 05 ? ? ? ? 85 C0 75");
+	}
+
 	if (identification::game::is(identification::game::version::iw8::v1_44_0_10435696)) {
-		batch.add(SETUP_POINTER(unk_IsUserSignedInToBnet), "40 53 48 83 EC ? 48 8B DA E8 ? ? ? ? 83 38 ? 75 ? E8 ? ? ? ? 84 C0");
+		batch.add(SETUP_POINTER(unk_IsUserSignedInToBNet), "40 53 48 83 EC ? 48 8B DA E8 ? ? ? ? 83 38 ? 75 ? E8 ? ? ? ? 84 C0");
 	}
 
 	batch.add(SETUP_POINTER(s_isContentEnumerationFinished), "80 3D ? ? ? ? ? 74 ? 48 89 7C 24", SETUP_MOD(add(2).rip().add(1)));

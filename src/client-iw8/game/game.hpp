@@ -11,15 +11,21 @@ namespace game {
 	inline functions::CL_GetLocalClientSignInStateT* CL_GetLocalClientSignInState{};
 	inline functions::Com_GameInfo_GetGameTypeForInternalNameT* Com_GameInfo_GetGameTypeForInternalName{};
     inline functions::Com_GameInfo_GetMapInfoForLoadNameT* Com_GameInfo_GetMapInfoForLoadName{};
+    inline functions::DB_LoadXFileT* DB_LoadXFile{};
     inline functions::Dvar_FindVarByNameT* Dvar_FindVarByName{};
     inline functions::Dvar_GetIntSafeT* Dvar_GetIntSafe{};
     inline functions::Dvar_GetStringSafeT* Dvar_GetStringSafe{};
     inline functions::Dvar_RegisterBoolT* Dvar_RegisterBool{};
     inline functions::dwGetLogOnStatusT* dwGetLogOnStatus{};
+    inline functions::GamerProfile_SetDataByNameT* GamerProfile_SetDataByName{};
+    inline functions::Info_ValueForKeyT* Info_ValueForKey{};
     inline functions::Live_IsUserSignedInToDemonwareT* Live_IsUserSignedInToDemonware{};
 	inline functions::R_EndFrameT* R_EndFrame{};
 	inline functions::SEH_StringEd_GetStringT* SEH_StringEd_GetString{};
-	inline functions::unk_IsUserSignedInToBnetT* unk_IsUserSignedInToBnet{};
+	inline functions::SV_Cmd_ArgvT* SV_Cmd_Argv{};
+	inline functions::SV_UpdateUserinfo_fT* SV_UpdateUserinfo_f{};
+	inline functions::unk_IsUnsupportedGPUT* unk_IsUnsupportedGPU{};
+	inline functions::unk_IsUserSignedInToBNetT* unk_IsUserSignedInToBNet{};
 
 	// Fields
 	inline bool* s_isContentEnumerationFinished{};

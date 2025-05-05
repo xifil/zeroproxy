@@ -10,11 +10,7 @@
 void game::init() {
 	memory::signature_store batch;
 
-	batch.add(SETUP_POINTER(Cmd_AddCommandInternal), "E8 ? ? ? ? 4C 8D 05 ? ? ? ? 48 8D 15 ? ? ? ? 48 8D 0D ? ? ? ? 48 8B 5C 24", SETUP_MOD(add(1).rip()));
-
-	batch.add(SETUP_POINTER(SEH_StringEd_GetString), "48 83 EC ? 48 8B 05 ? ? ? ? 48 85 C0 74 ? 80 78");
-
-	batch.add(SETUP_POINTER(XStoreQueryGameLicenseResult), "E8 ? ? ? ? 85 C0 0F 88 ? ? ? ? 80 7C 24", SETUP_MOD(add(1).rip()));
+	batch.add(SETUP_POINTER(XStoreQueryGameLicenseResult), "E8 ? ? ? ? 85 C0 78 ? 80 7C 24", SETUP_MOD(add(1).rip()));
 
 	batch.scan_all(true);
 }

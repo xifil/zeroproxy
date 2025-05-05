@@ -70,13 +70,19 @@ end
 
 newoption {
 	trigger = "iw4-store-copy-to",
-	description = "Optional, copy the Modern Warfare 2 DLL to a custom folder after build, define the path here if wanted.",
+	description = "Optional, copy the Modern Warfare 2 (MS) DLL to a custom folder after build, define the path here if wanted.",
 	value = "PATH"
 }
 
 newoption {
 	trigger = "t6-copy-to",
 	description = "Optional, copy the Black Ops II DLL to a custom folder after build, define the path here if wanted.",
+	value = "PATH"
+}
+
+newoption {
+	trigger = "t6-store-copy-to",
+	description = "Optional, copy the Black Ops II (MS) DLL to a custom folder after build, define the path here if wanted.",
 	value = "PATH"
 }
 
@@ -340,7 +346,7 @@ workspace "ZeroProxy"
 		kind "SharedLib"
 		language "C++"
 
-		targetname "powrprof"
+		targetname "d3d9"
 
 		pchheader "common.hpp"
 		pchsource "src/%{prj.name}/common.cpp"
@@ -410,6 +416,47 @@ workspace "ZeroProxy"
 		if _OPTIONS["t6-copy-to"] then
 			postbuildcommands {
 				"copy /y \"$(TargetPath)\" \"" .. _OPTIONS["t6-copy-to"] .. "\""
+			}
+		end
+
+		dependencies.imports()
+
+	project "client-t6-store"
+		location "%{wks.location}/src/%{prj.name}"
+		objdir "%{wks.location}/build/obj/t6-store"
+		targetdir "%{wks.location}/build/%{cfg.platform}/%{cfg.buildcfg}/t6-store"
+		kind "SharedLib"
+		language "C++"
+
+		targetname "d3d11"
+
+		pchheader "common.hpp"
+		pchsource "src/%{prj.name}/common.cpp"
+
+		files {
+			"./src/%{prj.name}/**.rc",
+			"./src/%{prj.name}/**.hpp",
+			"./src/%{prj.name}/**.cpp",
+			"./src/%{prj.name}/resources/**.*"
+		}
+
+		includedirs {
+			"./src/%{prj.name}",
+			"./src/common",
+			"./src/generated"
+		}
+
+		resincludedirs {
+			"./src/generated"
+		}
+
+		links {
+			"common"
+		}
+
+		if _OPTIONS["t6-store-copy-to"] then
+			postbuildcommands {
+				"copy /y \"$(TargetPath)\" \"" .. _OPTIONS["t6-store-copy-to"] .. "\""
 			}
 		end
 

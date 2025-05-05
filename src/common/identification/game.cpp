@@ -21,12 +21,18 @@ namespace identification::game {
 				return checksum;
 			}
 
-			if ("Black Ops II"s == get_target_game()) {
-				auto changelist = memory::sig_scan<std::uint32_t*>(game, "8B 0D ? ? ? ? A1 ? ? ? ? 8B 15 ? ? ? ? 51");
-				if (changelist.get() != nullptr) {
-					return *changelist.add(7).rel().get();
+#			if defined(_WIN64)
+				if ("Black Ops II"s == get_target_game() || "Modern Warfare 2"s == get_target_game()) {
+					return static_cast<std::uint32_t>(game.get_nt_headers()->FileHeader.TimeDateStamp);
 				}
-			}
+#			else
+				if ("Black Ops II"s == get_target_game()) {
+					auto changelist = memory::sig_scan<std::uint32_t*>(game, "8B 0D ? ? ? ? A1 ? ? ? ? 8B 15 ? ? ? ? 51");
+					if (changelist.get() != nullptr) {
+						return *changelist.add(7).rel().get();
+					}
+				}
+#			endif
 
 			return checksum;
 		}();

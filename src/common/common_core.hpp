@@ -23,6 +23,7 @@
 #include <dwmapi.h>
 #include <shellscalingapi.h>
 #include <d3d11.h>
+#include <d3d9.h>
 #include <dxgi1_6.h>
 #include <DbgHelp.h>
 

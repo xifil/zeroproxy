@@ -12,6 +12,8 @@ namespace patches {
 		utils::hook::detour dvar_register_bool_hook;
 		utils::hook::detour dw_get_log_on_status_hook;
 		utils::hook::detour live_is_user_signed_in_to_demonware_hook;
+		utils::hook::detour sv_update_user_info_f_hook;
+		utils::hook::detour unk_is_unsupported_gpu_hook;
 		utils::hook::detour unk_is_user_signed_in_to_bnet_hook;
 
 		int cl_get_local_client_sign_in_state_stub(int controller_index) {
@@ -60,7 +62,7 @@ namespace patches {
 			bool value_patched = value;
 			std::uint32_t flags_patched = flags;
 			for (const auto& [names, val] : dvars_to_patch) {
-				if (names.second == dvar_name == 0) {
+				if (names.second == dvar_name) {
 					const char* disclaimer = "";
 					if (value_patched == val) {
 						disclaimer = " - unnecessary";
@@ -84,6 +86,28 @@ namespace patches {
 
 		bool live_is_user_signed_in_to_demonware_stub(int controller_index) {
 			return true;
+		}
+
+		void sv_update_user_info_f_stub(iw8::SvClientMP* cl) {
+			/*
+				More checks can be added here
+
+				It's patched in:
+					- Modern Warfare (2019) (Current version)
+					- Vanguard
+					- Modern Warfare II
+
+				Could probably find the actual fix there
+			*/
+			if (!strlen(game::Info_ValueForKey(game::SV_Cmd_Argv(1), "platform"))) {
+				return;
+			}
+
+			return sv_update_user_info_f_hook.invoke<void>(cl);
+		}
+
+		bool unk_is_unsupported_gpu_stub() {
+			return false;
 		}
 
 		bool unk_is_user_signed_in_to_bnet_stub() {
@@ -114,9 +138,15 @@ namespace patches {
 		void post_unpack() override {
 			//cl_get_local_client_sign_in_state_hook.create(game::CL_GetLocalClientSignInState, cl_get_local_client_sign_in_state_stub);
 			dw_get_log_on_status_hook.create(game::dwGetLogOnStatus, dw_get_log_on_status_stub);
-			//dvar_register_bool_hook.create(game::Dvar_RegisterBool, dvar_register_bool_stub);
+			dvar_register_bool_hook.create(game::Dvar_RegisterBool, dvar_register_bool_stub);
 			live_is_user_signed_in_to_demonware_hook.create(game::Live_IsUserSignedInToDemonware, live_is_user_signed_in_to_demonware_stub);
-			//unk_is_user_signed_in_to_bnet_hook.create(game::unk_IsUserSignedInToBnet, unk_is_user_signed_in_to_bnet_stub);
+			sv_update_user_info_f_hook.create(game::SV_UpdateUserinfo_f, sv_update_user_info_f_stub);
+			if (game::unk_IsUnsupportedGPU) {
+				unk_is_unsupported_gpu_hook.create(game::unk_IsUnsupportedGPU, unk_is_unsupported_gpu_stub);
+			}
+			if (game::unk_IsUserSignedInToBNet) {
+				unk_is_user_signed_in_to_bnet_hook.create(game::unk_IsUserSignedInToBNet, unk_is_user_signed_in_to_bnet_stub);
+			}
 
 			scheduler::loop([] {
 				static bool finished_auth_patch = false;

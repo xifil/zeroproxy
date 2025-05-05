@@ -14,8 +14,8 @@ namespace identification::game {
 	
 	namespace version {
 		namespace iw4_store {
-			inline constexpr std::uint32_t v1_0_0_SP = 0x19EC101E;
-			inline constexpr std::uint32_t v1_0_0_MP = 0x1A856332;
+			inline constexpr std::uint32_t v2_0_6_MP = 0x67C8EE3F;
+			inline constexpr std::uint32_t v2_0_6_SP = 0x67C8EE56;
 		}
 
 		namespace iw5 {
@@ -29,6 +29,12 @@ namespace identification::game {
 			inline constexpr std::uint32_t v1_0_41_1902371_ZM = 1902371;
 			inline constexpr std::uint32_t v1_0_44_1759941_MP = 1759941;
 			inline constexpr std::uint32_t v1_0_45_1898228_MP = 1898228;
+		}
+
+		namespace t6_store {
+			inline constexpr std::uint32_t v2_0_0_43_MP = 0x67E407AA;
+			inline constexpr std::uint32_t v2_0_0_43_SP = 0x67E40777;
+			inline constexpr std::uint32_t v2_0_0_43_ZM = 0x67E40101;
 		}
 		
 		namespace iw8 {
@@ -95,8 +101,8 @@ namespace identification::game {
 	std::uint32_t get_checksum();
 	
 	inline std::vector<version::identifier> version_list = {
-		{ version::iw4_store::v1_0_0_SP, "Modern Warfare 2", "1.0.0", mode::SP },
-		{ version::iw4_store::v1_0_0_MP, "Modern Warfare 2", "1.0.0", mode::MP },
+		{ version::iw4_store::v2_0_6_MP, "Modern Warfare 2", "2.0.6", mode::MP },
+		{ version::iw4_store::v2_0_6_SP, "Modern Warfare 2", "2.0.6", mode::SP },
 		{ version::iw5::v1_9_388110_SP, "Modern Warfare 3", "1.9.388110", mode::SP },
 		{ version::iw5::v1_9_388110_MP, "Modern Warfare 3", "1.9.388110", mode::MP },
 		{ version::t6::v1_0_12_1468705_SP, "Black Ops II", "1.0.12.1468705", mode::SP },
@@ -104,6 +110,9 @@ namespace identification::game {
 		{ version::t6::v1_0_41_1902371_ZM, "Black Ops II", "1.0.41.1902371", mode::ZM },
 		{ version::t6::v1_0_44_1759941_MP, "Black Ops II", "1.0.44.1759941", mode::MP },
 		{ version::t6::v1_0_45_1898228_MP, "Black Ops II", "1.0.45.1898228", mode::MP },
+		{ version::t6_store::v2_0_0_43_MP, "Black Ops II", "2.0.0.43", mode::MP },
+		{ version::t6_store::v2_0_0_43_SP, "Black Ops II", "2.0.0.43", mode::SP },
+		{ version::t6_store::v2_0_0_43_ZM, "Black Ops II", "2.0.0.43", mode::ZM },
 		{ version::iw8::v0_01_2_7089334, "Modern Warfare", "0.01.2.7089334" },
 		{ version::iw8::v1_03_0_7209368, "Modern Warfare", "1.03.0.7209368" },
 		{ version::iw8::v1_20_4_7623265_REPLAY, "Modern Warfare", "1.20.4.7623265-replay" },

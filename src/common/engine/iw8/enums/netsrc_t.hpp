@@ -2,7 +2,7 @@
 #include "engine/engine_common.hpp"
 
 namespace iw8 {
-	enum class netsrc_t : int {
+	enum class netsrc_t : std::int32_t {
 		NS_CLIENT1 = 0x0,
 		NS_CLIENT2 = 0x1,
 		NS_MAXCLIENTS = 0x2,
