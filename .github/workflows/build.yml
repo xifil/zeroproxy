@@ -27,9 +27,17 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: .\generate.bat
 
+    - name: Build iw4-mod (x64)
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild .\src\client-iw4-store\client-iw4-store.vcxproj /p:Configuration=Release /p:Platform=x64
+
     - name: Build t6-mod
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild .\src\client-t6\client-t6.vcxproj /p:Configuration=Release /p:Platform=Win32
+
+    - name: Build t6-mod (x64)
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild .\src\client-t6-store\client-t6-store.vcxproj /p:Configuration=Release /p:Platform=x64
 
     - name: Build iw8-mod
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -39,11 +47,23 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild .\src\client-t9\client-t9.vcxproj /p:Configuration=Release /p:Platform=x64
 
+    - name: Upload iw4-mod (x64) artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: iw4-mod (x64)
+        path: build/x64/Release/iw4-store/d3d9.dll
+
     - name: Upload t6-mod artifact
       uses: actions/upload-artifact@v4
       with:
         name: t6-mod
         path: build/Win32/Release/t6/d3d11.dll
+
+    - name: Upload t6-mod (x64) artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: t6-mod (x64)
+        path: build/x64/Release/t6/d3d11.dll
 
     - name: Upload iw8-mod artifact
       uses: actions/upload-artifact@v4
