@@ -36,6 +36,16 @@ namespace identification::game {
 			inline constexpr std::uint32_t v2_0_0_43_SP = 0x67E40777;
 			inline constexpr std::uint32_t v2_0_0_43_ZM = 0x67E40101;
 		}
+
+		namespace iw6_store {
+			inline constexpr std::uint32_t v3_15_11_SP = 0x67C9BDB7;
+			inline constexpr std::uint32_t v3_15_11_MP = 0x67C9BDB9;
+		}
+
+		namespace s2_store {
+			inline constexpr std::uint32_t v2_0_0_SP = 0xAFD962C3;
+			inline constexpr std::uint32_t v2_0_0_MP = 0xF8D1963C;
+		}
 		
 		namespace iw8 {
 			inline constexpr std::uint32_t v0_01_2_7089334 = 0x37CCF2A5;
@@ -113,6 +123,10 @@ namespace identification::game {
 		{ version::t6_store::v2_0_0_43_MP, "Black Ops II", "2.0.0.43", mode::MP },
 		{ version::t6_store::v2_0_0_43_SP, "Black Ops II", "2.0.0.43", mode::SP },
 		{ version::t6_store::v2_0_0_43_ZM, "Black Ops II", "2.0.0.43", mode::ZM },
+		{ version::iw6_store::v3_15_11_MP, "Ghosts", "3.15.11", mode::MP },
+		{ version::iw6_store::v3_15_11_SP, "Ghosts", "3.15.11", mode::SP },
+		{ version::s2_store::v2_0_0_MP, "WWII", "2.0.0", mode::MP },
+		{ version::s2_store::v2_0_0_SP, "WWII", "2.0.0", mode::SP },
 		{ version::iw8::v0_01_2_7089334, "Modern Warfare", "0.01.2.7089334" },
 		{ version::iw8::v1_03_0_7209368, "Modern Warfare", "1.03.0.7209368" },
 		{ version::iw8::v1_20_4_7623265_REPLAY, "Modern Warfare", "1.20.4.7623265-replay" },

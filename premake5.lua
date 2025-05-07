@@ -87,6 +87,18 @@ newoption {
 }
 
 newoption {
+	trigger = "iw6-store-copy-to",
+	description = "Optional, copy the Ghosts (MS) DLL to a custom folder after build, define the path here if wanted.",
+	value = "PATH"
+}
+
+newoption {
+	trigger = "s2-store-copy-to",
+	description = "Optional, copy the WWII (MS) DLL to a custom folder after build, define the path here if wanted.",
+	value = "PATH"
+}
+
+newoption {
 	trigger = "iw8-copy-to",
 	description = "Optional, copy the Modern Warfare DLL to a custom folder after build, define the path here if wanted.",
 	value = "PATH"
@@ -457,6 +469,88 @@ workspace "ZeroProxy"
 		if _OPTIONS["t6-store-copy-to"] then
 			postbuildcommands {
 				"copy /y \"$(TargetPath)\" \"" .. _OPTIONS["t6-store-copy-to"] .. "\""
+			}
+		end
+
+		dependencies.imports()
+
+	project "client-iw6-store"
+		location "%{wks.location}/src/%{prj.name}"
+		objdir "%{wks.location}/build/obj/iw6-store"
+		targetdir "%{wks.location}/build/%{cfg.platform}/%{cfg.buildcfg}/iw6-store"
+		kind "SharedLib"
+		language "C++"
+
+		targetname "d3d11"
+
+		pchheader "common.hpp"
+		pchsource "src/%{prj.name}/common.cpp"
+
+		files {
+			"./src/%{prj.name}/**.rc",
+			"./src/%{prj.name}/**.hpp",
+			"./src/%{prj.name}/**.cpp",
+			"./src/%{prj.name}/resources/**.*"
+		}
+
+		includedirs {
+			"./src/%{prj.name}",
+			"./src/common",
+			"./src/generated"
+		}
+
+		resincludedirs {
+			"./src/generated"
+		}
+
+		links {
+			"common"
+		}
+
+		if _OPTIONS["iw6-store-copy-to"] then
+			postbuildcommands {
+				"copy /y \"$(TargetPath)\" \"" .. _OPTIONS["iw6-store-copy-to"] .. "\""
+			}
+		end
+
+		dependencies.imports()
+
+	project "client-s2-store"
+		location "%{wks.location}/src/%{prj.name}"
+		objdir "%{wks.location}/build/obj/s2-store"
+		targetdir "%{wks.location}/build/%{cfg.platform}/%{cfg.buildcfg}/s2-store"
+		kind "SharedLib"
+		language "C++"
+
+		targetname "d3d11"
+
+		pchheader "common.hpp"
+		pchsource "src/%{prj.name}/common.cpp"
+
+		files {
+			"./src/%{prj.name}/**.rc",
+			"./src/%{prj.name}/**.hpp",
+			"./src/%{prj.name}/**.cpp",
+			"./src/%{prj.name}/resources/**.*"
+		}
+
+		includedirs {
+			"./src/%{prj.name}",
+			"./src/common",
+			"./src/generated"
+		}
+
+		resincludedirs {
+			"./src/generated"
+		}
+
+		links {
+			"common"
+		}
+
+		if _OPTIONS["s2-store-copy-to"] then
+			postbuildcommands {
+				"copy /y \"$(TargetPath)\" \"" .. _OPTIONS["s2-store-copy-to"] .. "\""
 			}
 		end
 

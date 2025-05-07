@@ -22,7 +22,7 @@ namespace identification::game {
 			}
 
 #			if defined(_WIN64)
-				if ("Black Ops II"s == get_target_game() || "Modern Warfare 2"s == get_target_game()) {
+				if ("Black Ops II"s == get_target_game() || "Ghosts"s == get_target_game() || "Modern Warfare 2"s == get_target_game()) {
 					return static_cast<std::uint32_t>(game.get_nt_headers()->FileHeader.TimeDateStamp);
 				}
 #			else
