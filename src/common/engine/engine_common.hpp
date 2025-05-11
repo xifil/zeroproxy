@@ -7,6 +7,11 @@ namespace iw4 {
 	using Material = void;
 }
 
+namespace iw6 {
+	using Material = void;
+	using snd_alias_list_t = void;
+}
+
 namespace iw8 {
 	using AccessoryDef = void;
 	using AddonMapEnts = void;

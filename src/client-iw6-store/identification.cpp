@@ -1,7 +1,7 @@
 #include "common.hpp"
 
 extern "C" const char* ext_get_client_name() {
-	return "iw6-mod";
+	return "iw6s";
 }
 
 extern "C" const char* ext_get_target_game() {

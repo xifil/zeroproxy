@@ -70,16 +70,22 @@ namespace scheduler {
 		std::thread async_thread;
 		task_pipeline pipelines[ENUM_UNDER(pipeline::count)];
 
-		utils::hook::detour main_frame_hook;
+		utils::hook::detour com_frame_try_block_function_hook;
+		utils::hook::detour r_end_frame_hook;
 
 		void g_clear_vehicle_inputs_stub() {
 			//game::G_ClearVehicleInputs();
 			execute(pipeline::server);
 		}
 
-		void main_frame_stub() {
-			main_frame_hook.invoke<void>();
+		void com_frame_try_block_function_stub() {
 			execute(pipeline::main);
+			com_frame_try_block_function_hook.invoke<void>();
+		}
+
+		void r_end_frame_stub() {
+			execute(pipeline::renderer);
+			r_end_frame_hook.invoke<void>();
 		}
 	}
 
@@ -125,11 +131,10 @@ namespace scheduler {
 
 		void post_unpack() override {
 			if (!game::is_server()) {
+				r_end_frame_hook.create(game::R_EndFrame, r_end_frame_stub);
 			}
 
-			// Com_Frame_Try_Block_Function
-			//main_frame_hook.create(game::select(0x1420F8E00, 0x1405020E0), main_frame_stub);
-
+			com_frame_try_block_function_hook.create(game::Com_Frame_Try_Block_Function, com_frame_try_block_function_stub);
 			//utils::hook::call(game::select(0x14225522E, 0x140538427), g_clear_vehicle_inputs_stub);
 		}
 

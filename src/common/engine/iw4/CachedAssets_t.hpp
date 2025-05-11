@@ -5,27 +5,27 @@
 namespace iw4 {
 	class CachedAssets_t {
 	public:
-		Material* scroll_bar_arrow_up_;
-		Material* scroll_bar_arrow_down_;
-		Material* scroll_bar_arrow_left_;
-		Material* scroll_bar_arrow_right_;
-		Material* scroll_bar_;
-		Material* scroll_bar_thumb_;
-		Material* slider_bar_;
-		Material* slider_thumb_;
-		Material* white_material_;
-		Material* cursor_;
-		Material* text_decode_characters_;
-		Material* text_decode_characters_glow_;
-		Font_s* big_font_;
-		Font_s* small_font_;
-		Font_s* console_font_;
-		Font_s* bold_font_;
-		Font_s* text_font_;
-		Font_s* extra_big_font_;
-		Font_s* objective_font_;
-		Font_s* hud_big_font_;
-		Font_s* hud_small_font_;
+		Material* scroll_bar_arrow_up_;			// 0x0000
+		Material* scroll_bar_arrow_down_;		// 0x0008
+		Material* scroll_bar_arrow_left_;		// 0x0010
+		Material* scroll_bar_arrow_right_;		// 0x0018
+		Material* scroll_bar_;					// 0x0020
+		Material* scroll_bar_thumb_;			// 0x0028
+		Material* slider_bar_;					// 0x0030
+		Material* slider_thumb_;				// 0x0038
+		Material* white_material_;				// 0x0040
+		Material* cursor_;						// 0x0048
+		Material* text_decode_characters_;		// 0x0050
+		Material* text_decode_characters_glow_;	// 0x0058
+		Font_s* big_font_;						// 0x0060
+		Font_s* small_font_;					// 0x0068
+		Font_s* console_font_;					// 0x0070
+		Font_s* bold_font_;						// 0x0078
+		Font_s* text_font_;						// 0x0080
+		Font_s* extra_big_font_;				// 0x0088
+		Font_s* objective_font_;				// 0x0090
+		Font_s* hud_big_font_;					// 0x0098
+		Font_s* hud_small_font_;				// 0x00A0
 	};
 	ENGINE_ASSERT_SZ(CachedAssets_t, 0x00A8);
 }
