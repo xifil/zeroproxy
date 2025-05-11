@@ -10,6 +10,8 @@
 void game::init() {
 	memory::signature_store batch;
 
+	batch.add(SETUP_POINTER(CL_DrawTextPhysical), "E8 ? ? ? ? 0F 28 7C 24 ? 4C 8D 5C 24", SETUP_MOD(add(1).rip()));
+
 	batch.add(SETUP_POINTER(Cmd_AddCommandInternal), "E8 ? ? ? ? 4C 8D 05 ? ? ? ? 48 8D 15 ? ? ? ? 48 8D 0D ? ? ? ? 48 8B 5C 24", SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(Com_Frame_Try_Block_Function), "E8 ? ? ? ? FF 05 ? ? ? ? 83 3D", SETUP_MOD(add(1).rip()));
@@ -25,6 +27,8 @@ void game::init() {
 	if (identification::game::is(identification::game::version::iw4_store::v2_0_6_SP)) {
 		batch.add(SETUP_POINTER(UI_RefreshFullscreen), "E8 ? ? ? ? 83 3D ? ? ? ? ? 48 8B 7C 24", SETUP_MOD(add(1).rip()));
 	}
+
+	batch.add(SETUP_POINTER(sharedUiInfo_assets), "48 8B 05 ? ? ? ? 0F B6 56 ? 48 89 44 24", SETUP_MOD(add(3).rip()));
 
 	batch.scan_all(true);
 }

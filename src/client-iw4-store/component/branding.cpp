@@ -16,17 +16,17 @@ namespace branding {
 			static std::string watermark_text = std::format("{}: " GIT_DESCRIBE " [v{}]", identification::client::get_client_name(),
 				identification::game::get_version().version_);
 
-			t9::Font_s* font = *game::unk_WatermarkFont;
-			if (font) {
+			auto font = game::sharedUiInfo_assets->small_font_;
+			if (font != nullptr) {
 				float color[4] = { .666f, .666f, .666f, .666f };
-				game::CL_DrawTextPhysical(watermark_text.c_str(), 0x7FFFFFFF, font, 4.f, 4.f + static_cast<float>(font->font_height_),
-					1.f, 1.f, 0.f, color, 0, 0);
+				game::CL_DrawTextPhysical(watermark_text.c_str(), 0x7FFFFFFF, font, 4.f, 4.f + static_cast<float>(font->pixel_height_),
+					1.f, 1.f, color, 0);
 			}
 		}
 	}
 
 	struct component final : generic_component {
-		void post_unpack() override {
+		void post_load() override {
 			scheduler::loop(draw_branding, scheduler::pipeline::renderer);
 		}
 	};

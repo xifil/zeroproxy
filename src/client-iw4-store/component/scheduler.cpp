@@ -134,9 +134,7 @@ namespace scheduler {
 					std::this_thread::sleep_for(10ms);
 				}
 			});
-		}
 
-		void post_unpack() override {
 			if (!game::is_server()) {
 				if (game::ScrPlace_EndFrame != nullptr) {
 					scr_place_end_frame_hook.create(game::ScrPlace_EndFrame, scr_place_end_frame_stub);
