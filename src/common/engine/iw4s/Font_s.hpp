@@ -1,7 +1,7 @@
 #pragma once
 #include "engine/engine_common.hpp"
 
-namespace iw4 {
+namespace iw4s {
 	class Font_s {
 	public:
 		const char* font_name_;		// 0x0000

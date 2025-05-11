@@ -3,11 +3,11 @@
 
 #define ENGINE_ASSERT_SZ(cls, sz) static_assert(sizeof(cls) == sz, #cls " is not " #sz " bytes in size.")
 
-namespace iw4 {
+namespace iw4s {
 	using Material = void;
 }
 
-namespace iw6 {
+namespace iw6s {
 	using Material = void;
 	using snd_alias_list_t = void;
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include "engine/engine_common.hpp"
 
-namespace iw6 {
+namespace iw6s {
 	class Glyph {
 	public:
 		unsigned short letter_;	// 0x0000

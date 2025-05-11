@@ -27,7 +27,7 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: .\generate.bat
 
-    - name: Build iw4-mod (x64)
+    - name: Build iw4s (Store)
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild .\src\client-iw4-store\client-iw4-store.vcxproj /p:Configuration=Release /p:Platform=x64
 
@@ -35,9 +35,17 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild .\src\client-t6\client-t6.vcxproj /p:Configuration=Release /p:Platform=Win32
 
-    - name: Build t6-mod (x64)
+    - name: Build t6s (Store)
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild .\src\client-t6-store\client-t6-store.vcxproj /p:Configuration=Release /p:Platform=x64
+
+    - name: Build iw6s (Store)
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild .\src\client-iw6-store\client-iw6-store.vcxproj /p:Configuration=Release /p:Platform=x64
+
+    - name: Build s2s (Store)
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild .\src\client-s2-store\client-s2-store.vcxproj /p:Configuration=Release /p:Platform=x64
 
     - name: Build iw8-mod
       working-directory: ${{env.GITHUB_WORKSPACE}}
@@ -47,10 +55,10 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild .\src\client-t9\client-t9.vcxproj /p:Configuration=Release /p:Platform=x64
 
-    - name: Upload iw4-mod (x64) artifact
+    - name: Upload iw4s (Store) artifact
       uses: actions/upload-artifact@v4
       with:
-        name: iw4-mod (x64)
+        name: iw4s (Store)
         path: build/x64/Release/iw4-store/d3d9.dll
 
     - name: Upload t6-mod artifact
@@ -59,11 +67,23 @@ jobs:
         name: t6-mod
         path: build/Win32/Release/t6/d3d11.dll
 
-    - name: Upload t6-mod (x64) artifact
+    - name: Upload t6s (Store) artifact
       uses: actions/upload-artifact@v4
       with:
-        name: t6-mod (x64)
+        name: t6s (Store)
         path: build/x64/Release/t6/d3d11.dll
+
+    - name: Upload iw6s (Store) artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: iw6s (Store)
+        path: build/x64/Release/iw6/d3d11.dll
+
+    - name: Upload s2s (Store) artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: s2s (Store)
+        path: build/x64/Release/s2/d3d11.dll
 
     - name: Upload iw8-mod artifact
       uses: actions/upload-artifact@v4

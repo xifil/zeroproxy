@@ -1,8 +1,8 @@
 #pragma once
 #include "engine/engine_common.hpp"
-#include "engine/iw6/Font_s.hpp"
+#include "engine/iw6s/Font_s.hpp"
 
-namespace iw6 {
+namespace iw6s {
 	class CachedAssets_t {
 	public:
 		Material* scroll_bar_arrow_up_;				// 0x0000

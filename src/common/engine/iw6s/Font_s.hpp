@@ -1,8 +1,8 @@
 #pragma once
 #include "engine/engine_common.hpp"
-#include "engine/iw6/Glyph.hpp"
+#include "engine/iw6s/Glyph.hpp"
 
-namespace iw6 {
+namespace iw6s {
 	class Font_s {
 	public:
 		const char* font_name_;		// 0x0000
