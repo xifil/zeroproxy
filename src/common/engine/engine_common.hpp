@@ -125,6 +125,13 @@ namespace iw8 {
 	using XZoneTemporaryLoadData = void;
 }
 
+namespace t6s {
+	using Glyph = void;
+	using KerningPairs = void;
+	using Material = void;
+	using SndAliasList = void;
+}
+
 namespace uwp {
 	using XStoreContextHandle = class XStoreContext*;
 	using XStoreLicenseHandle = class XStoreLicense*;

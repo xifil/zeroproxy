@@ -70,7 +70,13 @@ namespace scheduler {
 		std::thread async_thread;
 		task_pipeline pipelines[ENUM_UNDER(pipeline::count)];
 
+		utils::hook::detour cl_draw_screen_hook;
 		utils::hook::detour main_frame_hook;
+
+		void cl_draw_screen_stub(std::uint32_t local_client_num) {
+			cl_draw_screen_hook.invoke<void>(local_client_num);
+			execute(pipeline::renderer);
+		}
 
 		void g_clear_vehicle_inputs_stub() {
 			//game::G_ClearVehicleInputs();
@@ -121,10 +127,9 @@ namespace scheduler {
 					std::this_thread::sleep_for(10ms);
 				}
 			});
-		}
 
-		void post_unpack() override {
 			if (!game::is_server()) {
+				cl_draw_screen_hook.create(game::CL_DrawScreen, cl_draw_screen_stub);
 			}
 
 			// Com_Frame_Try_Block_Function
