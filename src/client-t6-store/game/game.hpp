@@ -5,7 +5,5 @@
 namespace game {
 	void init();
 
-	inline functions::XStoreQueryGameLicenseResultT* XStoreQueryGameLicenseResult{};
-
 	bool is_server();
 }

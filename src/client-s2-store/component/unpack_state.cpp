@@ -20,4 +20,4 @@ namespace unpack_state {
 	};
 }
 
-REGISTER_COMPONENT(unpack_state::component)
+//REGISTER_COMPONENT(unpack_state::component)

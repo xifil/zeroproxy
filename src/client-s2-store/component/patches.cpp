@@ -11,24 +11,11 @@
 namespace patches {
 	namespace {
 		utils::hook::detour seh_stringed_get_string_hook;
-		utils::hook::detour x_store_query_game_license_result_hook;
 
 		utils::hook::iat_detour create_window_ex_w_hook;
 
 		const char* seh_stringed_get_string_stub(const char* key) {
 			return key;
-		}
-
-		HRESULT x_store_query_game_license_result_stub(void* async, uwp::XStoreGameLicense* license) {
-			// result ignored, we return S_OK anyway to avoid "popup_drm_menu_gdk_license_error"
-			x_store_query_game_license_result_hook.invoke<HRESULT>(async, license);
-
-			// bypass "popup_drm_menu_gdk_invalid_license"
-			license->is_active_ = true;
-			license->is_disc_license_ = false;
-			license->is_trial_ = false;
-
-			return S_OK;
 		}
 
 		HWND create_window_ex_w_stub(DWORD dw_ex_style, LPCWSTR lp_class_name, LPCWSTR lp_window_name, DWORD dw_style, int x, int y, int n_width, int n_height,
@@ -56,4 +43,4 @@ namespace patches {
 	};
 }
 
-REGISTER_COMPONENT(patches::component)
+//REGISTER_COMPONENT(patches::component)

@@ -70,16 +70,29 @@ namespace scheduler {
 		std::thread async_thread;
 		task_pipeline pipelines[ENUM_UNDER(pipeline::count)];
 
-		utils::hook::detour main_frame_hook;
+		utils::hook::detour com_frame_try_block_function_hook;
+		utils::hook::detour g_glass_update_hook;
+		utils::hook::detour scr_place_end_frame_hook;
+		utils::hook::detour ui_refresh_fullscreen_hook;
 
-		void g_clear_vehicle_inputs_stub() {
-			//game::G_ClearVehicleInputs();
+		void com_frame_try_block_function_stub() {
+			com_frame_try_block_function_hook.invoke<void>();
+			execute(pipeline::main);
+		}
+
+		void g_glass_update_stub() {
+			g_glass_update_hook.invoke<void>();
 			execute(pipeline::server);
 		}
 
-		void main_frame_stub() {
-			main_frame_hook.invoke<void>();
-			execute(pipeline::main);
+		void scr_place_end_frame_stub() {
+			scr_place_end_frame_hook.invoke<void>();
+			execute(pipeline::renderer);
+		}
+
+		void ui_refresh_fullscreen_stub(std::uint32_t local_client_num) {
+			execute(pipeline::renderer);
+			ui_refresh_fullscreen_hook.invoke<void>(local_client_num);
 		}
 	}
 
@@ -125,12 +138,16 @@ namespace scheduler {
 
 		void post_unpack() override {
 			if (!game::is_server()) {
+				if (game::ScrPlace_EndFrame != nullptr) {
+					scr_place_end_frame_hook.create(game::ScrPlace_EndFrame, scr_place_end_frame_stub);
+				}
+				else if (game::UI_RefreshFullscreen != nullptr) {
+					ui_refresh_fullscreen_hook.create(game::UI_RefreshFullscreen, ui_refresh_fullscreen_stub);
+				}
 			}
 
-			// Com_Frame_Try_Block_Function
-			//main_frame_hook.create(game::select(0x1420F8E00, 0x1405020E0), main_frame_stub);
-
-			//utils::hook::call(game::select(0x14225522E, 0x140538427), g_clear_vehicle_inputs_stub);
+			com_frame_try_block_function_hook.create(game::Com_Frame_Try_Block_Function, com_frame_try_block_function_stub);
+			g_glass_update_hook.create(game::G_Glass_Update, g_glass_update_stub);
 		}
 
 		void pre_destroy() override {

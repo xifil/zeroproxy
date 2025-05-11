@@ -14,8 +14,6 @@ void game::init() {
 
 	batch.add(SETUP_POINTER(SEH_StringEd_GetString), "48 83 EC ? 48 8B 05 ? ? ? ? 48 85 C0 74 ? 80 78 ? ? 74");
 
-	batch.add(SETUP_POINTER(XStoreQueryGameLicenseResult), "E8 ? ? ? ? 85 C0 79 ? C7 05", SETUP_MOD(add(1).rip()));
-
 	batch.scan_all();
 }
 

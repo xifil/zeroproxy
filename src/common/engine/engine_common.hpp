@@ -115,3 +115,14 @@ namespace iw8 {
 	using XModelSurfs = void;
 	using XZoneTemporaryLoadData = void;
 }
+
+namespace uwp {
+	using XStoreContextHandle = class XStoreContext*;
+	using XStoreLicenseHandle = class XStoreLicense*;
+	using XStoreProductQueryHandle = class XStoreProductQuery*;
+	using XTaskQueueHandle = class XTaskQueueObject*;
+	using XUserHandle = class XUser*;
+
+	using XStoreGameLicenseChangedCallback = void(void* context);
+	using XStorePackageLicenseLostCallback = void(void* context);
+}

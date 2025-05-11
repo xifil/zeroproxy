@@ -15,4 +15,4 @@ namespace pointers {
 	};
 }
 
-REGISTER_COMPONENT(pointers::component)
+//REGISTER_COMPONENT(pointers::component)
