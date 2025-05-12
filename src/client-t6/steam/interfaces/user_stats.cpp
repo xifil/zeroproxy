@@ -8,7 +8,7 @@ namespace steam {
 				callback_id = 1101
 			};
 
-			uint64_t game_id_;
+			std::uint64_t game_id_;
 			int result_;
 			steam_id steam_id_user_;
 		};

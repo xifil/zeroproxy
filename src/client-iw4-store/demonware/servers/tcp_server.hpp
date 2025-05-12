@@ -1,0 +1,25 @@
+#pragma once
+#include "common.hpp"
+#include "demonware/servers/base_server.hpp"
+
+#include <utils/concurrency.hpp>
+
+namespace demonware {
+	class tcp_server : public base_server {
+	public:
+		using base_server::base_server;
+
+		void handle_input(const char* buf, std::size_t size);
+		std::size_t handle_output(char* buf, std::size_t size);
+		bool pending_data();
+
+		void frame() override;
+	protected:
+		void send(const std::string& data);
+
+		virtual void handle(const std::string& data) = 0;
+	private:
+		utils::concurrency::container<data_queue> in_queue_;
+		utils::concurrency::container<stream_queue> out_queue_;
+	};
+}

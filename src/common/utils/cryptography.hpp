@@ -35,7 +35,7 @@ namespace utils::cryptography {
 
 			bool operator==(key& key) const;
 
-			uint64_t get_hash() const;
+			std::uint64_t get_hash() const;
 
 		private:
 			ecc_key key_storage_{};
@@ -61,7 +61,7 @@ namespace utils::cryptography {
 
 	namespace tiger {
 		std::string compute(const std::string& data, bool hex = false);
-		std::string compute(const uint8_t* data, size_t length, bool hex = false);
+		std::string compute(const std::uint8_t* data, std::size_t length, bool hex = false);
 	}
 
 	namespace aes {
@@ -75,38 +75,38 @@ namespace utils::cryptography {
 
 	namespace sha1 {
 		std::string compute(const std::string& data, bool hex = false);
-		std::string compute(const uint8_t* data, size_t length, bool hex = false);
+		std::string compute(const std::uint8_t* data, std::size_t length, bool hex = false);
 	}
 
 	namespace sha256 {
 		std::string compute(const std::string& data, bool hex = false);
-		std::string compute(const uint8_t* data, size_t length, bool hex = false);
+		std::string compute(const std::uint8_t* data, std::size_t length, bool hex = false);
 	}
 
 	namespace sha512 {
 		std::string compute(const std::string& data, bool hex = false);
-		std::string compute(const uint8_t* data, size_t length, bool hex = false);
+		std::string compute(const std::uint8_t* data, std::size_t length, bool hex = false);
 	}
 
 	namespace md5 {
 		std::string compute(const std::string& data, bool hex = false);
-		std::string compute(const uint8_t* data, size_t length, bool hex = false);
+		std::string compute(const std::uint8_t* data, std::size_t length, bool hex = false);
 	}
 
 	namespace base64 {
-		std::string encode(const uint8_t* data, size_t len);
+		std::string encode(const std::uint8_t* data, std::size_t len);
 		std::string encode(const std::string& data);
 		std::string decode(const std::string& data);
 	}
 
 	namespace jenkins_one_at_a_time {
 		unsigned int compute(const std::string& data);
-		unsigned int compute(const char* key, size_t len);
+		unsigned int compute(const char* key, std::size_t len);
 	};
 
 	namespace random {
-		uint32_t get_integer();
+		std::uint32_t get_integer();
 		std::string get_challenge();
-		void get_data(void* data, size_t size);
+		void get_data(void* data, std::size_t size);
 	}
 }

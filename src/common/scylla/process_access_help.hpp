@@ -18,7 +18,7 @@ namespace scylla {
 		static std::vector<module_info> module_list; // target process module list
 		static std::vector<module_info> own_module_list; // own module list
 
-		static const size_t PE_HEADER_BYTES_COUNT = 2000;
+		static const std::size_t PE_HEADER_BYTES_COUNT = 2000;
 
 		static BYTE file_header_from_disk[PE_HEADER_BYTES_COUNT];
 
@@ -102,9 +102,9 @@ namespace scylla {
 		/*
 		 * Disassemble Memory
 		 */
-		static bool disassemble_memory(BYTE* dataBuffer, SIZE_T bufferSize, std::uintptr_t startOffset);
+		static bool disassemble_memory(BYTE* dataBuffer, std::size_t bufferSize, std::uintptr_t startOffset);
 
-		static bool decompose_memory(BYTE* dataBuffer, SIZE_T bufferSize, std::uintptr_t startAddress);
+		static bool decompose_memory(BYTE* dataBuffer, std::size_t bufferSize, std::uintptr_t startAddress);
 
 		/*
 		 * Search for pattern
@@ -119,7 +119,7 @@ namespace scylla {
 		/*
 		 * Get memory region from address
 		 */
-		static bool get_memory_region_from_address(std::uintptr_t address, std::uintptr_t* memoryRegionBase, SIZE_T* memoryRegionSize);
+		static bool get_memory_region_from_address(std::uintptr_t address, std::uintptr_t* memoryRegionBase, std::size_t* memoryRegionSize);
 
 		/*
 		 * Read PE Header from file
@@ -131,7 +131,7 @@ namespace scylla {
 		/*
 		 * Get real sizeOfImage value
 		 */
-		static SIZE_T get_size_of_image_process(HANDLE process_handle, std::uintptr_t module_base);
+		static std::size_t get_size_of_image_process(HANDLE process_handle, std::uintptr_t module_base);
 
 		/*
 		 * Get real sizeOfImage value current process

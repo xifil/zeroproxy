@@ -122,7 +122,7 @@ namespace steam_proxy {
 			}, scheduler::pipeline::main);
 		}
 
-		ownership_state start_mod_unsafe(const std::string& title, size_t app_id) {
+		ownership_state start_mod_unsafe(const std::string& title, std::size_t app_id) {
 			/*
 			if (!client_utils || !client_user) {
 				return ownership_state::nosteam;
@@ -177,7 +177,7 @@ namespace steam_proxy {
 			return ownership_state::success;
 		}
 
-		ownership_state start_mod(const std::string& title, const size_t app_id) {
+		ownership_state start_mod(const std::string& title, const std::size_t app_id) {
 			__try {
 				return start_mod_unsafe(title, app_id);
 			}

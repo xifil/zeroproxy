@@ -28,6 +28,7 @@
 #include <DbgHelp.h>
 
 #pragma comment(lib, "DbgHelp.lib")
+#pragma comment(lib, "ws2_32.lib")
 
 // min and max is required by gdi, therefore NOMINMAX won't work
 #ifdef max

@@ -28,7 +28,7 @@ namespace arxan {
 				"DbgPrompt"
 			};
 
-			using buffer = uint8_t[15];
+			using buffer = std::uint8_t[15];
 			static utils::nt::library ntdll{ "ntdll.dll" };
 			static buffer buffers[ARRAYSIZE(functions)] = {};
 			static bool loaded = false;

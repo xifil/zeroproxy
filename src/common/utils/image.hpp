@@ -5,8 +5,8 @@
 
 namespace utils::image {
 	struct image {
-		size_t width;
-		size_t height;
+		std::size_t width;
+		std::size_t height;
 		std::string data;
 	};
 

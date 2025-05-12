@@ -16,7 +16,7 @@ namespace utils {
 
 			void free(const void* data);
 
-			void* allocate(size_t length);
+			void* allocate(std::size_t length);
 
 			template <typename T>
 			T* allocate() {
@@ -24,7 +24,7 @@ namespace utils {
 			}
 
 			template <typename T>
-			T* allocate_array(const size_t count = 1) {
+			T* allocate_array(const std::size_t count = 1) {
 				return static_cast<T*>(this->allocate(count * sizeof(T)));
 			}
 
@@ -39,7 +39,7 @@ namespace utils {
 			std::vector<void*> pool_;
 		};
 
-		static void* allocate(size_t length);
+		static void* allocate(std::size_t length);
 
 		template <typename T>
 		static T* allocate() {
@@ -47,7 +47,7 @@ namespace utils {
 		}
 
 		template <typename T>
-		static T* allocate_array(const size_t count = 1) {
+		static T* allocate_array(const std::size_t count = 1) {
 			return static_cast<T*>(allocate(count * sizeof(T)));
 		}
 
@@ -56,7 +56,7 @@ namespace utils {
 		static void free(void* data);
 		static void free(const void* data);
 
-		static bool is_set(const void* mem, char chr, size_t length);
+		static bool is_set(const void* mem, char chr, std::size_t length);
 
 		static bool is_bad_read_ptr(const void* ptr);
 		static bool is_bad_code_ptr(const void* ptr);

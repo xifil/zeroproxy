@@ -51,8 +51,8 @@ namespace utils::compression {
 			}
 
 			int ret{};
-			size_t offset = 0;
-			static thread_local uint8_t dest[CHUNK] = {0};
+			std::size_t offset = 0;
+			static thread_local std::uint8_t dest[CHUNK] = {0};
 			auto& stream = stream_container.get();
 
 			do {
@@ -198,7 +198,7 @@ namespace utils::compression {
 
 			private:
 				const std::string& data_;
-				size_t offset_{0};
+				std::size_t offset_{0};
 				zlib_filefunc64_def func_def_{};
 
 				voidpf open_file(const void* filename, const int mode) const {
@@ -218,7 +218,7 @@ namespace utils::compression {
 						return -1;
 					}
 
-					size_t target_base = this->data_.size();
+					std::size_t target_base = this->data_.size();
 					if (origin == ZLIB_FILEFUNC_SEEK_CUR) {
 						target_base = this->offset_;
 					}

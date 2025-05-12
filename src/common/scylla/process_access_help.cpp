@@ -31,7 +31,7 @@ namespace scylla {
 	}
 
 	bool process_access_help::read_memory_from_process(std::uintptr_t address, std::size_t size, LPVOID data_buffer) {
-		SIZE_T lp_number_of_bytes_read = 0;
+		std::size_t lp_number_of_bytes_read = 0;
 		DWORD dw_protect = 0;
 		bool return_value = false;
 

@@ -41,7 +41,7 @@ namespace utils::nt {
 
 		void unprotect() const;
 		[[nodiscard]] void* get_entry_point() const;
-		[[nodiscard]] size_t get_relative_entry_point() const;
+		[[nodiscard]] std::size_t get_relative_entry_point() const;
 
 		[[nodiscard]] bool is_valid() const;
 		[[nodiscard]] std::string get_name() const;
@@ -238,7 +238,7 @@ namespace utils::nt {
 	std::string load_resource(int id);
 
 	void relaunch_self();
-	__declspec(noreturn) void terminate(uint32_t code = 0);
+	__declspec(noreturn) void terminate(std::uint32_t code = 0);
 
 	void show_error(const std::string& text, const std::string& title = "Error");
 

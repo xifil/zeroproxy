@@ -12,7 +12,7 @@ namespace utils {
 		, buffer_(std::move(buffer))
 	{}
 
-	void byte_buffer::write(const void* buffer, const size_t length) {
+	void byte_buffer::write(const void* buffer, const std::size_t length) {
 		if (!this->writing_) {
 			throw std::runtime_error("Writing to readable byte buffer");
 		}
@@ -20,7 +20,7 @@ namespace utils {
 		this->buffer_.append(static_cast<const char*>(buffer), length);
 	}
 
-	void byte_buffer::read(void* data, const size_t length) {
+	void byte_buffer::read(void* data, const std::size_t length) {
 		if (this->writing_) {
 			throw std::runtime_error("Reading from writable byte buffer");
 		}
@@ -33,7 +33,7 @@ namespace utils {
 		this->offset_ += length;
 	}
 
-	std::string byte_buffer::read_data(const size_t length) {
+	std::string byte_buffer::read_data(const std::size_t length) {
 		std::string result{};
 		result.resize(length);
 

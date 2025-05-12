@@ -59,7 +59,7 @@ namespace scylla {
 			delete[] this->file_memory_;
 		}
 
-		for (size_t i = 0; i < this->list_pe_section_.size(); i++) {
+		for (std::size_t i = 0; i < this->list_pe_section_.size(); i++) {
 			if (this->list_pe_section_[i].data_) {
 				delete[] this->list_pe_section_[i].data_;
 			}
@@ -940,7 +940,7 @@ namespace scylla {
 	}
 
 	bool pe_parser::add_new_last_section(const char* section_name, std::uint32_t section_size, std::uint8_t* section_data) {
-		size_t name_length = strlen(section_name);
+		std::size_t name_length = strlen(section_name);
 		DWORD file_alignment = 0, section_alignment = 0;
 		pe_file_section section;
 

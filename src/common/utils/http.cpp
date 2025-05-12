@@ -7,7 +7,7 @@
 namespace utils::http {
 	namespace {
 		struct progress_helper {
-			const std::function<void(size_t)>* callback{};
+			const std::function<void(std::size_t)>* callback{};
 			std::exception_ptr exception{};
 		};
 
@@ -27,7 +27,7 @@ namespace utils::http {
 			return 0;
 		}
 
-		size_t write_callback(void* contents, const size_t size, const size_t nmemb, void* userp) {
+		std::size_t write_callback(void* contents, const std::size_t size, const std::size_t nmemb, void* userp) {
 			auto* buffer = static_cast<std::string*>(userp);
 
 			const auto total_size = size * nmemb;
@@ -36,7 +36,9 @@ namespace utils::http {
 		}
 	}
 
-	std::optional<std::string> get_data(const std::string& url, const headers& headers, const std::function<void(size_t)>& callback, const uint32_t retries) {
+	std::optional<std::string> get_data(const std::string& url, const headers& headers, const std::function<void(std::size_t)>& callback,
+		const std::uint32_t retries)
+	{
 		curl_slist* header_list = nullptr;
 		auto* curl = curl_easy_init();
 		if (!curl) {

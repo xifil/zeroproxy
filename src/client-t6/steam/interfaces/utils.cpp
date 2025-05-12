@@ -7,7 +7,7 @@ namespace steam {
 	}
 
 	unsigned int utils::GetSecondsSinceComputerActive() {
-		return static_cast<uint32_t>(GetTickCount64() / 1000);
+		return static_cast<std::uint32_t>(GetTickCount64() / 1000);
 	}
 
 	int utils::GetConnectedUniverse() {
@@ -15,7 +15,7 @@ namespace steam {
 	}
 
 	unsigned int utils::GetServerRealTime() {
-		return static_cast<uint32_t>(time(nullptr));
+		return static_cast<std::uint32_t>(time(nullptr));
 	}
 
 	const char* utils::GetIPCountry() {

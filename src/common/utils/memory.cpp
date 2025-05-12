@@ -32,7 +32,7 @@ namespace utils {
 		this->free(const_cast<void*>(data));
 	}
 
-	void* memory::allocator::allocate(const size_t length) {
+	void* memory::allocator::allocate(const std::size_t length) {
 		std::lock_guard _(this->mutex_);
 
 		const auto data = memory::allocate(length);
@@ -59,7 +59,7 @@ namespace utils {
 		return j != this->pool_.end();
 	}
 
-	void* memory::allocate(const size_t length) {
+	void* memory::allocate(const std::size_t length) {
 		return std::calloc(length, 1);
 	}
 
@@ -77,10 +77,10 @@ namespace utils {
 		free(const_cast<void*>(data));
 	}
 
-	bool memory::is_set(const void* mem, const char chr, const size_t length) {
+	bool memory::is_set(const void* mem, const char chr, const std::size_t length) {
 		const auto mem_arr = static_cast<const char*>(mem);
 
-		for (size_t i = 0; i < length; ++i) {
+		for (std::size_t i = 0; i < length; ++i) {
 			if (mem_arr[i] != chr) {
 				return false;
 			}
@@ -133,9 +133,9 @@ namespace utils {
 			std::memcpy(name, section->Name, size);
 
 			if (name == rdata) {
-				const auto target = size_t(pointer);
-				const size_t source_start = size_t(pointer_lib.get_ptr()) + section->PointerToRawData;
-				const size_t source_end = source_start + section->SizeOfRawData;
+				const auto target = std::size_t(pointer);
+				const std::size_t source_start = std::size_t(pointer_lib.get_ptr()) + section->PointerToRawData;
+				const std::size_t source_end = source_start + section->SizeOfRawData;
 
 				return target >= source_start && target <= source_end;
 			}

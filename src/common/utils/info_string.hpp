@@ -10,7 +10,7 @@ namespace utils {
 		explicit info_string(const std::string& buffer);
 		explicit info_string(const char* buffer);
 		explicit info_string(const std::string_view& buffer);
-		info_string(const std::basic_string_view<uint8_t>& buffer);
+		info_string(const std::basic_string_view<std::uint8_t>& buffer);
 
 		void set(const std::string& key, const std::string& value);
 		std::string get(const std::string& key) const;

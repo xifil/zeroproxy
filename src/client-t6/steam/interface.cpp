@@ -64,8 +64,8 @@ namespace steam {
 		ud_t ud;
 		ud_init(&ud);
 		ud_set_mode(&ud, sizeof(std::uintptr_t) * 8);
-		ud_set_pc(&ud, reinterpret_cast<uint64_t>(method_ptr));
-		ud_set_input_buffer(&ud, static_cast<const uint8_t*>(method_ptr), INT32_MAX);
+		ud_set_pc(&ud, reinterpret_cast<std::uint64_t>(method_ptr));
+		ud_set_input_buffer(&ud, static_cast<const std::uint8_t*>(method_ptr), INT32_MAX);
 
 		while (true) {
 			ud_disassemble(&ud);

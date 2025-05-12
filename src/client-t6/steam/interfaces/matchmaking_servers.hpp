@@ -9,9 +9,9 @@ namespace steam {
 
 	class servernetadr_t {
 	public:
-		uint16_t connection_port_;
-		uint16_t query_port_;
-		uint32_t ip_;
+		std::uint16_t connection_port_;
+		std::uint16_t query_port_;
+		std::uint32_t ip_;
 	};
 
 	class gameserveritem_t {
@@ -23,13 +23,13 @@ namespace steam {
 		char game_dir_[32];
 		char map_[32];
 		char game_description_[64];
-		uint32_t app_id_;
+		std::uint32_t app_id_;
 		int players_;
 		int max_players_;
 		int bot_players_;
 		bool password_;
 		bool secure_;
-		uint32_t time_last_played_;
+		std::uint32_t time_last_played_;
 		int server_version_;
 		char server_name_[64];
 		char game_tags_[128];

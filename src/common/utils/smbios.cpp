@@ -25,9 +25,9 @@ namespace utils::smbios {
 		} dmi_header;
 #pragma warning(pop)
 
-		std::vector<uint8_t> get_smbios_data() {
+		std::vector<std::uint8_t> get_smbios_data() {
 			DWORD size = 0;
-			std::vector<uint8_t> data{};
+			std::vector<std::uint8_t> data{};
 
 			size = GetSystemFirmwareTable('RSMB', 0, nullptr, size);
 			data.resize(size);
@@ -36,7 +36,7 @@ namespace utils::smbios {
 			return data;
 		}
 
-		std::string parse_uuid(const uint8_t* data) {
+		std::string parse_uuid(const std::uint8_t* data) {
 			if (utils::memory::is_set(data, 0, 16) || utils::memory::is_set(data, -1, 16)) {
 				return {};
 			}
@@ -70,7 +70,7 @@ namespace utils::smbios {
 			}
 
 			i += header->length;
-			while ((i + 1) < raw_data->Length && *reinterpret_cast<uint16_t*>(data + i) != 0) {
+			while ((i + 1) < raw_data->Length && *reinterpret_cast<std::uint16_t*>(data + i) != 0) {
 				++i;
 			}
 

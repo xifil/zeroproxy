@@ -3,19 +3,19 @@
 
 namespace utils::hardware_breakpoint {
 	namespace {
-		void set_bits(uint64_t& value, const uint32_t bit_index, const uint32_t bits, const uint64_t new_value) {
-			const uint64_t range_mask = (1ull << bits) - 1ull;
-			const uint64_t full_mask = ~(range_mask << bit_index);
+		void set_bits(std::uint64_t& value, const std::uint32_t bit_index, const std::uint32_t bits, const std::uint64_t new_value) {
+			const std::uint64_t range_mask = (1ull << bits) - 1ull;
+			const std::uint64_t full_mask = ~(range_mask << bit_index);
 			value = (value & full_mask) | (new_value << bit_index);
 		}
 
-		void validate_index(const uint32_t index) {
+		void validate_index(const std::uint32_t index) {
 			if (index >= 4) {
 				throw std::runtime_error("Invalid index");
 			}
 		}
 
-		uint32_t translate_length(const uint32_t length) {
+		std::uint32_t translate_length(const std::uint32_t length) {
 			if (length != 1 && length != 2 && length != 4) {
 				throw std::runtime_error("Invalid length");
 			}
@@ -25,7 +25,7 @@ namespace utils::hardware_breakpoint {
 
 		class debug_context {
 		public:
-			debug_context(uint32_t thread_id)
+			debug_context(std::uint32_t thread_id)
 				: handle_(thread_id, THREAD_SET_CONTEXT | THREAD_GET_CONTEXT)
 			{
 				if (!this->handle_) {
@@ -62,8 +62,8 @@ namespace utils::hardware_breakpoint {
 			CONTEXT context_{};
 		};
 
-		uint32_t find_free_index(const CONTEXT& context) {
-			for (uint32_t i = 0; i < 4; ++i) {
+		std::uint32_t find_free_index(const CONTEXT& context) {
+			for (std::uint32_t i = 0; i < 4; ++i) {
 				if ((context.Dr7 & (1ull << (i << 1ull))) == 0) {
 					return i;
 				}
@@ -77,12 +77,12 @@ namespace utils::hardware_breakpoint {
 		//set_bits(context.Dr7, 8, 1, enabled ? 1 : 0);
 	}
 
-	void set_branch_tracing(const bool enabled, const uint32_t thread_id) {
+	void set_branch_tracing(const bool enabled, const std::uint32_t thread_id) {
 		debug_context context(thread_id);
 		set_branch_tracing(enabled, context);
 	}
 
-	uint32_t activate(const uint64_t address, uint32_t length, const condition cond, CONTEXT& context) {
+	std::uint32_t activate(const std::uint64_t address, std::uint32_t length, const condition cond, CONTEXT& context) {
 		const auto index = find_free_index(context);
 		length = translate_length(length);
 
@@ -95,16 +95,16 @@ namespace utils::hardware_breakpoint {
 		return index;
 	}
 
-	uint32_t activate(void* address, const uint32_t length, const condition cond, const uint32_t thread_id) {
-		return activate(reinterpret_cast<uint64_t>(address), length, cond, thread_id);
+	std::uint32_t activate(void* address, const std::uint32_t length, const condition cond, const std::uint32_t thread_id) {
+		return activate(reinterpret_cast<std::uint64_t>(address), length, cond, thread_id);
 	}
 
-	uint32_t activate(const uint64_t address, const uint32_t length, const condition cond, const uint32_t thread_id) {
+	std::uint32_t activate(const std::uint64_t address, const std::uint32_t length, const condition cond, const std::uint32_t thread_id) {
 		debug_context context(thread_id);
 		return activate(address, length, cond, context);
 	}
 
-	void deactivate_address(const uint64_t address, CONTEXT& context) {
+	void deactivate_address(const std::uint64_t address, CONTEXT& context) {
 		for (auto i = 0; i < 4; ++i) {
 			if ((&context.Dr0)[i] == address) {
 				deactivate(i, context);
@@ -112,21 +112,21 @@ namespace utils::hardware_breakpoint {
 		}
 	}
 
-	void deactivate_address(void* address, const uint32_t thread_id) {
-		return deactivate_address(reinterpret_cast<uint64_t>(address), thread_id);
+	void deactivate_address(void* address, const std::uint32_t thread_id) {
+		return deactivate_address(reinterpret_cast<std::uint64_t>(address), thread_id);
 	}
 
-	void deactivate_address(const uint64_t address, const uint32_t thread_id) {
+	void deactivate_address(const std::uint64_t address, const std::uint32_t thread_id) {
 		debug_context context(thread_id);
 		deactivate_address(address, context);
 	}
 
-	void deactivate(const uint32_t index, CONTEXT& context) {
+	void deactivate(const std::uint32_t index, CONTEXT& context) {
 		validate_index(index);
 		//set_bits(context.Dr7, index << 1ull, 1, 0);
 	}
 
-	void deactivate(const uint32_t index, const uint32_t thread_id) {
+	void deactivate(const std::uint32_t index, const std::uint32_t thread_id) {
 		debug_context context(thread_id);
 		deactivate(index, context);
 	}
@@ -135,7 +135,7 @@ namespace utils::hardware_breakpoint {
 		context.Dr7 = 0;
 	}
 
-	void deactivate_all(const uint32_t thread_id) {
+	void deactivate_all(const std::uint32_t thread_id) {
 		debug_context context(thread_id);
 		deactivate_all(context);
 	}

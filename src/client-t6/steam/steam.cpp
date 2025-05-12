@@ -8,14 +8,14 @@
 #include "component/steam_proxy.hpp"
 
 namespace steam {
-	uint64_t callbacks::call_id_ = 0;
+	std::uint64_t callbacks::call_id_ = 0;
 	std::recursive_mutex callbacks::mutex_;
-	std::map<uint64_t, bool> callbacks::calls_;
-	std::map<uint64_t, callbacks::base*> callbacks::result_handlers_;
+	std::map<std::uint64_t, bool> callbacks::calls_;
+	std::map<std::uint64_t, callbacks::base*> callbacks::result_handlers_;
 	std::vector<callbacks::result> callbacks::results_;
 	std::vector<callbacks::base*> callbacks::callback_list_;
 
-	uint64_t callbacks::register_call() {
+	std::uint64_t callbacks::register_call() {
 		std::lock_guard<std::recursive_mutex> _(mutex_);
 		calls_[++call_id_] = false;
 		return call_id_;
@@ -39,12 +39,12 @@ namespace steam {
 		}
 	}
 
-	void callbacks::register_call_result(const uint64_t call, base* result) {
+	void callbacks::register_call_result(const std::uint64_t call, base* result) {
 		std::lock_guard<std::recursive_mutex> _(mutex_);
 		result_handlers_[call] = result;
 	}
 
-	void callbacks::unregister_call_result(const uint64_t call, base* /*result*/) {
+	void callbacks::unregister_call_result(const std::uint64_t call, base* /*result*/) {
 		std::lock_guard<std::recursive_mutex> _(mutex_);
 		const auto i = result_handlers_.find(call);
 		if (i != result_handlers_.end()) {
@@ -52,7 +52,7 @@ namespace steam {
 		}
 	}
 
-	void callbacks::return_call(void* data, const int size, const int type, const uint64_t call) {
+	void callbacks::return_call(void* data, const int size, const int type, const std::uint64_t call) {
 		std::lock_guard<std::recursive_mutex> _(mutex_);
 
 		result result{};
@@ -152,7 +152,7 @@ namespace steam {
 		return true;
 	}
 
-	void SteamAPI_RegisterCallResult(callbacks::base* result, const uint64_t call) {
+	void SteamAPI_RegisterCallResult(callbacks::base* result, const std::uint64_t call) {
 		ANNOUNCE_CALL();
 		callbacks::register_call_result(call, result);
 	}
@@ -171,7 +171,7 @@ namespace steam {
 		ANNOUNCE_CALL();
 	}
 
-	void SteamAPI_UnregisterCallResult(callbacks::base* result, const uint64_t call) {
+	void SteamAPI_UnregisterCallResult(callbacks::base* result, const std::uint64_t call) {
 		ANNOUNCE_CALL();
 		callbacks::unregister_call_result(call, result);
 	}

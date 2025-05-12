@@ -100,12 +100,12 @@ namespace utils::string {
 		return {};
 	}
 
-	void strip(const char* in, char* out, size_t max) {
+	void strip(const char* in, char* out, std::size_t max) {
 		assert(max);
 		if (!in || !out) return;
 
 		max--;
-		size_t current = 0;
+		std::size_t current = 0;
 		while (*in != '\0' && current < max) {
 			const auto color_index = (*(in + 1) - 48) >= 0xC ? 7 : (*(in + 1) - 48);
 
@@ -124,11 +124,11 @@ namespace utils::string {
 		*out = '\0';
 	}
 
-	void strip_material(const char* in, char* out, size_t max) {
+	void strip_material(const char* in, char* out, std::size_t max) {
 		assert(max);
 		if (!in || !out) return;
 
-		size_t i = 0;
+		std::size_t i = 0;
 		while (*in != '\0' && i < max - 1) {
 			if (*in != '$' && *in != '{' && *in != '}') {
 				*out++ = *in;
@@ -167,7 +167,7 @@ namespace utils::string {
 			return str;
 		}
 
-		size_t start_pos = 0;
+		std::size_t start_pos = 0;
 		while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
 			str.replace(start_pos, from.length(), to);
 			start_pos += to.length();
@@ -207,12 +207,12 @@ namespace utils::string {
 		ltrim(rtrim(str));
 	}
 
-	void copy(char* dest, const size_t max_size, const char* src) {
+	void copy(char* dest, const std::size_t max_size, const char* src) {
 		if (!max_size) {
 			return;
 		}
 
-		for (size_t i = 0;; ++i) {
+		for (std::size_t i = 0;; ++i) {
 			if (i + 1 == max_size) {
 				dest[i] = 0;
 				break;

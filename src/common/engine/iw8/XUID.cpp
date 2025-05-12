@@ -12,7 +12,7 @@ namespace iw8 {
 		using MSG_WriteInt64T = void(const msg_t* msg, const std::uint64_t value);
 		using Sys_MicrosecondsT = std::uint64_t();
 
-		uint64_t atoui64(const std::string& str, int base) {
+		std::uint64_t atoui64(const std::string& str, int base) {
 			try {
 				return std::stoull(str, nullptr, base);
 			}

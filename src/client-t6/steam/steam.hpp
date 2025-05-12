@@ -54,7 +54,7 @@ namespace steam {
 			{}
 
 			virtual void run(void* pv_param) = 0;
-			virtual void run(void* pv_param, bool failure, uint64_t handle) = 0;
+			virtual void run(void* pv_param, bool failure, std::uint64_t handle) = 0;
 			virtual int get_callback_size_bytes() = 0;
 
 			int get_i_callback() const {
@@ -76,25 +76,25 @@ namespace steam {
 			void* data{};
 			int size{};
 			int type{};
-			uint64_t call{};
+			std::uint64_t call{};
 		};
 
-		static uint64_t register_call();
+		static std::uint64_t register_call();
 
 		static void register_callback(base* handler, int callback);
 		static void unregister_callback(base* handler);
 
-		static void register_call_result(uint64_t call, base* result);
-		static void unregister_call_result(uint64_t call, base* result);
+		static void register_call_result(std::uint64_t call, base* result);
+		static void unregister_call_result(std::uint64_t call, base* result);
 
-		static void return_call(void* data, int size, int type, uint64_t call);
+		static void return_call(void* data, int size, int type, std::uint64_t call);
 		static void run_callbacks();
 
 	private:
-		static uint64_t call_id_;
+		static std::uint64_t call_id_;
 		static std::recursive_mutex mutex_;
-		static std::map<uint64_t, bool> calls_;
-		static std::map<uint64_t, base*> result_handlers_;
+		static std::map<std::uint64_t, bool> calls_;
+		static std::map<std::uint64_t, base*> result_handlers_;
 		static std::vector<result> results_;
 		static std::vector<base*> callback_list_;
 	};
@@ -103,11 +103,11 @@ namespace steam {
 
 	bool SteamAPI_RestartAppIfNecessary();
 	bool SteamAPI_Init();
-	void SteamAPI_RegisterCallResult(callbacks::base* result, uint64_t call);
+	void SteamAPI_RegisterCallResult(callbacks::base* result, std::uint64_t call);
 	void SteamAPI_RegisterCallback(callbacks::base* handler, int callback);
 	void SteamAPI_RunCallbacks();
 	void SteamAPI_Shutdown();
-	void SteamAPI_UnregisterCallResult(callbacks::base* result, const uint64_t call);
+	void SteamAPI_UnregisterCallResult(callbacks::base* result, const std::uint64_t call);
 	void SteamAPI_UnregisterCallback(callbacks::base* handler);
 	const char* SteamAPI_GetSteamInstallPath();
 

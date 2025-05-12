@@ -8,10 +8,10 @@ using namespace asmjit::x86;
 
 namespace utils::hook {
 	namespace detail {
-		template <size_t Entries>
-		std::vector<size_t(*)()> get_iota_functions() {
+		template <std::size_t Entries>
+		std::vector<std::size_t(*)()> get_iota_functions() {
 			if constexpr (Entries == 0) {
-				std::vector<size_t(*)()> functions;
+				std::vector<std::size_t(*)()> functions;
 				return functions;
 			}
 			else {
@@ -30,7 +30,7 @@ namespace utils::hook {
 	// Example:
 	//   ID3D11Device* device = ...
 	//   auto entry = get_vtable_entry(device, &ID3D11Device::CreateTexture2D);
-	template <size_t Entries = 100, typename Class, typename T, typename... Args>
+	template <std::size_t Entries = 100, typename Class, typename T, typename... Args>
 	void** get_vtable_entry(Class* obj, T (Class::* entry)(Args ...)) {
 		union {
 			decltype(entry) func;
@@ -42,7 +42,7 @@ namespace utils::hook {
 		auto iota_functions = detail::get_iota_functions<Entries>();
 		auto* object = iota_functions.data();
 
-		using fake_func = size_t(__thiscall*)(void* self);
+		using fake_func = std::size_t(__thiscall*)(void* self);
 		auto index = static_cast<fake_func>(pointer)(&object);
 
 		void** obj_v_table = *reinterpret_cast<void***>(obj);
@@ -76,7 +76,7 @@ namespace utils::hook {
 	public:
 		detour();
 		detour(void* place, void* target);
-		detour(size_t place, void* target);
+		detour(std::size_t place, void* target);
 		~detour();
 
 		detour(detour&& other) noexcept {
@@ -106,7 +106,7 @@ namespace utils::hook {
 		void disable();
 
 		void create(void* place, void* target);
-		void create(size_t place, void* target);
+		void create(std::size_t place, void* target);
 		void clear();
 
 		void move();
@@ -126,7 +126,7 @@ namespace utils::hook {
 		[[nodiscard]] void* get_original() const;
 
 	private:
-		std::vector<uint8_t> moved_data_{};
+		std::vector<std::uint8_t> moved_data_{};
 		void* place_{};
 		void* original_{};
 
@@ -189,39 +189,39 @@ namespace utils::hook {
 	std::optional<std::pair<void*, void*>> iat(const nt::library& library, const std::string& target_library,
 	                                           const std::string& process, void* stub);
 
-	void nop(void* place, size_t length);
-	void nop(size_t place, size_t length);
+	void nop(void* place, std::size_t length);
+	void nop(std::size_t place, std::size_t length);
 
-	void copy(void* place, const void* data, size_t length);
-	void copy(size_t place, const void* data, size_t length);
+	void copy(void* place, const void* data, std::size_t length);
+	void copy(std::size_t place, const void* data, std::size_t length);
 
 	void copy_string(void* place, const char* str);
-	void copy_string(size_t place, const char* str);
+	void copy_string(std::size_t place, const char* str);
 
 	bool is_relatively_far(const void* pointer, const void* data, int offset = 5);
-	bool is_relatively_far(size_t pointer, size_t data, int offset = 5);
+	bool is_relatively_far(std::size_t pointer, std::size_t data, int offset = 5);
 
 	void call(void* pointer, void* data);
-	void call(size_t pointer, void* data);
-	void call(size_t pointer, size_t data);
+	void call(std::size_t pointer, void* data);
+	void call(std::size_t pointer, std::size_t data);
 
 	void jump(void* pointer, void* data, bool use_far = false, bool use_safe = false);
-	void jump(size_t pointer, void* data, bool use_far = false, bool use_safe = false);
-	void jump(size_t pointer, size_t data, bool use_far = false, bool use_safe = false);
+	void jump(std::size_t pointer, void* data, bool use_far = false, bool use_safe = false);
+	void jump(std::size_t pointer, std::size_t data, bool use_far = false, bool use_safe = false);
 
 	void* assemble(const std::function<void(assembler&)>& asm_function);
 
 	void inject(void* pointer, const void* data);
-	void inject(size_t pointer, const void* data);
-	void inject(size_t pointer, size_t data);
+	void inject(std::size_t pointer, const void* data);
+	void inject(std::size_t pointer, std::size_t data);
 
-	std::vector<uint8_t> move_hook(void* pointer);
-	std::vector<uint8_t> move_hook(size_t pointer);
+	std::vector<std::uint8_t> move_hook(void* pointer);
+	std::vector<std::uint8_t> move_hook(std::size_t pointer);
 
 	template <typename T>
 	T extract(void* address) {
-		auto* const data = static_cast<uint8_t*>(address);
-		const auto offset = *reinterpret_cast<int32_t*>(data);
+		auto* const data = static_cast<std::uint8_t*>(address);
+		const auto offset = *reinterpret_cast<std::int32_t*>(data);
 		return reinterpret_cast<T>(data + offset + 4);
 	}
 
@@ -233,12 +233,12 @@ namespace utils::hook {
 	}
 
 	template <typename T>
-	static void set(const size_t place, T value = false) {
+	static void set(const std::size_t place, T value = false) {
 		return set<T>(reinterpret_cast<void*>(place), value);
 	}
 
 	template <typename T, typename... Args>
-	static T invoke(size_t func, Args ... args) {
+	static T invoke(std::size_t func, Args ... args) {
 		return reinterpret_cast<T(*)(Args ...)>(func)(args...);
 	}
 

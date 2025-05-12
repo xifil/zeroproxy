@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 namespace steam {
-	using HTTPRequestHandle = uint64_t;
-	using HTTPCookieContainerHandle = uint64_t;
+	using HTTPRequestHandle = std::uint64_t;
+	using HTTPCookieContainerHandle = std::uint64_t;
 	
 	class http {
 	public:

@@ -53,7 +53,9 @@ namespace steam {
 		return 2;
 	}
 
-	int user::DecompressVoice(const void* pCompressed, std::uint32_t cbCompressed, void* pDestBuffer, std::uint32_t cbDestBufferSize, std::uint32_t* nBytesWritten, std::uint32_t nDesiredSampleRate) {
+	int user::DecompressVoice(const void* pCompressed, std::uint32_t cbCompressed, void* pDestBuffer, std::uint32_t cbDestBufferSize,
+		std::uint32_t* nBytesWritten, std::uint32_t nDesiredSampleRate)
+	{
 		return 0;
 	}
 
@@ -62,7 +64,7 @@ namespace steam {
 	}
 
 	unsigned int user::GetAuthSessionTicket(void* pTicket, int cbMaxTicket, unsigned int* pcbTicket) {
-		static uint32_t ticket = 0;
+		static std::uint32_t ticket = 0;
 		*pcbTicket = 1;
 
 		const auto result = callbacks::register_call();
@@ -113,13 +115,13 @@ namespace steam {
 		return result;
 	}
 
-	bool user::GetEncryptedAppTicket(void* pTicket, int cbMaxTicket, unsigned int* pcbTicket) {
+	bool user::GetEncryptedAppTicket(void* pTicket, int cbMaxTicket, std::uint32_t* pcbTicket) {
 		if (cbMaxTicket < 0 || auth_ticket.empty()) {
 			return false;
 		}
 
 		const auto size = auth_ticket.size();
-		if (static_cast<size_t>(cbMaxTicket) < size) {
+		if (static_cast<std::size_t>(cbMaxTicket) < size) {
 			*pcbTicket = static_cast<unsigned>(size);
 			return false;
 		}

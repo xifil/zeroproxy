@@ -12,6 +12,7 @@ namespace game {
 	inline functions::ScrPlace_EndFrameT* ScrPlace_EndFrame{};
 	inline functions::SEH_StringEd_GetStringT* SEH_StringEd_GetString{};
 	inline functions::UI_RefreshFullscreenT* UI_RefreshFullscreen{};
+	inline functions::unk_DWLogT* unk_DWLog{};
 
 	inline iw4s::CachedAssets_t* sharedUiInfo_assets{};
 

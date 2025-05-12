@@ -17,7 +17,7 @@ namespace utils::hook {
 		this->mask_.clear();
 		this->pattern_.clear();
 
-		uint8_t nibble = 0;
+		std::uint8_t nibble = 0;
 		auto has_nibble = false;
 
 		for (auto val : pattern) {
@@ -35,7 +35,7 @@ namespace utils::hook {
 				}
 
 				char str[] = {val, 0};
-				const auto current_nibble = static_cast<uint8_t>(strtol(str, nullptr, 16));
+				const auto current_nibble = static_cast<std::uint8_t>(strtol(str, nullptr, 16));
 
 				if (!has_nibble) {
 					has_nibble = true;
@@ -43,7 +43,7 @@ namespace utils::hook {
 				}
 				else {
 					has_nibble = false;
-					const uint8_t byte = current_nibble | (nibble << 4);
+					const std::uint8_t byte = current_nibble | (nibble << 4);
 
 					this->mask_.push_back('x');
 					this->pattern_.push_back(byte);
@@ -67,20 +67,20 @@ namespace utils::hook {
 		}
 	}
 
-	signature::signature_result signature::process_range(uint8_t* start, const size_t length) const {
+	signature::signature_result signature::process_range(std::uint8_t* start, const std::size_t length) const {
 		if (this->has_sse_support()) {
 			return this->process_range_vectorized(start, length);
 		}
 		return this->process_range_linear(start, length);
 	}
 
-	signature::signature_result signature::process_range_linear(uint8_t* start, const size_t length) const {
-		std::vector<uint8_t*> result;
+	signature::signature_result signature::process_range_linear(std::uint8_t* start, const std::size_t length) const {
+		std::vector<std::uint8_t*> result;
 
-		for (size_t i = 0; i < length; ++i) {
+		for (std::size_t i = 0; i < length; ++i) {
 			const auto address = start + i;
 
-			size_t j = 0;
+			std::size_t j = 0;
 			for (; j < this->mask_.size(); ++j) {
 				if (this->mask_[j] != '?' && this->pattern_[j] != address[j]) {
 					break;
@@ -95,18 +95,18 @@ namespace utils::hook {
 		return result;
 	}
 
-	signature::signature_result signature::process_range_vectorized(uint8_t* start, const size_t length) const {
-		std::vector<uint8_t*> result;
+	signature::signature_result signature::process_range_vectorized(std::uint8_t* start, const std::size_t length) const {
+		std::vector<std::uint8_t*> result;
 		__declspec(align(16)) char desired_mask[16] = {0};
 
-		for (size_t i = 0; i < this->mask_.size(); i++) {
+		for (std::size_t i = 0; i < this->mask_.size(); i++) {
 			desired_mask[i / 8] |= (this->mask_[i] == '?' ? 0 : 1) << i % 8;
 		}
 
 		const auto mask = _mm_load_si128(reinterpret_cast<const __m128i*>(desired_mask));
 		const auto comparand = _mm_loadu_si128(reinterpret_cast<const __m128i*>(this->pattern_.data()));
 
-		for (size_t i = 0; i < length; ++i) {
+		for (std::size_t i = 0; i < length; ++i) {
 			const auto address = start + i;
 			const auto value = _mm_loadu_si128(reinterpret_cast<const __m128i*>(address));
 			const auto comparison = _mm_cmpestrm(value, 16, comparand, static_cast<int>(this->mask_.size()), _SIDD_CMP_EQUAL_EACH);
@@ -145,7 +145,7 @@ namespace utils::hook {
 		const auto grid = range / cores;
 
 		std::mutex mutex;
-		std::vector<uint8_t*> result;
+		std::vector<std::uint8_t*> result;
 		std::vector<std::thread> threads;
 
 		for (auto i = 0u; i < cores; ++i) {
@@ -187,6 +187,6 @@ namespace utils::hook {
 	}
 }
 
-utils::hook::signature::signature_result operator"" _sig(const char* str, const size_t len) {
+utils::hook::signature::signature_result operator"" _sig(const char* str, const std::size_t len) {
 	return utils::hook::signature(std::string(str, len)).process();
 }

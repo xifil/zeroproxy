@@ -19,21 +19,21 @@
 
 namespace utils::hook {
 	namespace {
-		size_t get_allocation_granularity() {
+		std::size_t get_allocation_granularity() {
 			SYSTEM_INFO info{};
 			GetSystemInfo(&info);
 
 			return info.dwAllocationGranularity;
 		}
 
-		uint8_t* allocate_somewhere_near(const void* base_address, const size_t granularity, const size_t size) {
-			size_t target_address = reinterpret_cast<size_t>(base_address) - (1ull << 31);
+		std::uint8_t* allocate_somewhere_near(const void* base_address, const std::size_t granularity, const std::size_t size) {
+			std::size_t target_address = reinterpret_cast<std::size_t>(base_address) - (1ull << 31);
 			target_address &= ~(granularity - 1);
 
 			while (true) {
 				target_address += granularity;
 
-				auto* target_ptr = reinterpret_cast<uint8_t*>(target_address);
+				auto* target_ptr = reinterpret_cast<std::uint8_t*>(target_address);
 				if (is_relatively_far(base_address, target_ptr)) {
 					return nullptr;
 				}
@@ -45,7 +45,7 @@ namespace utils::hook {
 						return nullptr;
 					}
 
-					return static_cast<uint8_t*>(res);
+					return static_cast<std::uint8_t*>(res);
 				}
 			}
 		}
@@ -93,7 +93,7 @@ namespace utils::hook {
 				return *this;
 			}
 
-			void* allocate(const size_t length) {
+			void* allocate(const std::size_t length) {
 				if (!this->buffer_) {
 					return nullptr;
 				}
@@ -112,12 +112,12 @@ namespace utils::hook {
 			}
 
 		private:
-			uint8_t* buffer_{};
-			size_t length_{};
-			size_t offset_{};
+			std::uint8_t* buffer_{};
+			std::size_t length_{};
+			std::size_t offset_{};
 		};
 
-		void* get_memory_near(const void* address, const size_t size) {
+		void* get_memory_near(const void* address, const std::size_t size) {
 			static concurrency::container<std::vector<memory>> memory_container{};
 
 			return memory_container.access<void*>([&](std::vector<memory>& memories) {
@@ -223,18 +223,18 @@ namespace utils::hook {
 	}
 
 	asmjit::Error assembler::call(void* target) {
-		return Assembler::call(reinterpret_cast<size_t>(target));
+		return Assembler::call(reinterpret_cast<std::size_t>(target));
 	}
 
 	asmjit::Error assembler::jmp(void* target) {
-		return Assembler::jmp(reinterpret_cast<size_t>(target));
+		return Assembler::jmp(reinterpret_cast<std::size_t>(target));
 	}
 
 	detour::detour() {
 		(void)initialize_min_hook();
 	}
 
-	detour::detour(const size_t place, void* target)
+	detour::detour(const std::size_t place, void* target)
 		: detour(reinterpret_cast<void*>(place), target) {
 	}
 
@@ -271,7 +271,7 @@ namespace utils::hook {
 		this->enable();
 	}
 
-	void detour::create(const size_t place, void* target) {
+	void detour::create(const std::size_t place, void* target) {
 		this->create(reinterpret_cast<void*>(place), target);
 	}
 
@@ -378,7 +378,7 @@ namespace utils::hook {
 		return {{ ptr, stub }};
 	}
 
-	void nop(void* place, const size_t length) {
+	void nop(void* place, const std::size_t length) {
 		DWORD old_protect{};
 		VirtualProtect(place, length, PAGE_EXECUTE_READWRITE, &old_protect);
 
@@ -388,11 +388,11 @@ namespace utils::hook {
 		FlushInstructionCache(GetCurrentProcess(), place, length);
 	}
 
-	void nop(const size_t place, const size_t length) {
+	void nop(const std::size_t place, const std::size_t length) {
 		nop(reinterpret_cast<void*>(place), length);
 	}
 
-	void copy(void* place, const void* data, const size_t length) {
+	void copy(void* place, const void* data, const std::size_t length) {
 		DWORD old_protect{};
 		VirtualProtect(place, length, PAGE_EXECUTE_READWRITE, &old_protect);
 
@@ -402,7 +402,7 @@ namespace utils::hook {
 		FlushInstructionCache(GetCurrentProcess(), place, length);
 	}
 
-	void copy(const size_t place, const void* data, const size_t length) {
+	void copy(const std::size_t place, const void* data, const std::size_t length) {
 		copy(reinterpret_cast<void*>(place), data, length);
 	}
 
@@ -410,18 +410,18 @@ namespace utils::hook {
 		copy(reinterpret_cast<void*>(place), str, strlen(str) + 1);
 	}
 
-	void copy_string(const size_t place, const char* str) {
+	void copy_string(const std::size_t place, const char* str) {
 		copy_string(reinterpret_cast<void*>(place), str);
 	}
 
 	bool is_relatively_far(const void* pointer, const void* data, const int offset) {
-		return is_relatively_far(reinterpret_cast<size_t>(pointer), reinterpret_cast<size_t>(data), offset);
+		return is_relatively_far(reinterpret_cast<std::size_t>(pointer), reinterpret_cast<std::size_t>(data), offset);
 	}
 
-	bool is_relatively_far(const size_t pointer, const size_t data, const int offset) {
-		const auto diff = static_cast<int64_t>(data - (pointer + offset));
-		const auto small_diff = static_cast<int32_t>(diff);
-		return diff != static_cast<int64_t>(small_diff);
+	bool is_relatively_far(const std::size_t pointer, const std::size_t data, const int offset) {
+		const auto diff = static_cast<std::int64_t>(data - (pointer + offset));
+		const auto small_diff = static_cast<std::int32_t>(diff);
+		return diff != static_cast<std::int64_t>(small_diff);
 	}
 
 	void call(void* pointer, void* data) {
@@ -438,19 +438,20 @@ namespace utils::hook {
 			}
 #		endif
 
-		uint8_t copy_data[5];
+		std::uint8_t copy_data[5];
 		copy_data[0] = 0xE8;
-		*reinterpret_cast<int32_t*>(&copy_data[1]) = static_cast<int32_t>(reinterpret_cast<size_t>(data) - (reinterpret_cast<size_t>(pointer) + 5));
+		*reinterpret_cast<std::int32_t*>(&copy_data[1]) = static_cast<std::int32_t>(reinterpret_cast<std::size_t>(data)
+			- (reinterpret_cast<std::size_t>(pointer) + 5));
 
 		auto* patch_pointer = static_cast<PBYTE>(pointer);
 		copy(patch_pointer, copy_data, sizeof(copy_data));
 	}
 
-	void call(const size_t pointer, void* data) {
+	void call(const std::size_t pointer, void* data) {
 		return call(reinterpret_cast<void*>(pointer), data);
 	}
 
-	void call(const size_t pointer, const size_t data) {
+	void call(const std::size_t pointer, const std::size_t data) {
 		return call(pointer, reinterpret_cast<void*>(data));
 	}
 
@@ -480,14 +481,14 @@ namespace utils::hook {
 #		if defined(_WIN64)
 			if (use_far) {
 				if (use_safe) {
-					uint8_t copy_data[sizeof(jump_data_safe) + sizeof(data)];
+					std::uint8_t copy_data[sizeof(jump_data_safe) + sizeof(data)];
 					memcpy(copy_data, jump_data_safe, sizeof(jump_data_safe));
 					memcpy(copy_data + sizeof(jump_data_safe), &data, sizeof(data));
 
 					copy(patch_pointer, copy_data, sizeof(copy_data));
 				}
 				else {
-					uint8_t copy_data[sizeof(jump_data)];
+					std::uint8_t copy_data[sizeof(jump_data)];
 					memcpy(copy_data, jump_data, sizeof(jump_data));
 					memcpy(copy_data + 2, &data, sizeof(data));
 
@@ -496,9 +497,9 @@ namespace utils::hook {
 			}
 			else {
 #		endif
-				uint8_t copy_data[5];
+				std::uint8_t copy_data[5];
 				copy_data[0] = 0xE9;
-				*reinterpret_cast<int32_t*>(&copy_data[1]) = int32_t(size_t(data) - (size_t(pointer) + 5));
+				*reinterpret_cast<std::int32_t*>(&copy_data[1]) = std::int32_t(std::size_t(data) - (std::size_t(pointer) + 5));
 
 				copy(patch_pointer, copy_data, sizeof(copy_data));
 #		if defined(_WIN64)
@@ -506,11 +507,11 @@ namespace utils::hook {
 #		endif
 	}
 
-	void jump(const size_t pointer, void* data, const bool use_far, const bool use_safe) {
+	void jump(const std::size_t pointer, void* data, const bool use_far, const bool use_safe) {
 		return jump(reinterpret_cast<void*>(pointer), data, use_far, use_safe);
 	}
 
-	void jump(const size_t pointer, const size_t data, const bool use_far, const bool use_safe) {
+	void jump(const std::size_t pointer, const std::size_t data, const bool use_far, const bool use_safe) {
 		return jump(pointer, reinterpret_cast<void*>(data), use_far, use_safe);
 	}
 
@@ -530,26 +531,26 @@ namespace utils::hook {
 		return result;
 	}
 
-	void inject(size_t pointer, size_t data) {
+	void inject(std::size_t pointer, std::size_t data) {
 		if (is_relatively_far(pointer, data, 4)) {
 			throw std::runtime_error("Too far away to create 32bit relative branch");
 		}
 
-		set<int32_t>(pointer, static_cast<int32_t>(data - (pointer + 4)));
+		set<std::int32_t>(pointer, static_cast<std::int32_t>(data - (pointer + 4)));
 	}
 
 	void inject(void* pointer, const void* data) {
-		return inject(reinterpret_cast<size_t>(pointer), reinterpret_cast<size_t>(data));
+		return inject(reinterpret_cast<std::size_t>(pointer), reinterpret_cast<std::size_t>(data));
 	}
 
-	void inject(const size_t pointer, const void* data) {
-		return inject(pointer, reinterpret_cast<size_t>(data));
+	void inject(const std::size_t pointer, const void* data) {
+		return inject(pointer, reinterpret_cast<std::size_t>(data));
 	}
 
-	std::vector<uint8_t> move_hook(void* pointer) {
-		std::vector<uint8_t> original_data{};
+	std::vector<std::uint8_t> move_hook(void* pointer) {
+		std::vector<std::uint8_t> original_data{};
 
-		auto* data_ptr = static_cast<uint8_t*>(pointer);
+		auto* data_ptr = static_cast<std::uint8_t*>(pointer);
 		if (data_ptr[0] == 0xE9) {
 			original_data.resize(6);
 			memmove(original_data.data(), pointer, original_data.size());
@@ -572,12 +573,12 @@ namespace utils::hook {
 		return original_data;
 	}
 
-	std::vector<uint8_t> move_hook(const size_t pointer) {
+	std::vector<std::uint8_t> move_hook(const std::size_t pointer) {
 		return move_hook(reinterpret_cast<void*>(pointer));
 	}
 
 	void* follow_branch(void* address) {
-		auto* const data = static_cast<uint8_t*>(address);
+		auto* const data = static_cast<std::uint8_t*>(address);
 		if (*data != 0xE8 && *data != 0xE9) {
 			throw std::runtime_error("No branch instruction found");
 		}

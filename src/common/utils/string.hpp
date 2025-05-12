@@ -1,11 +1,11 @@
 #pragma once
 #include "memory.hpp"
 
-template <class Type, size_t n>
+template <class Type, std::size_t n>
 constexpr auto ARRAY_COUNT(Type (&)[n]) { return n; }
 
 namespace utils::string {
-	template<size_t N>
+	template<std::size_t N>
 	struct literal {
 		constexpr literal(const char(&str)[N]) {
 			std::copy_n(str, N, this->value_);
@@ -14,7 +14,7 @@ namespace utils::string {
 		char value_[N];
 	};
 	
-	template <size_t Buffers, size_t MinBufferSize>
+	template <std::size_t Buffers, std::size_t MinBufferSize>
 	class va_provider final {
 	public:
 		static_assert(Buffers != 0 && MinBufferSize != 0, "Buffers and MinBufferSize mustn't be 0");
@@ -53,7 +53,7 @@ namespace utils::string {
 	private:
 		class entry final {
 		public:
-			entry(const size_t _size = MinBufferSize)
+			entry(const std::size_t _size = MinBufferSize)
 				: size(_size)
 				, buffer(nullptr)
 			{
@@ -83,11 +83,11 @@ namespace utils::string {
 				this->allocate();
 			}
 
-			size_t size{};
+			std::size_t size{};
 			char* buffer{nullptr};
 		};
 
-		size_t current_buffer_{};
+		std::size_t current_buffer_{};
 		entry string_pool_[Buffers]{};
 	};
 
@@ -106,8 +106,8 @@ namespace utils::string {
 
 	std::string get_clipboard_data();
 
-	void strip(const char* in, char* out, size_t max);
-	void strip_material(const char* in, char* out, size_t max);
+	void strip(const char* in, char* out, std::size_t max);
+	void strip_material(const char* in, char* out, std::size_t max);
 
 	std::string convert(const std::wstring& wstr);
 	std::wstring convert(const std::string& str);
@@ -118,9 +118,9 @@ namespace utils::string {
 
 	void trim(std::string& str);
 
-	void copy(char* dest, size_t max_size, const char* src);
+	void copy(char* dest, std::size_t max_size, const char* src);
 
-	template <size_t Size>
+	template <std::size_t Size>
 	void copy(char (&dest)[Size], const char* src) {
 		copy(dest, Size, src);
 	}

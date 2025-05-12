@@ -145,7 +145,7 @@ namespace utils::io {
 			stream.seekg(0, std::ios::beg);
 
 			if (size > -1) {
-				data->resize(static_cast<uint32_t>(size));
+				data->resize(static_cast<std::uint32_t>(size));
 				stream.read(data->data(), size);
 				stream.close();
 				return true;

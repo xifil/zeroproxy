@@ -252,7 +252,7 @@ namespace game_console {
 
 				const auto offset = (con.screen_max[0] - con.globals.x) / 4.f;
 
-				for (size_t i = 0; i < matches.size(); i++) {
+				for (std::size_t i = 0; i < matches.size(); i++) {
 					auto* const dvar = game::Dvar_FindVar(matches[i].name.data());
 
 					draw_hint_text(static_cast<int>(i), matches[i].name.data(), dvar ? dvars::con_inputDvarMatchColor->current.vector
@@ -409,7 +409,7 @@ namespace game_console {
 					return false;
 				}
 
-				for (size_t i = 0; i < clipboard.length(); i++) {
+				for (std::size_t i = 0; i < clipboard.length(); i++) {
 					console_char_event(local_client_num, clipboard[i]);
 				}
 

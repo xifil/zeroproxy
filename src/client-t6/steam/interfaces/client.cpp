@@ -14,7 +14,7 @@ namespace steam {
 		return 1;
 	}
 
-	HSteamUser client::CreateLocalUser(HSteamPipe* phSteamPipe, uint32_t eAccountType) {
+	HSteamUser client::CreateLocalUser(HSteamPipe* phSteamPipe, std::uint32_t eAccountType) {
 		return 1;
 	}
 
@@ -28,7 +28,7 @@ namespace steam {
 		return SteamGameServer();
 	}
 
-	void client::SetLocalIPBinding(uint32_t unIP, uint16_t usPort) {}
+	void client::SetLocalIPBinding(std::uint32_t unIP, std::uint16_t usPort) {}
 
 	void* client::GetISteamFriends(HSteamUser hSteamUser, HSteamPipe hSteamPipe, const char* pchVersion) {
 		return SteamFriends();
@@ -79,7 +79,7 @@ namespace steam {
 
 	void client::RunFrame() {}
 
-	uint32_t client::GetIPCCallCount() {
+	std::uint32_t client::GetIPCCallCount() {
 		return 0;
 	}
 

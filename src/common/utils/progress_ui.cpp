@@ -26,7 +26,7 @@ namespace utils {
 		}
 	}
 
-	void progress_ui::set_progress(const size_t current, const size_t max) const {
+	void progress_ui::set_progress(const std::size_t current, const std::size_t max) const {
 		if (this->dialog_) {
 			this->dialog_->SetProgress64(current, max);
 		}

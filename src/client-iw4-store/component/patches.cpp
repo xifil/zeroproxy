@@ -12,6 +12,8 @@
 
 namespace patches {
 	namespace {
+		utils::hook::detour unk_dw_log_hook;
+
 		utils::hook::iat_detour create_window_ex_a_hook;
 
 		HWND create_window_ex_a_stub(DWORD dw_ex_style, LPCSTR lp_class_name, LPCSTR lp_window_name, DWORD dw_style, int x, int y, int n_width, int n_height,
@@ -25,10 +27,26 @@ namespace patches {
 			return create_window_ex_a_hook.invoke<HWND>(dw_ex_style, lp_class_name, lp_window_name_patched, dw_style, x, y, n_width, n_height, hwnd_parent,
 				h_menu, h_instance, lp_param);
 		}
+
+		void unk_dw_log_stub(int type, const char* category, const char* source, const char* source_file, const char* source_function, int a6,
+			const char* message, ...)
+		{
+			va_list args;
+			va_start(args, message);
+
+			char buffer[1024];
+			vsnprintf(buffer, sizeof(buffer), message, args);
+
+			va_end(args);
+
+			LOG("Component/Patches", DEBUG, "[DW] [{}{}] [{}/{}]: {}", category, type, source, source_function, buffer);
+			unk_dw_log_hook.invoke<void>(type, category, source, source_file, source_function, a6, "%s", buffer);
+		}
 	}
 
 	struct component final : generic_component {
 		void post_load() override {
+			unk_dw_log_hook.create(game::unk_DWLog, unk_dw_log_stub);
 			create_window_ex_a_hook.create(utils::nt::library(), "user32.dll", "CreateWindowExA", create_window_ex_a_stub);
 		}
 	};

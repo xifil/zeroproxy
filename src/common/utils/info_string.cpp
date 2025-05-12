@@ -15,7 +15,7 @@ namespace utils {
 	{}
 
 
-	info_string::info_string(const std::basic_string_view<uint8_t>& buffer)
+	info_string::info_string(const std::basic_string_view<std::uint8_t>& buffer)
 		: info_string(std::string_view(reinterpret_cast<const char*>(buffer.data()), buffer.size())) {
 	}
 
@@ -38,7 +38,7 @@ namespace utils {
 		}
 
 		const auto key_values = string::split(buffer, '\\');
-		for (size_t i = 0; !key_values.empty() && i < (key_values.size() - 1); i += 2) {
+		for (std::size_t i = 0; !key_values.empty() && i < (key_values.size() - 1); i += 2) {
 			const auto& key = key_values[i];
 			const auto& value = key_values[i + 1];
 

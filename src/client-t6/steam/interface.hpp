@@ -5,14 +5,14 @@
 #endif
 
 namespace steam {
-	template <size_t ...>
+	template <std::size_t ...>
 	struct argument_size_calculator final
-		: std::integral_constant<size_t, 0>
+		: std::integral_constant<std::size_t, 0>
 	{};
 
-	template <size_t X, size_t ... Xs>
+	template <std::size_t X, std::size_t ... Xs>
 	struct argument_size_calculator<X, Xs...> final
-		: std::integral_constant<size_t, X + ((argument_size_calculator<Xs...>::value + (sizeof(void*) - 1)) & ~(sizeof(void*) - 1))>
+		: std::integral_constant<std::size_t, X + ((argument_size_calculator<Xs...>::value + (sizeof(void*) - 1)) & ~(sizeof(void*) - 1))>
 	{};
 	
 	struct raw_steam_id final {
@@ -45,13 +45,13 @@ namespace steam {
 		class method final {
 		public:
 			void* pointer = nullptr;
-			size_t param_size = 0;
+			std::size_t param_size = 0;
 		};
 
 		class method_result final {
 		public:
 			std::string name;
-			size_t param_size = 0;
+			std::size_t param_size = 0;
 			bool name_found = false;
 			bool param_size_found = false;
 		};
@@ -73,7 +73,7 @@ namespace steam {
 			}
 
 #			if !defined(_WIN64)
-				constexpr size_t passed_argc = argument_size_calculator<sizeof(Args)...>::value;
+				constexpr std::size_t passed_argc = argument_size_calculator<sizeof(Args)...>::value;
 				if (passed_argc != method.param_size) {
 					throw std::runtime_error(std::format("Invalid argument count {} [passed_argc] != {} [method.param_size]", passed_argc, method.param_size));
 				}
@@ -83,7 +83,7 @@ namespace steam {
 		}
 
 		template <typename T, typename... Args>
-		T invoke(const size_t table_entry, Args ... args) {
+		T invoke(const std::size_t table_entry, Args ... args) {
 			if (!this->interface_ptr_) {
 				throw std::runtime_error("Invalid interface pointer");
 			}

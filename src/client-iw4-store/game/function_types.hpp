@@ -14,4 +14,6 @@ namespace functions {
 	using ScrPlace_EndFrameT = void();
 	using SEH_StringEd_GetStringT = const char*(const char* psz_reference);
 	using UI_RefreshFullscreenT = void(std::uint32_t local_client_num);
+	using unk_DWLogT = void(int type, const char* category, const char* source, const char* source_file, const char* source_function, int a6,
+		const char* message, ...);
 }

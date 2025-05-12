@@ -28,6 +28,8 @@ void game::init() {
 		batch.add(SETUP_POINTER(UI_RefreshFullscreen), "E8 ? ? ? ? 83 3D ? ? ? ? ? 48 8B 7C 24", SETUP_MOD(add(1).rip()));
 	}
 
+	batch.add(SETUP_POINTER(unk_DWLog), "4C 8B DC 55 41 54 41 55");
+
 	batch.add(SETUP_POINTER(sharedUiInfo_assets), "48 8B 05 ? ? ? ? 0F B6 56 ? 48 89 44 24", SETUP_MOD(add(3).rip()));
 
 	batch.scan_all(true);

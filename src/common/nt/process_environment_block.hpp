@@ -80,10 +80,10 @@ namespace nt {
 		unsigned long number_of_processors_;								// 0x00B8
 		unsigned long nt_global_flag_;										// 0x00BC
 		ULARGE_INTEGER critical_section_timeout_;							// 0x00C0
-		SIZE_T heap_segment_reserve_;										// 0x00C8
-		SIZE_T heap_segment_commit_;										// 0x00D0
-		SIZE_T heap_de_commit_total_free_threshold_;						// 0x00D8
-		SIZE_T heap_de_commit_free_block_threshold_;						// 0x00E0
+		std::size_t heap_segment_reserve_;									// 0x00C8
+		std::size_t heap_segment_commit_;									// 0x00D0
+		std::size_t heap_de_commit_total_free_threshold_;					// 0x00D8
+		std::size_t heap_de_commit_free_block_threshold_;					// 0x00E0
 		unsigned long number_of_heaps_;										// 0x00E8
 		unsigned long maximum_number_of_heaps_;								// 0x00EC
 		void** process_heaps_;												// 0x00F0 - PHEAP
@@ -114,7 +114,7 @@ namespace nt {
 		assembly_storage_map* process_assembly_storage_map_;				// 0x0300
 		activation_context_data* system_default_activation_context_data_;	// 0x0308
 		assembly_storage_map* system_assembly_storage_map_;					// 0x0310
-		SIZE_T minimum_stack_commit_;										// 0x0318
+		std::size_t minimum_stack_commit_;									// 0x0318
 		void* spare_pointers_[2];											// 0x0320 - 19H1 (previously FlsCallback to FlsHighIndex)
 		void* patch_loader_data_;											// 0x0330
 		void* chpe_v2_process_info_;										// 0x0338 - _CHPEV2_PROCESS_INFO

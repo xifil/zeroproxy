@@ -20,41 +20,45 @@ namespace steam {
 		return false;
 	}
 
-	uint64_t controller::GetActionSetHandle(const char* pszActionSetName) {
+	std::uint64_t controller::GetActionSetHandle(const char* pszActionSetName) {
 		return 0;
 	}
 
-	void controller::ActivateActionSet(ControllerHandle_t controllerHandle, uint64_t actionSetHandle) {}
+	void controller::ActivateActionSet(ControllerHandle_t controllerHandle, std::uint64_t actionSetHandle) {}
 
-	uint64_t controller::GetCurrentActionSet(ControllerHandle_t controllerHandle) {
+	std::uint64_t controller::GetCurrentActionSet(ControllerHandle_t controllerHandle) {
 		return 0;
 	}
 
-	uint64_t controller::GetDigitalActionHandle(const char* pszActionName) {
+	std::uint64_t controller::GetDigitalActionHandle(const char* pszActionName) {
 		return 0;
 	}
 
-	uint64_t controller::GetDigitalActionData(ControllerHandle_t controllerHandle, uint64_t digitalActionHandle) {
+	std::uint64_t controller::GetDigitalActionData(ControllerHandle_t controllerHandle, std::uint64_t digitalActionHandle) {
 		return 0;
 	}
 
-	int controller::GetDigitalActionOrigins(ControllerHandle_t controllerHandle, uint64_t actionSetHandle, uint64_t digitalActionHandle, uint64_t* originsOut) {
+	int controller::GetDigitalActionOrigins(ControllerHandle_t controllerHandle, std::uint64_t actionSetHandle, std::uint64_t digitalActionHandle,
+		std::uint64_t* originsOut)
+	{
 		return 0;
 	}
 
-	uint64_t controller::GetAnalogActionHandle(const char* pszActionName) {
+	std::uint64_t controller::GetAnalogActionHandle(const char* pszActionName) {
 		return 0;
 	}
 
-	uint64_t controller::GetAnalogActionData(ControllerHandle_t controllerHandle, uint64_t analogActionHandle) {
+	std::uint64_t controller::GetAnalogActionData(ControllerHandle_t controllerHandle, std::uint64_t analogActionHandle) {
 		return 0;
 	}
 
-	int controller::GetAnalogActionOrigins(ControllerHandle_t controllerHandle, uint64_t actionSetHandle, uint64_t analogActionHandle, uint64_t* originsOut) {
+	int controller::GetAnalogActionOrigins(ControllerHandle_t controllerHandle, std::uint64_t actionSetHandle, std::uint64_t analogActionHandle,
+		std::uint64_t* originsOut)
+	{
 		return 0;
 	}
 
-	void controller::StopAnalogActionMomentum(ControllerHandle_t controllerHandle, uint64_t eAction) {}
+	void controller::StopAnalogActionMomentum(ControllerHandle_t controllerHandle, std::uint64_t eAction) {}
 
-	void controller::TriggerHapticPulse(ControllerHandle_t controllerHandle, uint64_t eTargetPad, unsigned short usDurationMicroSec) {}
+	void controller::TriggerHapticPulse(ControllerHandle_t controllerHandle, std::uint64_t eTargetPad, unsigned short usDurationMicroSec) {}
 }

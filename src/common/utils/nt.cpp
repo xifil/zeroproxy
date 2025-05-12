@@ -86,7 +86,7 @@ namespace utils::nt {
 		auto nt_headers = this->get_nt_headers();
 		auto section = IMAGE_FIRST_SECTION(nt_headers);
 
-		for (uint16_t i = 0; i < nt_headers->FileHeader.NumberOfSections; ++i, ++section) {
+		for (std::uint16_t i = 0; i < nt_headers->FileHeader.NumberOfSections; ++i, ++section) {
 			if (section) {
 				headers.push_back(section);
 			}
@@ -111,7 +111,7 @@ namespace utils::nt {
 		VirtualProtect(this->get_ptr(), this->get_optional_header()->SizeOfImage, PAGE_EXECUTE_READWRITE, &protection);
 	}
 
-	size_t library::get_relative_entry_point() const {
+	std::size_t library::get_relative_entry_point() const {
 		if (!this->is_valid()) {
 			return 0;
 		}
@@ -202,11 +202,11 @@ namespace utils::nt {
 				auto* thunk_data = reinterpret_cast<PIMAGE_THUNK_DATA>(import_descriptor->FirstThunk + this->get_ptr());
 
 				while (original_thunk_data->u1.AddressOfData) {
-					if (thunk_data->u1.Function == reinterpret_cast<uint64_t>(target_function)) {
+					if (thunk_data->u1.Function == reinterpret_cast<std::uint64_t>(target_function)) {
 						return reinterpret_cast<void**>(&thunk_data->u1.Function);
 					}
 
-					const size_t ordinal_number = original_thunk_data->u1.AddressOfData & 0xFFFFFFF;
+					const std::size_t ordinal_number = original_thunk_data->u1.AddressOfData & 0xFFFFFFF;
 
 					if (ordinal_number <= 0xFFFF) {
 						auto* proc = GetProcAddress(other_module.module_, reinterpret_cast<char*>(ordinal_number));
@@ -243,10 +243,10 @@ namespace utils::nt {
 			return 0;
 		}
 
-		uint32_t checksum = 0;
+		std::uint32_t checksum = 0;
 		char byte;
 		while (file.get(byte)) {
-			checksum += static_cast<uint8_t>(byte);
+			checksum += static_cast<std::uint8_t>(byte);
 		}
 
 		return checksum;
@@ -339,7 +339,7 @@ namespace utils::nt {
 		}
 	}
 
-	void terminate(const uint32_t code) {
+	void terminate(const std::uint32_t code) {
 		TerminateProcess(GetCurrentProcess(), code);
 		_Exit(code);
 	}

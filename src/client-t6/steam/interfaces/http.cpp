@@ -2,15 +2,15 @@
 #include "steam/steam.hpp"
 
 namespace steam {
-	HTTPRequestHandle http::CreateHTTPRequest(uint32_t eHTTPRequestMethod, const char* pchAbsoluteURL) {
+	HTTPRequestHandle http::CreateHTTPRequest(std::uint32_t eHTTPRequestMethod, const char* pchAbsoluteURL) {
 		return 0;
 	}
 
-	bool http::SetHTTPRequestContextValue(HTTPRequestHandle hRequest, uint64_t ulContextValue) {
+	bool http::SetHTTPRequestContextValue(HTTPRequestHandle hRequest, std::uint64_t ulContextValue) {
 		return false;
 	}
 
-	bool http::SetHTTPRequestNetworkActivityTimeout(HTTPRequestHandle hRequest, uint32_t unTimeoutSeconds) {
+	bool http::SetHTTPRequestNetworkActivityTimeout(HTTPRequestHandle hRequest, std::uint32_t unTimeoutSeconds) {
 		return false;
 	}
 
@@ -22,7 +22,7 @@ namespace steam {
 		return false;
 	}
 
-	bool http::SendHTTPRequest(HTTPRequestHandle hRequest, uint64_t* pCallHandle) {
+	bool http::SendHTTPRequest(HTTPRequestHandle hRequest, std::uint64_t* pCallHandle) {
 		return false;
 	}
 
@@ -34,19 +34,19 @@ namespace steam {
 		return false;
 	}
 
-	bool http::GetHTTPResponseHeaderSize(HTTPRequestHandle hRequest, const char* pchHeaderName, uint32_t* unResponseHeaderSize) {
+	bool http::GetHTTPResponseHeaderSize(HTTPRequestHandle hRequest, const char* pchHeaderName, std::uint32_t* unResponseHeaderSize) {
 		return false;
 	}
 
-	bool http::GetHTTPResponseHeaderValue(HTTPRequestHandle hRequest, const char* pchHeaderName, uint8_t* pHeaderValueBuffer, uint32_t unBufferSize) {
+	bool http::GetHTTPResponseHeaderValue(HTTPRequestHandle hRequest, const char* pchHeaderName, std::uint8_t* pHeaderValueBuffer, std::uint32_t unBufferSize) {
 		return false;
 	}
 
-	bool http::GetHTTPResponseBodySize(HTTPRequestHandle hRequest, uint32_t* unBodySize) {
+	bool http::GetHTTPResponseBodySize(HTTPRequestHandle hRequest, std::uint32_t* unBodySize) {
 		return false;
 	}
 
-	bool http::GetHTTPResponseBodyData(HTTPRequestHandle hRequest, uint8_t* pBodyDataBuffer, uint32_t unBufferSize) {
+	bool http::GetHTTPResponseBodyData(HTTPRequestHandle hRequest, std::uint8_t* pBodyDataBuffer, std::uint32_t unBufferSize) {
 		return false;
 	}
 
@@ -58,7 +58,7 @@ namespace steam {
 		return false;
 	}
 
-	bool http::SetHTTPRequestRawPostBody(HTTPRequestHandle hRequest, const char* pchContentType, uint8_t* pubBody, uint32_t unBodyLen) {
+	bool http::SetHTTPRequestRawPostBody(HTTPRequestHandle hRequest, const char* pchContentType, std::uint8_t* pubBody, std::uint32_t unBodyLen) {
 		return false;
 	}
 }
