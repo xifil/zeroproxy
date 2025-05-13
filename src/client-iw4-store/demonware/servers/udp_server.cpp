@@ -1,6 +1,8 @@
 #include "common.hpp"
 #include "demonware/servers/udp_server.hpp"
 
+#include <utils/string.hpp>
+
 namespace demonware {
 	void udp_server::handle_input(const char* buf, std::size_t size, endpoint_data endpoint) {
 		in_queue_.access([&](in_queue& queue) {
@@ -28,6 +30,7 @@ namespace demonware {
 			queue.pop();
 
 			const auto copy_size = std::min(size, data.data_.size());
+			LOG("Demonware/UDPServer", DEBUG, "sending back data to client: {}", utils::string::dump_hex(data.data_));
 			std::memcpy(buf, data.data_.data(), copy_size);
 			std::memcpy(address, &data.address_, sizeof(data.address_));
 			*addrlen = sizeof(data.address_);

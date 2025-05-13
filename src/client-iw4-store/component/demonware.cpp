@@ -98,7 +98,7 @@ namespace demonware {
 
 		namespace io {
 			int getaddrinfo_stub(const char* name, const char* service, const addrinfo* hints, addrinfo** res) {
-				//LOG("Component/Demonware", DEBUG, "[ network ]: [getaddrinfo]: \"{}\" \"{}\"", name, service);
+				LOG("Component/Demonware", DEBUG, "[ network ]: [getaddrinfo]: \"{}\" \"{}\"", name ? name : "<null>", service ? service : "<null>");
 
 				/*
 				for (auto i = 0; i < ARRAYSIZE(blocked_hosts); ++i) {
@@ -178,7 +178,7 @@ namespace demonware {
 			}
 
 			hostent* gethostbyname_stub(const char* name) {
-				//LOG("Component/Demonware", DEBUG, "[ network ]: [gethostbyname]: \"{}\"", name);
+				LOG("Component/Demonware", DEBUG, "[ network ]: [gethostbyname]: \"{}\"", name ? name : "<null>");
 
 				base_server* server = tcp_servers.find(name);
 				if (!server) {
@@ -420,9 +420,7 @@ namespace demonware {
 			//register_hook("getsockname", io::getsockname_stub);
 
 			//check_lpc_files();
-		}
 
-		void post_unpack() override {
 			server_thread = utils::thread::create_named_thread("Demonware", server_main);
 
 			/*
@@ -452,4 +450,4 @@ namespace demonware {
 	};
 }
 
-//REGISTER_COMPONENT(demonware::component)
+REGISTER_COMPONENT(demonware::component)

@@ -16,6 +16,7 @@ namespace demonware {
 
 		virtual ~base_server() = default;
 
+		void debug_log_packet(const std::string& server_type, const std::string& packet);
 		const std::string& get_name() const;
 		std::uint32_t get_address() const;
 

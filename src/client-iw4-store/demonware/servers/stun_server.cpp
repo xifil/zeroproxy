@@ -4,6 +4,8 @@
 
 namespace demonware {
 	void stun_server::handle(const endpoint_data& endpoint, const std::string& packet) {
+		debug_log_packet("StunServer", packet);
+
 		std::uint8_t type, version, padding;
 
 		byte_buffer buffer(packet);
