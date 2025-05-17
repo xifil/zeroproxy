@@ -43,6 +43,10 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild .\src\client-iw6-store\client-iw6-store.vcxproj /p:Configuration=Release /p:Platform=x64
 
+    - name: Build t7s (Store)
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild .\src\client-t7-store\client-t7-store.vcxproj /p:Configuration=Release /p:Platform=x64
+
     - name: Build s2s (Store)
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: msbuild .\src\client-s2-store\client-s2-store.vcxproj /p:Configuration=Release /p:Platform=x64
@@ -78,6 +82,12 @@ jobs:
       with:
         name: iw6s (Store)
         path: build/x64/Release/iw6/d3d11.dll
+
+    - name: Upload t7s (Store) artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: t7s (Store)
+        path: build/x64/Release/t7/d3d11.dll
 
     - name: Upload s2s (Store) artifact
       uses: actions/upload-artifact@v4

@@ -42,6 +42,10 @@ namespace identification::game {
 			inline constexpr std::uint32_t v3_15_11_MP = 0x67C9BDB9;
 		}
 
+		namespace t7_store {
+			inline constexpr std::uint32_t v2_0_0 = 0x67363F2A;
+		}
+
 		namespace s2_store {
 			inline constexpr std::uint32_t v2_0_0_SP = 0xAFD962C3;
 			inline constexpr std::uint32_t v2_0_0_MP = 0xF8D1963C;
@@ -125,6 +129,7 @@ namespace identification::game {
 		{ version::t6_store::v2_0_0_43_ZM, "Black Ops II", "2.0.0.43", mode::ZM },
 		{ version::iw6_store::v3_15_11_MP, "Ghosts", "3.15.11", mode::MP },
 		{ version::iw6_store::v3_15_11_SP, "Ghosts", "3.15.11", mode::SP },
+		{ version::t7_store::v2_0_0, "Black Ops III", "2.0.0" },
 		{ version::s2_store::v2_0_0_MP, "WWII", "2.0.0", mode::MP },
 		{ version::s2_store::v2_0_0_SP, "WWII", "2.0.0", mode::SP },
 		{ version::iw8::v0_01_2_7089334, "Modern Warfare", "0.01.2.7089334" },

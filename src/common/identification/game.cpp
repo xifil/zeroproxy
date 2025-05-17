@@ -1,5 +1,6 @@
 ﻿#include "identification/game.hpp"
 #include "memory/memory.hpp"
+#include "utils/string.hpp"
 
 extern "C" const char* ext_get_target_game();
 
@@ -22,7 +23,7 @@ namespace identification::game {
 			}
 
 #			if defined(_WIN64)
-				if ("Black Ops II"s == get_target_game() || "Ghosts"s == get_target_game() || "Modern Warfare 2"s == get_target_game()) {
+				if (utils::string::equals_any(get_target_game(), { "Black Ops II", "Black Ops III", "Ghosts", "Modern Warfare 2" })) {
 					return static_cast<std::uint32_t>(game.get_nt_headers()->FileHeader.TimeDateStamp);
 				}
 #			else

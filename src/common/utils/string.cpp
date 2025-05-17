@@ -58,6 +58,16 @@ namespace utils::string {
 		return std::equal(substring.rbegin(), substring.rend(), text.rbegin());
 	}
 
+	bool equals_any(const std::string& text, std::vector<std::string> matches) {
+		for (const auto& s : matches) {
+			if (text == s) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	bool is_numeric(const std::string& text) {
 		auto it = text.begin();
 		while (it != text.end() && std::isdigit(static_cast<unsigned char>(*it))) {

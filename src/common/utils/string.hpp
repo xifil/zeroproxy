@@ -99,6 +99,7 @@ namespace utils::string {
 	std::string to_upper(std::string text);
 	bool starts_with(const std::string& text, const std::string& substring);
 	bool ends_with(const std::string& text, const std::string& substring);
+	bool equals_any(const std::string& text, std::vector<std::string> matches);
 
 	bool is_numeric(const std::string& text);
 

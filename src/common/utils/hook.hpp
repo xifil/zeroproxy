@@ -107,6 +107,7 @@ namespace utils::hook {
 
 		void create(void* place, void* target);
 		void create(std::size_t place, void* target);
+		void create(const std::string& target_library, const std::string& target_process, void* target);
 		void clear();
 
 		void move();

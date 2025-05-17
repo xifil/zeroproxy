@@ -275,6 +275,20 @@ namespace utils::hook {
 		this->create(reinterpret_cast<void*>(place), target);
 	}
 
+	void detour::create(const std::string& target_library, const std::string& target_process, void* target) {
+		utils::nt::library library(target_library);
+		if (!library.is_valid()) {
+			return;
+		}
+
+		auto proc = library.get_proc<void*>(target_process);
+		if (proc == nullptr) {
+			return;
+		}
+
+		this->create(proc, target);
+	}
+
 	void detour::clear() {
 		if (this->place_) {
 			this->un_move();
