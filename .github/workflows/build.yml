@@ -75,25 +75,25 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: t6s (Store)
-        path: build/x64/Release/t6/d3d11.dll
+        path: build/x64/Release/t6-store/d3d11.dll
 
     - name: Upload iw6s (Store) artifact
       uses: actions/upload-artifact@v4
       with:
         name: iw6s (Store)
-        path: build/x64/Release/iw6/d3d11.dll
+        path: build/x64/Release/iw6-store/d3d11.dll
 
     - name: Upload t7s (Store) artifact
       uses: actions/upload-artifact@v4
       with:
         name: t7s (Store)
-        path: build/x64/Release/t7/d3d11.dll
+        path: build/x64/Release/t7-store/d3d11.dll
 
     - name: Upload s2s (Store) artifact
       uses: actions/upload-artifact@v4
       with:
         name: s2s (Store)
-        path: build/x64/Release/s2/d3d11.dll
+        path: build/x64/Release/s2-store/d3d11.dll
 
     - name: Upload iw8-mod artifact
       uses: actions/upload-artifact@v4
