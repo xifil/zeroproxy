@@ -5,6 +5,7 @@ enum class component_priority {
 	name,
 	steam_proxy,
 	arxan,
+	call_spoofer,
 	pointers
 };
 

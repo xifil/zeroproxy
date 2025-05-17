@@ -4,6 +4,7 @@
 #include "game/game.hpp"
 
 #include <loader/component_loader.hpp>
+#include <memory/memory.hpp>
 #include <utils/hook.hpp>
 #include <utils/string.hpp>
 
@@ -61,12 +62,14 @@ namespace patches {
 
 	struct component final : generic_component {
 		void post_load() override {
-			com_print_message_hook.create(game::Com_PrintMessage, com_print_message_stub);
-			create_window_ex_a_hook.create(utils::nt::library(), "user32.dll", "CreateWindowExA", create_window_ex_a_stub);
-			set_window_text_a_hook.create(utils::nt::library(), "user32.dll", "SetWindowTextA", set_window_text_a_stub);
+			utils::nt::library game{};
 
-			utils::hook::set<std::uint8_t>(0x13DF336_b, 0xEB);	// always enable ingame console
-			utils::hook::set<std::uint8_t>(0x1EEA680_b, 0xC3);	// stub microphone enumeration
+			com_print_message_hook.create(game::Com_PrintMessage, com_print_message_stub);
+			create_window_ex_a_hook.create(game, "user32.dll", "CreateWindowExA", create_window_ex_a_stub);
+			set_window_text_a_hook.create(game, "user32.dll", "SetWindowTextA", set_window_text_a_stub);
+
+			utils::hook::set<std::uint8_t>(memory::sig_scan(game, "75 ? 83 25").get(), 0xEB);								// always enable ingame console
+			utils::hook::set<std::uint8_t>(memory::sig_scan(game, "40 55 57 41 54 41 55 41 57 48 8D AC 24").get(), 0xC3);	// stub microphone enumeration
 		}
 	};
 }

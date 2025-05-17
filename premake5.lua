@@ -534,6 +534,7 @@ workspace "ZeroProxy"
 		pchsource "src/%{prj.name}/common.cpp"
 
 		files {
+			"./src/%{prj.name}/**.asm",
 			"./src/%{prj.name}/**.rc",
 			"./src/%{prj.name}/**.hpp",
 			"./src/%{prj.name}/**.cpp",
