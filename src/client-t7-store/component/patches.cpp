@@ -64,6 +64,9 @@ namespace patches {
 			com_print_message_hook.create(game::Com_PrintMessage, com_print_message_stub);
 			create_window_ex_a_hook.create(utils::nt::library(), "user32.dll", "CreateWindowExA", create_window_ex_a_stub);
 			set_window_text_a_hook.create(utils::nt::library(), "user32.dll", "SetWindowTextA", set_window_text_a_stub);
+
+			utils::hook::set<std::uint8_t>(0x13DF336_b, 0xEB);	// always enable ingame console
+			utils::hook::set<std::uint8_t>(0x1EEA680_b, 0xC3);	// stub microphone enumeration
 		}
 	};
 }
