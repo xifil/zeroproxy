@@ -4,9 +4,6 @@
 #include <loader/component_loader.hpp>
 #include <utils/hook.hpp>
 
-#include <types.h>
-#include <extern.h>
-
 namespace exception_filter {
 	namespace {
 		utils::hook::iat_detour set_unhandled_exception_filter_hook;
