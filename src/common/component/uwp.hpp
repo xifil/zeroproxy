@@ -12,6 +12,7 @@
 namespace uwp {
 	namespace {
 		utils::hook::detour query_api_impl_hook;
+		utils::hook::detour x_game_save_files_get_folder_with_ui_result_hook;
 		utils::hook::detour x_store_query_game_license_result_hook;
 		utils::hook::detour x_user_is_store_user_hook;
 
@@ -31,8 +32,18 @@ namespace uwp {
 			return PTR_AS(vt_cls*, class_ptr)->vftable_[index];
 		}
 
+		namespace x_game_save {
+			HRESULT x_game_save_files_get_folder_with_ui_result_stub(void* _this, uwp::XAsyncBlock* async, std::size_t folder_size, char* folder_result) {
+				if (_getcwd(folder_result, folder_size) == nullptr) {
+					return x_game_save_files_get_folder_with_ui_result_hook.invoke<HRESULT>(_this, async, folder_size, folder_result);
+				}
+
+				return S_OK;
+			}
+		}
+
 		namespace x_store {
-			HRESULT x_store_query_game_license_result_stub(uwp::IStoreImpl1* _this, void* async, uwp::XStoreGameLicense* license) {
+			HRESULT x_store_query_game_license_result_stub(uwp::IStoreImpl1* _this, uwp::XAsyncBlock* async, uwp::XStoreGameLicense* license) {
 				// result ignored, we return S_OK anyway to avoid "popup_drm_menu_gdk_license_error"
 				x_store_query_game_license_result_hook.invoke<HRESULT>(_this, async, license);
 
@@ -53,18 +64,19 @@ namespace uwp {
 
 		HRESULT query_api_impl_stub(GUID* first, GUID* second, void** api_out) {
 			auto res = query_api_impl_hook.invoke<HRESULT>(first, second, api_out);
+			static bool hooked_game_save_vt = false;
 			static bool hooked_store_vt = false;
 			static bool hooked_user_vt = false;
 
 			if (first != nullptr && second != nullptr && res >= 0) {
-				/*
-				 * something strange to note:
-				 * 
-				 * the first GUID [0dd112ac-7c24-448c-b92b-3960fb5bd30c], appears in both xgameruntime.lib (from the gdk on github) and the game, however
-				 * the second GUID [5c48dedf-0b67-4492-a4b5-6829b8e796e1] differs from the one in xgameruntime.lib, that one being
-				 * "b09d803c-2414-4a05-82c6-66dfdc9e9a44". i'm not sure what these guids are specifically used for, all i know is that they find the api
-				 * class but i can't formulate a reason as to why it's different between the game and the april 2025 .lib from github. strange.
-				 */
+				if (!hooked_game_save_vt && is_target_api(*first, *second, "704c3f58-e629-4cc2-b197-30511b996fe2", "704c3f58-e629-4cc2-b197-30511b996ee2")) {
+					if (identification::game::get_target_game() == "Black Ops III"s) {
+						x_game_save_files_get_folder_with_ui_result_hook.create(get_vt_function(*api_out, 31),
+							x_game_save::x_game_save_files_get_folder_with_ui_result_stub);
+					}
+					hooked_game_save_vt = true;
+				}
+
 				if (!hooked_store_vt && is_target_api(*first, *second, "0dd112ac-7c24-448c-b92b-3960fb5bd30c", "5c48dedf-0b67-4492-a4b5-6829b8e796e1")) {
 					x_store_query_game_license_result_hook.create(get_vt_function(*api_out, 29), x_store::x_store_query_game_license_result_stub);
 					hooked_store_vt = true;
