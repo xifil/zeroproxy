@@ -39,12 +39,12 @@ namespace scylla {
 			return return_value;
 		}
 
-		if (!ReadProcessMemory(h_process, (LPVOID)address, data_buffer, size, &lp_number_of_bytes_read)) {
+		if (!ReadProcessMemory(h_process, (LPVOID)address, data_buffer, size, reinterpret_cast<SIZE_T*>(&lp_number_of_bytes_read))) {
 			if (!VirtualProtectEx(h_process, (LPVOID)address, size, PAGE_READWRITE, &dw_protect)) {
 				return_value = false;
 			}
 			else {
-				return_value = ReadProcessMemory(h_process, (LPVOID)address, data_buffer, size, &lp_number_of_bytes_read);
+				return_value = ReadProcessMemory(h_process, (LPVOID)address, data_buffer, size, reinterpret_cast<SIZE_T*>(&lp_number_of_bytes_read));
 				VirtualProtectEx(h_process, (LPVOID)address, size, dw_protect, &dw_protect);
 			}
 		}
