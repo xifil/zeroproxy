@@ -34,7 +34,9 @@ namespace memory {
 	}
 
 	template <typename T = void*>
-	std::enable_if_t<std::is_pointer_v<T>, std::vector<scanned_result<std::remove_pointer_t<T>>>> masked_vectored_sig_scan(utils::nt::library library, masked_signature sig, std::size_t limit) {
+	std::enable_if_t<std::is_pointer_v<T>, std::vector<scanned_result<std::remove_pointer_t<T>>>> masked_vectored_sig_scan(utils::nt::library library,
+		masked_signature sig, std::size_t limit)
+	{
 		std::size_t pat_len = sig.mask_.size();
 		MODULEINFO mod_info = library.get_info();
 		std::uintptr_t mod_base = PTR_AS(std::uintptr_t, mod_info.lpBaseOfDll);
@@ -90,11 +92,14 @@ namespace memory {
 	}
 
 	template <typename T = void*>
-	std::enable_if_t<std::is_pointer_v<T>, std::vector<scanned_result<std::remove_pointer_t<T>>>> vectored_sig_scan(utils::nt::library library, std::string pattern, std::size_t limit, std::string name = "", bool print_fail = true) {
+	std::enable_if_t<std::is_pointer_v<T>, std::vector<scanned_result<std::remove_pointer_t<T>>>> vectored_sig_scan(utils::nt::library library,
+		std::string pattern, std::size_t limit, std::string name = "", bool print_fail = true)
+	{
 		std::vector<scanned_result<std::remove_pointer_t<T>>> res = masked_vectored_sig_scan<T>(library, masked_signature_from_string(pattern), limit);
 		if (!name.empty()) {
 			if (res.size() > 0) {
-				LOG("Scanner", DEBUG, "Found '{}' {}+0x{:X} [{} total]", name, library.get_name(), res.at(0).as<std::uintptr_t>() - PTR_AS(std::uintptr_t, library.get_info().lpBaseOfDll), res.size());
+				LOG("Scanner", DEBUG, "Found '{}' {}+0x{:X} [{} total]", name, library.get_name(), res.at(0).as<std::uintptr_t>()
+					- PTR_AS(std::uintptr_t, library.get_info().lpBaseOfDll), res.size());
 			}
 			else if (print_fail) {
 				LOG("Scanner", WARN, "Failed to find '{}' in {} ({})", name, library.get_name(), pattern);
@@ -104,11 +109,14 @@ namespace memory {
 	}
 
 	template <typename T = void*>
-	std::enable_if_t<std::is_pointer_v<T>, scanned_result<std::remove_pointer_t<T>>> sig_scan(utils::nt::library library, std::string pattern, std::string name = "", bool print_fail = true) {
+	std::enable_if_t<std::is_pointer_v<T>, scanned_result<std::remove_pointer_t<T>>> sig_scan(utils::nt::library library, std::string pattern,
+		std::string name = "", bool print_fail = true)
+	{
 		scanned_result<std::remove_pointer_t<T>> res = masked_sig_scan<T>(library, masked_signature_from_string(pattern));
 		if (!name.empty()) {
 			if (res) {
-				LOG("Scanner", DEBUG, "Found '{}' {}+0x{:X}", name, library.get_name(), res.as<std::uintptr_t>() - PTR_AS(std::uintptr_t, library.get_info().lpBaseOfDll));
+				LOG("Scanner", DEBUG, "Found '{}' {}+0x{:X}", name, library.get_name(), res.as<std::uintptr_t>()
+					- PTR_AS(std::uintptr_t, library.get_info().lpBaseOfDll));
 			}
 			else if (print_fail) {
 				LOG("Scanner", WARN, "Failed to find '{}' in {} ({})", name, library.get_name(), pattern);
@@ -127,7 +135,8 @@ namespace memory {
 
 		scanned_result<std::remove_pointer_t<T>> res = scanned_result<std::remove_pointer_t<T>>(library.get_proc<void*>(export_name));
 		if (res) {
-			LOG("Scanner", DEBUG, "Found '{}' {}+0x{:X}", export_name, module_name, res.as<std::uintptr_t>() - PTR_AS(std::uintptr_t, library.get_info().lpBaseOfDll));
+			LOG("Scanner", DEBUG, "Found '{}' {}+0x{:X}", export_name, module_name, res.as<std::uintptr_t>()
+				- PTR_AS(std::uintptr_t, library.get_info().lpBaseOfDll));
 		}
 		else {
 			LOG("Scanner", WARN, "Failed to find '{}' in {}", export_name, module_name);

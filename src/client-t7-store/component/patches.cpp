@@ -70,6 +70,21 @@ namespace patches {
 
 			utils::hook::set<std::uint8_t>(memory::sig_scan(game, "75 ? 83 25").get(), 0xEB);								// always enable ingame console
 			utils::hook::set<std::uint8_t>(memory::sig_scan(game, "40 55 57 41 54 41 55 41 57 48 8D AC 24").get(), 0xC3);	// stub microphone enumeration
+
+			/* fix mutex crash in xbox curl by making it a recursive mutex */
+			auto non_recursive_lock_res = memory::sig_scan(game, "41 8D 57 ? E8 ? ? ? ? 90 48 8D 77");
+
+			auto non_recursive_lock = non_recursive_lock_res.as<std::uintptr_t>();
+			auto _mtx_init_in_situ = non_recursive_lock_res.add(5).rip().as<std::uintptr_t>();
+
+			char mutex_patch[] = {
+				0xBA, 0x02, 0x01, 0x00, 0x00	// mov edx, 0x00000102;
+			};
+			utils::hook::copy(non_recursive_lock, mutex_patch, ARRAYSIZE(mutex_patch));
+			utils::hook::call(non_recursive_lock + ARRAYSIZE(mutex_patch), _mtx_init_in_situ);
+
+			/* patch in non-matching fastfiles (avoid "Fastfile archive checksum ([...]) does not match executable nor any permissible") */
+			utils::hook::set<std::uint8_t>(memory::sig_scan(game, "74 ? 41 FF C3 49 83 C2").get(), 0xEB);
 		}
 	};
 }
