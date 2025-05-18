@@ -83,6 +83,38 @@ namespace patches {
 			utils::hook::copy(non_recursive_lock, mutex_patch, ARRAYSIZE(mutex_patch));
 			utils::hook::call(non_recursive_lock + ARRAYSIZE(mutex_patch), _mtx_init_in_situ);
 
+			scheduler::loop([] {
+				static int affinity_state = 0;
+				static ULONG_PTR process_affinity = 0;
+				static ULONG_PTR system_affinity = 0;
+
+				if (affinity_state > 1) {
+					return;
+				}
+
+				if (affinity_state == 0) {
+					if (GetProcessAffinityMask(GetCurrentProcess(), &process_affinity, &system_affinity)) {
+						if (process_affinity) {
+							ULONG_PTR affinity = process_affinity & (1 | 2 | 4 | 8);
+							if (affinity) {
+								if (SetProcessAffinityMask(GetCurrentProcess(), affinity)) {
+									affinity_state++;
+								}
+							}
+						}
+					}
+				}
+				else if (affinity_state == 1) {
+					if (SetProcessAffinityMask(GetCurrentProcess(), process_affinity)) {
+						affinity_state++;
+					}
+				}
+			}, scheduler::pipeline::async, 1000ms);
+		}
+
+		void post_unpack() override {
+			utils::nt::library game{};
+
 			/* patch in non-matching fastfiles (avoid "Fastfile archive checksum ([...]) does not match executable nor any permissible") */
 			utils::hook::set<std::uint8_t>(memory::sig_scan(game, "74 ? 41 FF C3 49 83 C2").get(), 0xEB);
 		}

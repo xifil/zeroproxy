@@ -1,0 +1,118 @@
+english
+
+
+WIN_COULDNT_START_PROCESS
+"Could not start process."
+
+
+WIN_CONFIGURE_UPDATED_TITLE
+"Recommended Settings Updated"
+
+
+WIN_CONFIGURE_UPDATED_BODY
+"The recommended settings have been updated since the last time you ran Call of Duty.
+Would you like the game to configure itself optimally with these new settings?
+
+This is recommended for most people.  It will change your system settings but not your controls."
+
+
+WIN_LOW_MEMORY_BODY
+"It looks like you are low on virtual memory.
+This can cause the game to run slowly and it may stop completely.
+It is highly recommended that you close some programs before running Call of Duty.
+
+Do you want to run Call of Duty anyway?"
+
+
+WIN_LOW_MEMORY_TITLE
+"Low Memory"
+
+
+WIN_UPDATE_DRIVER_BODY
+"Your video card drivers are out of date, please go to the manufacturer's 
+website to download and install newer ones or the game may not run correctly. 
+
+Would you like more information on how to update your drivers?"
+
+
+WIN_UPDATE_DRIVER_TITLE
+"Old Drivers"
+
+
+WIN_INSTALL_MFPLAT
+"Black Ops III requires installation of the Windows Media Feature Pack.
+
+Click yes for more information on how to download."
+
+
+WIN_SAFE_MODE_BODY
+"Your game did not shut down properly during your last session, would you like to start in Safe Mode?
+
+Note: Safe mode will change your Graphics settings."
+
+
+WIN_SAFE_MODE_TITLE
+"Safe mode"
+
+
+WIN_INSTALL_MFPLAT_TITLE
+"Windows Media Feature Pack Missing"
+
+
+WIN_COMPUTER_CHANGE_BODY
+"Your computer appears to have changed since the last time you ran Call of Duty.
+Would you like the game to configure itself optimally for your new hardware?
+
+This is recommended for most people.
+It will change your system settings but not your controls."
+
+
+WIN_COMPUTER_CHANGE_TITLE
+"Set Optimal Settings?"
+
+
+WIN_DISK_FULL_BODY
+"Call of Duty: Black Ops III couldn't write a file.  The hard drive is probably full."
+
+
+WIN_DISK_FULL_TITLE
+"File Write Error"
+
+
+WIN_IMPROPER_QUIT_BODY
+"It appears that Call of Duty: Black Ops III did not quit properly the last time it ran.
+Do you want to run the game in safe mode?
+
+This is recommended for most people.
+It will change your system settings but not your controls."
+
+
+WIN_IMPROPER_QUIT_TITLE
+"Run In Safe Mode?"
+
+
+WIN_ERROR
+"Fatal Error"
+
+WIN_NO_STEAM
+"Steam must be running to play this game."
+
+WIN_OUT_OF_MEM_BODY
+"Out of memory error.  You are probably low on hard disk space."
+
+
+WIN_OUT_OF_MEM_TITLE
+"Out of memory error"
+
+
+WIN_UNABLE_LOAD_DLL_BODY
+"Unable to load a DLL.  Possibly due to low memory, insufficient hard drive space, or missing DLL files."
+
+
+WIN_DIRECTX_INIT_TITLE
+"DirectX Error"
+
+WIN_DIRECTX_INIT_BODY
+"DirectX encountered an unrecoverable error.
+
+Check the readme for possible solutions."

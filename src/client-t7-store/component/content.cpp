@@ -47,10 +47,12 @@ namespace content {
 	struct component final : generic_component {
 		void post_load() override {
 			utils::hook::jump(game::Content_DoWeHaveContentPack, content_do_we_have_content_pack_stub);
-			utils::hook::jump(game::Content_GetAvailableContentPacks, content_get_available_content_packs_stub);
 			utils::hook::jump(game::Content_HasEntitlementOwnershipByRef, content_has_entitlement_ownership_by_ref_stub);
 			utils::hook::jump(game::MSStore_OwnsContent, ms_store_owns_content_stub);
+		}
 
+		void post_unpack() override {
+			utils::hook::jump(game::Content_GetAvailableContentPacks, content_get_available_content_packs_stub);
 			spoof_owns_content();
 		}
 	};

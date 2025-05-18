@@ -70,22 +70,23 @@ namespace scheduler {
 		std::thread async_thread;
 		task_pipeline pipelines[ENUM_UNDER(pipeline::count)];
 
-		utils::hook::detour cl_draw_screen_hook;
-		utils::hook::detour main_frame_hook;
+		utils::hook::detour com_frame_try_block_function_hook;
+		utils::hook::detour snd_end_frame_hook;
+		utils::hook::detour unk_wait_for_objects_hook;
 
-		void cl_draw_screen_stub(std::uint32_t local_client_num) {
-			cl_draw_screen_hook.invoke<void>(local_client_num);
-			execute(pipeline::renderer);
-		}
-
-		void g_clear_vehicle_inputs_stub() {
-			//game::G_ClearVehicleInputs();
-			execute(pipeline::server);
-		}
-
-		void main_frame_stub() {
-			main_frame_hook.invoke<void>();
+		void com_frame_try_block_function_stub() {
+			com_frame_try_block_function_hook.invoke<void>();
 			execute(pipeline::main);
+		}
+
+		void snd_end_frame_stub() {
+			execute(pipeline::renderer);
+			snd_end_frame_hook.invoke<void>();
+		}
+
+		std::int64_t unk_wait_for_objects_stub() {
+			execute(pipeline::server);
+			return unk_wait_for_objects_hook.invoke<std::int64_t>();
 		}
 	}
 
@@ -129,13 +130,11 @@ namespace scheduler {
 			});
 
 			if (!game::is_server()) {
-				//cl_draw_screen_hook.create(game::CL_DrawScreen, cl_draw_screen_stub);
+				snd_end_frame_hook.create(game::SND_EndFrame, snd_end_frame_stub);
 			}
 
-			// Com_Frame_Try_Block_Function
-			//main_frame_hook.create(game::select(0x1420F8E00, 0x1405020E0), main_frame_stub);
-
-			//utils::hook::call(game::select(0x14225522E, 0x140538427), g_clear_vehicle_inputs_stub);
+			com_frame_try_block_function_hook.create(game::Com_Frame_Try_Block_Function, com_frame_try_block_function_stub);
+			unk_wait_for_objects_hook.create(game::unk_WaitForObjects, unk_wait_for_objects_stub);
 		}
 
 		void pre_destroy() override {
