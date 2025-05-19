@@ -132,6 +132,12 @@ namespace t6s {
 	using SndAliasList = void;
 }
 
+namespace t7s {
+	using Glyph = void;
+	using KerningPairs = void;
+	using Material = void;
+}
+
 namespace uwp {
 	using XStoreContextHandle = class XStoreContext*;
 	using XStoreLicenseHandle = class XStoreLicense*;

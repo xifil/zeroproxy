@@ -12,6 +12,7 @@ namespace game {
 	inline functions::Content_HasEntitlementOwnershipByRefT* Content_HasEntitlementOwnershipByRef{};
 	inline functions::FS_FindXZoneT* FS_FindXZone{};
 	inline functions::MSStore_OwnsContentT* MSStore_OwnsContent{};
+	inline functions::R_AddCmdDrawTextWithCursorInternalT* R_AddCmdDrawTextWithCursorInternal{};
 	inline functions::SND_EndFrameT* SND_EndFrame{};
 	inline functions::unk_GenericACFunctionT* unk_AC_OnDllLoaded{};
 	inline functions::unk_GenericACFunctionT* unk_AC_Unk2_Threaded{};
@@ -27,9 +28,11 @@ namespace game {
 	inline functions::unk_InitSysDvarsT* unk_InitSysDvars{};
 	inline functions::unk_WaitForObjectsT* unk_WaitForObjects{};
 
+	inline int* com_quitInProgress{};
 	inline int* s_contentPackMetaData{};
 	inline std::uint64_t* unk_AC_State{};
 	inline std::uint8_t* unk_OwnedContent{};
+	inline t7s::Font_s* unk_WatermarkFont{};
 
 	bool is_server();
 }

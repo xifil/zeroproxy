@@ -24,6 +24,8 @@ void game::init() {
 
 	batch.add(SETUP_POINTER(MSStore_OwnsContent), "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F1 E8");
 
+	batch.add(SETUP_POINTER(R_AddCmdDrawTextWithCursorInternal), "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 80 39");
+
 	batch.add(SETUP_POINTER(SND_EndFrame), "40 53 56 57 48 83 EC ? 48 8D 35");
 
 	batch.add(SETUP_POINTER(unk_AC_OnDllLoaded), "83 F9 ? 0F 85 ? ? ? ? 48 81 EC");
@@ -56,11 +58,15 @@ void game::init() {
 
 	batch.add(SETUP_POINTER(unk_WaitForObjects), "40 53 48 83 EC ? 48 8D 4C 24 ? FF 15 ? ? ? ? 48 8B 0D");
 
+	batch.add(SETUP_POINTER(com_quitInProgress), "83 3D ? ? ? ? ? 75 ? B1", SETUP_MOD(add(2).rip()));
+
 	batch.add(SETUP_POINTER(s_contentPackMetaData), "8B 9C CF ? ? ? ? B1", SETUP_MOD(add(3).rip()));
 
 	batch.add(SETUP_POINTER(unk_AC_State), "48 85 05", SETUP_MOD(add(3).rip()));
 
 	batch.add(SETUP_POINTER(unk_OwnedContent), "48 8D 0D ? ? ? ? 86 04 0A", SETUP_MOD(add(3).rip()));
+
+	batch.add(SETUP_POINTER(unk_WatermarkFont), "48 8D 05 ? ? ? ? 48 89 05 ? ? ? ? 48 8D 05 ? ? ? ? EB ? 48 8D 05", SETUP_MOD(add(3).rip()));
 
 	batch.scan_all(true);
 }

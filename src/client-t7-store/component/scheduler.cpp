@@ -80,7 +80,9 @@ namespace scheduler {
 		}
 
 		void snd_end_frame_stub() {
-			execute(pipeline::renderer);
+			if (*game::com_quitInProgress == 0) {
+				execute(pipeline::renderer);
+			}
 			snd_end_frame_hook.invoke<void>();
 		}
 
@@ -146,4 +148,4 @@ namespace scheduler {
 	};
 }
 
-//REGISTER_COMPONENT(scheduler::component)
+REGISTER_COMPONENT(scheduler::component)

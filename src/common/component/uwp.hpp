@@ -57,7 +57,7 @@ namespace uwp {
 		}
 
 		namespace x_user {
-			bool x_user_is_store_user_stub(uwp::XUserHandle user) {
+			bool x_user_is_store_user_stub(void* _this, uwp::XUserHandle user) {
 				return true;
 			}
 		}
