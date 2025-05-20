@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "common_core.hpp"
+#include "utils/nt.hpp"
 
 namespace memory {
 	template <typename T>
@@ -53,6 +54,10 @@ namespace memory {
 
 		scanned_result rel() {
 			return scanned_result(*this->as<void**>());
+		}
+
+		scanned_result based_rel() {
+			return scanned_result(utils::nt::library::get_by_address(this->pointer_).get_ptr()).add(this->as<std::int32_t&>());
 		}
 
 		explicit operator bool() {

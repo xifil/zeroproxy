@@ -136,6 +136,29 @@ namespace t7s {
 	using Glyph = void;
 	using KerningPairs = void;
 	using Material = void;
+
+	class lua_Debug;
+	class lua_State;
+
+	using lua_Alloc = void*(*)(void*, void*, std::size_t, std::size_t);
+	using lua_CFunction = int(*)(void*);
+	using lua_Hook = void(*)(lua_State*, lua_Debug*);
+
+	namespace hks {
+		using DebugMapT = int(*)(const char* file_name, int lua_line);
+		using EmergencyGCFailFuncT = void(*)(lua_State*, std::size_t);
+		using LogFuncT = void(*)(lua_State*, const char*, ...);
+
+		class Closure;
+		class CClosure;
+		class HashTable;
+		class InternString;
+		class Metatable;
+		class Method;
+		class StructInst;
+		class UpValue;
+		class UserData;
+	}
 }
 
 namespace uwp {

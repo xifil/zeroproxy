@@ -1,0 +1,15 @@
+#pragma once
+#include "engine/engine_common.hpp"
+
+namespace t7s::hks {
+	enum class GCResumePhase {
+		GC_STATE_MARKING_UPVALUES = 0,
+		GC_STATE_MARKING_GLOBAL_TABLE = 1,
+		GC_STATE_MARKING_REGISTRY = 2,
+		GC_STATE_MARKING_PROTOTYPES = 3,
+		GC_STATE_MARKING_SCRIPT_PROFILER = 4,
+		GC_STATE_MARKING_FINALIZER_STATE = 5,
+		GC_STATE_MARKING_ARRAY = 6,
+		GC_STATE_MARKING_HASH = 7
+	};
+}

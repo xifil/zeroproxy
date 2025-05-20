@@ -10,6 +10,8 @@
 void game::init() {
 	memory::signature_store batch;
 
+	batch.add(SETUP_POINTER(CL_GetKeyBindingInternal), "E8 ? ? ? ? 8B F8 4C 8B BC 24", SETUP_MOD(add(1).rip()));
+
 	batch.add(SETUP_POINTER(Com_Frame_Try_Block_Function), "E8 ? ? ? ? FF 05 ? ? ? ? C7 44 24 ? ? ? ? ? C6 44 24", SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(Com_PrintMessage), "40 53 41 54 41 56 41 57 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 44 24");
@@ -20,11 +22,20 @@ void game::init() {
 
 	batch.add(SETUP_POINTER(Content_DoWeHaveContentPack), "40 53 48 83 EC ? 48 85 C9 74");
 
+	batch.add(SETUP_POINTER(CScrCmd_SetAllControllersLightbarColor), "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8B 05 ? ? ? ? 48 33 C4 48 89"
+		" 44 24 ? 8B 3D");
+
 	batch.add(SETUP_POINTER(FS_FindXZone), "E8 ? ? ? ? 48 85 C0 48 8D 2D", SETUP_MOD(add(1).rip()));
+
+	batch.add(SETUP_POINTER(GPad_ResetLightbarColor), "E8 ? ? ? ? 48 83 EB ? 75 ? 48 8B 4C 24", SETUP_MOD(add(1).rip()));
+
+	batch.add(SETUP_POINTER(GPad_SetLightbarColor), "E8 ? ? ? ? EB ? E8 ? ? ? ? 48 83 EB", SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(MSStore_OwnsContent), "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 83 EC ? 48 8B F1 E8");
 
 	batch.add(SETUP_POINTER(R_AddCmdDrawTextWithCursorInternal), "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC ? 80 39");
+
+	batch.add(SETUP_POINTER(Scr_GetInt), "E8 ? ? ? ? 85 C0 40 0F 95 C6 C7 44 24", SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(SND_EndFrame), "40 53 56 57 48 83 EC ? 48 8D 35");
 
@@ -58,13 +69,19 @@ void game::init() {
 
 	batch.add(SETUP_POINTER(unk_WaitForObjects), "40 53 48 83 EC ? 48 8D 4C 24 ? FF 15 ? ? ? ? 48 8B 0D");
 
+	batch.add(SETUP_POINTER(clientGameStates), "43 8B 84 81", SETUP_MOD(add(4).based_rel()));
+
 	batch.add(SETUP_POINTER(com_quitInProgress), "83 3D ? ? ? ? ? 75 ? B1", SETUP_MOD(add(2).rip()));
 
 	batch.add(SETUP_POINTER(s_contentPackMetaData), "8B 9C CF ? ? ? ? B1", SETUP_MOD(add(3).rip()));
 
+	batch.add(SETUP_POINTER(s_gamePads), "48 8D 15 ? ? ? ? 85 FF", SETUP_MOD(add(3).rip()));
+
 	batch.add(SETUP_POINTER(unk_AC_State), "48 85 05", SETUP_MOD(add(3).rip()));
 
 	batch.add(SETUP_POINTER(unk_OwnedContent), "48 8D 0D ? ? ? ? 86 04 0A", SETUP_MOD(add(3).rip()));
+
+	batch.add(SETUP_POINTER(unk_PadHandles), "41 83 BC 2E ? ? ? ? ? 7C", SETUP_MOD(add(4).based_rel()));
 
 	batch.add(SETUP_POINTER(unk_WatermarkFont), "48 8D 05 ? ? ? ? 48 89 05 ? ? ? ? 48 8D 05 ? ? ? ? EB ? 48 8D 05", SETUP_MOD(add(3).rip()));
 
@@ -74,4 +91,12 @@ void game::init() {
 bool game::is_server() {
 	static bool is_server = utils::flags::has_flag("dedicated");
 	return is_server;
+}
+
+int game::Com_LocalClient_GetControllerIndex(int local_client_num) {
+	if (local_client_num >= 0 && local_client_num <= 2 && clientGameStates[local_client_num].local_client_num_ == local_client_num) {
+		return clientGameStates[local_client_num].controller_index_;
+	}
+
+	return -1;
 }
