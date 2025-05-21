@@ -23,18 +23,18 @@ namespace localized_strings {
 			}
 
 			return localized_overrides.access<const char*>([&](const localized_map& map) {
-				const auto original = seh_string_ed_get_string_hook.invoke<const char*>(psz_reference);
+				const auto res = seh_string_ed_get_string_hook.invoke<const char*>(psz_reference);
 
 				for (const auto& [regex, callback] : map) {
 					std::string input = psz_reference;
 					std::smatch match;
 					if (std::regex_match(input, match, regex) && input.size() == match[0].str().size()) {
-						original_localization original_loc = { input, original };
+						original_localization original_loc = { input, res };
 						return utils::string::va("%s", callback(original_loc, match).data());
 					}
 				}
 
-				return original;
+				return res;
 			});
 		}
 	}

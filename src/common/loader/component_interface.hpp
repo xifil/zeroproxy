@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 enum class component_priority {
+	lua_hook = -1,
 	min = 0,
 	name,
 	steam_proxy,

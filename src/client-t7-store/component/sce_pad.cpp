@@ -1,4 +1,5 @@
 #include "common.hpp"
+#include "component/lua_hook.hpp"
 #include "game/game.hpp"
 
 #include <engine/sce_pad/sce_pad_color.hpp>
@@ -16,6 +17,8 @@ namespace sce_pad {
 		utils::hook::detour c_scr_cmd_set_all_controllers_lightbar_color_hook;
 		utils::hook::detour g_pad_reset_lightbar_color_hook;
 		utils::hook::detour g_pad_set_lightbar_color_hook;
+		utils::hook::detour key_key_num_to_string_hook;
+		utils::hook::detour lua_cod_lua_call_gamepad_type_hook;
 
 		utils::nt::library& get_lib_sce_pad() {
 			static utils::nt::library lib_sce_pad("libScePad.dll");
@@ -117,6 +120,51 @@ namespace sce_pad {
 			sce_pad::sce_pad_color sce_color(color->x, color->y, color->z);
 			sce_pad_set_light_bar(sce_pad_handle, sce_color.get_this());
 		}
+
+		const char* key_key_num_to_string_stub(int local_client_num, int key_num, bool translate) {
+			auto res = key_key_num_to_string_hook.invoke<const char*>(local_client_num, key_num, translate);
+
+			static utils::nt::library game{};
+			static std::uintptr_t cl_get_key_binding_internal = memory::sig_scan(game, "BB ? ? ? ? 48 85 C0 74 ? 48 8D 48 ? 4D 8B C6").as<std::uintptr_t>();
+
+			for (int i = 0; i < 16; i++) {
+				if (res == game::unk_KeyNumToName[i].key_name_xenon_) {
+					int controller_index = game::Com_LocalClient_GetControllerIndex(local_client_num);
+					if (controller_index == -1) {
+						std::uintptr_t return_address = PTR_AS(std::uintptr_t, _ReturnAddress());
+						if (return_address == cl_get_key_binding_internal) {
+							controller_index = last_cl_get_key_binding_internal_index;
+						}
+						else {
+							controller_index = last_lua_gamepad_index;
+						}
+					}
+
+					int sce_pad = controller_index_to_sce_pad_handle(controller_index);
+					if (sce_pad != -1) {
+						return game::unk_KeyNumToName[i].key_name_ps3_;
+					}
+
+					break;
+				}
+			}
+
+			return res;
+		}
+
+		int lua_cod_lua_call_gamepad_type_stub(t7s::lua_State* lua_vm) {
+			int controller_index = static_cast<int>(game::lua_tonumber(lua_vm, 1));
+			last_lua_gamepad_index = controller_index;
+			
+			int sce_pad = controller_index_to_sce_pad_handle(controller_index);
+			if (sce_pad != -1) {
+				game::lua_pushinteger(lua_vm, 0 /* GAMEPAD_TYPE_ORBIS */);
+			}
+			else {
+				game::lua_pushinteger(lua_vm, 1 /* GAMEPAD_TYPE_DURANGO */);
+			}
+			return 1;
+		}
 	}
 
 	struct component final : generic_component {
@@ -126,8 +174,10 @@ namespace sce_pad {
 				c_scr_cmd_set_all_controllers_lightbar_color_stub);
 			g_pad_reset_lightbar_color_hook.create(game::GPad_ResetLightbarColor, g_pad_reset_lightbar_color_stub);
 			g_pad_set_lightbar_color_hook.create(game::GPad_SetLightbarColor, g_pad_set_lightbar_color_stub);
+			key_key_num_to_string_hook.create(game::Key_KeynumToName, key_key_num_to_string_stub);
+			lua_hook::create(lua_cod_lua_call_gamepad_type_hook, "GamepadType", lua_cod_lua_call_gamepad_type_stub);
 		}
 	};
 }
 
-//REGISTER_COMPONENT(sce_pad::component)
+REGISTER_COMPONENT(sce_pad::component)

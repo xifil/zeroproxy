@@ -11,6 +11,7 @@
 
 namespace t7s {
 	class lua_State {
+	public:
 		enum class Status {
 			NEW = 1,
 			RUNNING = 2,
