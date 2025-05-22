@@ -9,6 +9,7 @@
 namespace game {
 	void init();
 
+	inline functions::Cinematic_StartPlaybackT* Cinematic_StartPlayback{};
 	inline functions::CL_GetKeyBindingInternalT* CL_GetKeyBindingInternal{};
 	inline functions::Com_Frame_Try_Block_FunctionT* Com_Frame_Try_Block_Function{};
 	inline functions::Com_PrintMessageT* Com_PrintMessage{};
@@ -16,12 +17,13 @@ namespace game {
 	inline functions::Content_GetAvailableContentPacksT* Content_GetAvailableContentPacks{};
 	inline functions::Content_HasEntitlementOwnershipByRefT* Content_HasEntitlementOwnershipByRef{};
 	inline functions::CScrCmd_SetAllControllersLightbarColorT* CScrCmd_SetAllControllersLightbarColor{};
+	inline functions::DB_FindXAssetHeaderT* DB_FindXAssetHeader{};
 	inline functions::FS_FindXZoneT* FS_FindXZone{};
 	inline functions::GPad_ResetLightbarColorT* GPad_ResetLightbarColor{};
 	inline functions::GPad_SetLightbarColorT* GPad_SetLightbarColor{};
 	inline functions::hks_obj_tolstringT* hks_obj_tolstring{};
 	inline functions::hksI_openlibT* hksI_openlib{};
-	inline functions::Key_KeynumToNameT* Key_KeynumToName{};
+	inline functions::Key_KeynumToStringT* Key_KeynumToString{};
 	inline functions::lua_pcallT* lua_pcall{};
 	inline functions::lua_pushlstringT* lua_pushlstring{};
 	inline functions::lua_pushvfstringT* lua_pushvfstring{};

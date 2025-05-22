@@ -1,9 +1,9 @@
 #include "common.hpp"
 
-#include "component/localized_strings.hpp"
 #include "component/scheduler.hpp"
 #include "game/game.hpp"
 
+#include <component/localized_strings.hpp>
 #include <loader/component_loader.hpp>
 #include <utils/hook.hpp>
 #include <utils/string.hpp>

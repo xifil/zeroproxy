@@ -1,5 +1,5 @@
 #pragma once
-#include "common.hpp"
+#include "common_core.hpp"
 
 namespace localized_strings {
 	class original_localization {

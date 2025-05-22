@@ -174,7 +174,7 @@ namespace sce_pad {
 				c_scr_cmd_set_all_controllers_lightbar_color_stub);
 			g_pad_reset_lightbar_color_hook.create(game::GPad_ResetLightbarColor, g_pad_reset_lightbar_color_stub);
 			g_pad_set_lightbar_color_hook.create(game::GPad_SetLightbarColor, g_pad_set_lightbar_color_stub);
-			key_key_num_to_string_hook.create(game::Key_KeynumToName, key_key_num_to_string_stub);
+			key_key_num_to_string_hook.create(game::Key_KeynumToString, key_key_num_to_string_stub);
 			lua_hook::create(lua_cod_lua_call_gamepad_type_hook, "GamepadType", lua_cod_lua_call_gamepad_type_stub);
 		}
 	};

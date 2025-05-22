@@ -10,6 +10,8 @@
 void game::init() {
 	memory::signature_store batch;
 
+	batch.add(SETUP_POINTER(Cinematic_StartPlayback), "E8 ? ? ? ? 44 0F B6 05", SETUP_MOD(add(1).rip()));
+
 	batch.add(SETUP_POINTER(CL_GetKeyBindingInternal), "E8 ? ? ? ? 8B F8 4C 8B BC 24", SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(Com_Frame_Try_Block_Function), "E8 ? ? ? ? FF 05 ? ? ? ? C7 44 24 ? ? ? ? ? C6 44 24", SETUP_MOD(add(1).rip()));
@@ -25,6 +27,8 @@ void game::init() {
 	batch.add(SETUP_POINTER(CScrCmd_SetAllControllersLightbarColor), "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 0F 29 74 24 ? 48 8B 05 ? ? ? ? 48 33 C4 48 89"
 		" 44 24 ? 8B 3D");
 
+	batch.add(SETUP_POINTER(DB_FindXAssetHeader), "E8 ? ? ? ? 4C 8B 70", SETUP_MOD(add(1).rip()));
+
 	batch.add(SETUP_POINTER(FS_FindXZone), "E8 ? ? ? ? 48 85 C0 48 8D 2D", SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(GPad_ResetLightbarColor), "E8 ? ? ? ? 48 83 EB ? 75 ? 48 8B 4C 24", SETUP_MOD(add(1).rip()));
@@ -35,7 +39,7 @@ void game::init() {
 
 	batch.add(SETUP_POINTER(hksI_openlib), "40 53 56 57 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 84 24 ? ? ? ? 49 8B F0 48 8B FA 48 8B D9 48 85 D2");
 
-	batch.add(SETUP_POINTER(Key_KeynumToName), "48 89 5C 24 ? 57 48 83 EC ? 48 63 DA 41 8B F8 83 FB");
+	batch.add(SETUP_POINTER(Key_KeynumToString), "48 89 5C 24 ? 57 48 83 EC ? 48 63 DA 41 8B F8 83 FB");
 
 	batch.add(SETUP_POINTER(lua_pcall), "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC ? 48 8B 69");
 
