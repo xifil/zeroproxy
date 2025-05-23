@@ -15,6 +15,8 @@
 #include <engine/t7s/unknown/pad_handle_lookup.hpp>
 
 namespace functions {
+	using bdLogMessageT = void(int type, const char* category, const char* source, const char* source_file, const char* source_function, int a6,
+		const char* message, ...);
 	using Cinematic_StartPlaybackT = void(const char* name, const char* key, const std::uint32_t playback_flags, const float volume, void* callback_info,
 		const int id);
 	using CL_GetKeyBindingInternalT = int(int local_client_num, const char* command, char** key_names, int game_pad_only, int bind_num);

@@ -36,10 +36,10 @@ namespace demonware {
 	}
 
 	void auth3_server::handle(const std::string& packet) {
+		LOG("Demonware/Auth3Server", DEBUG, "called handle: {}", utils::string::dump_hex(packet));
+
 		if (packet.starts_with("POST /auth/")) {
-#			ifndef NDEBUG
-				printf("[DW]: [auth]: user requested authentication.\n");
-#			endif
+			LOG("Demonware/Auth3Server", DEBUG, "user requested authentication.");
 			return;
 		}
 
@@ -75,9 +75,7 @@ namespace demonware {
 			}
 		}
 
-#		ifndef NDEBUG
-			printf("[DW]: [auth]: authenticating user %s\n", token.data() + 64);
-#		endif
+		LOG("Demonware/Auth3Server", DEBUG, "authenticating user {}", token.data() + 64);
 
 		std::string auth_key(reinterpret_cast<char*>(token.data() + 32), 24);
 		std::string session_key("\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37\x13\x37", 24);
@@ -168,8 +166,6 @@ namespace demonware {
 
 		this->send_reply(&reply);
 
-#		ifndef NDEBUG
-			printf("[DW]: [auth]: user successfully authenticated.\n");
-#		endif
+		LOG("Demonware/Auth3Server", DEBUG, "user successfully authenticated.");
 	}
 }

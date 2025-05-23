@@ -46,6 +46,8 @@ namespace demonware {
 	}
 
 	void lobby_server::handle(const std::string& packet) {
+		LOG("Demonware/LobbyServer", DEBUG, "called handle: {}", utils::string::dump_hex(packet));
+
 		byte_buffer buffer(packet);
 		buffer.set_use_data_types(false);
 
@@ -61,9 +63,7 @@ namespace demonware {
 					return;
 				}
 				else if (size == 0xC8) {
-#					ifndef NDEBUG
-						printf("[DW]: [lobby]: received client_header_ack.\n");
-#					endif
+					LOG("Demonware/LobbyServer", DEBUG, "received client_header_ack.");
 
 					int c8;
 					buffer.read_int32(&c8);
@@ -75,9 +75,7 @@ namespace demonware {
 
 					raw_reply reply(packet_2);
 					this->send_reply(&reply);
-#					ifndef NDEBUG
-						printf("[DW]: [lobby]: sending server_header_ack.\n");
-#					endif
+					LOG("Demonware/LobbyServer", DEBUG, "sending server_header_ack.");
 					return;
 				}
 
@@ -92,9 +90,7 @@ namespace demonware {
 					buffer.read_ubyte(&type);
 
 					if (type == 0x82) {
-#						ifndef NDEBUG
-							printf("[DW]: [lobby]: received client_auth.\n");
-#						endif
+						LOG("Demonware/LobbyServer", DEBUG, "received client_auth.");
 						std::string packet_3(packet.data(), packet.size() - 8); // this 8 are client hash check?
 
 						demonware::queue_packet_to_hash(packet_3);
@@ -107,9 +103,7 @@ namespace demonware {
 						raw_reply reply(response);
 						this->send_reply(&reply);
 
-#						ifndef NDEBUG
-							printf("[DW]: [lobby]: sending server_auth_done.\n");
-#						endif
+						LOG("Demonware/LobbyServer", DEBUG, "sending server_auth_done.");
 						return;
 					}
 					else if (type == 0x85) {
@@ -145,7 +139,7 @@ namespace demonware {
 					}
 				}
 
-				printf("[DW]: [lobby]: ERROR! received unk message.\n");
+				LOG("Demonware/LobbyServer", DEBUG, "ERROR! received unk message.");
 				return;
 			}
 		}
@@ -159,7 +153,7 @@ namespace demonware {
 			it->second->exec_task(this, data);
 		}
 		else {
-			printf("[DW]: [lobby]: missing service '%s'\n", utils::string::va("%d", id));
+			LOG("Demonware/LobbyServer", DEBUG, "missing service '{}'", utils::string::va("%d", id));
 
 			// return no error
 			byte_buffer buffer(data);

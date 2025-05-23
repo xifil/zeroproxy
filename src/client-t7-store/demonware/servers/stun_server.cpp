@@ -2,8 +2,12 @@
 #include "demonware/byte_buffer.hpp"
 #include "demonware/servers/stun_server.hpp"
 
+#include <utils/string.hpp>
+
 namespace demonware {
 	void stun_server::handle(const endpoint_data& endpoint, const std::string& packet) {
+		LOG("Demonware/StunServer", DEBUG, "called handle: {}", utils::string::dump_hex(packet));
+
 		std::uint8_t type, version, padding;
 
 		byte_buffer buffer(packet);

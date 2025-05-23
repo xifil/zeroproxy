@@ -1,4 +1,5 @@
 #include "common.hpp"
+#include "game/game.hpp"
 
 #include <loader/component_loader.hpp>
 
@@ -391,6 +392,10 @@ namespace demonware {
 	class component final : public generic_component {
 	public:
 		component() {
+			if (!game::should_enable_demonware_emulator()) {
+				return;
+			}
+
 			udp_servers.create<stun_server>("mw2-stun.eu.demonware.net");
 			udp_servers.create<stun_server>("mw2-stun.us.demonware.net");
 			udp_servers.create<stun_server>("stun.au.demonware.net");
@@ -405,6 +410,10 @@ namespace demonware {
 		}
 
 		void post_load() override {
+			if (!game::should_enable_demonware_emulator()) {
+				return;
+			}
+
 			register_hook("send", io::send_stub);
 			register_hook("recv", io::recv_stub);
 			register_hook("sendto", io::sendto_stub);
@@ -438,6 +447,10 @@ namespace demonware {
 		}
 
 		void pre_destroy() override {
+			if (!game::should_enable_demonware_emulator()) {
+				return;
+			}
+
 			exit_server = true;
 			if (server_thread.joinable()) {
 				server_thread.join();

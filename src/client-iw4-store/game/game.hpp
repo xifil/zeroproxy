@@ -5,6 +5,7 @@
 namespace game {
 	void init();
 
+	inline functions::bdLogMessageT* bdLogMessage{};
 	inline functions::CL_DrawTextPhysicalT* CL_DrawTextPhysical{};
 	inline functions::Cmd_AddCommandInternalT* Cmd_AddCommandInternal{};
 	inline functions::Com_Frame_Try_Block_FunctionT* Com_Frame_Try_Block_Function{};
@@ -12,9 +13,9 @@ namespace game {
 	inline functions::ScrPlace_EndFrameT* ScrPlace_EndFrame{};
 	inline functions::SEH_StringEd_GetStringT* SEH_StringEd_GetString{};
 	inline functions::UI_RefreshFullscreenT* UI_RefreshFullscreen{};
-	inline functions::unk_DWLogT* unk_DWLog{};
 
 	inline iw4s::CachedAssets_t* sharedUiInfo_assets{};
 
 	bool is_server();
+	bool should_enable_demonware_emulator();
 }

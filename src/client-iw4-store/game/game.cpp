@@ -10,6 +10,8 @@
 void game::init() {
 	memory::signature_store batch;
 
+	batch.add(SETUP_POINTER(bdLogMessage), "4C 8B DC 55 41 54 41 55");
+
 	batch.add(SETUP_POINTER(CL_DrawTextPhysical), "E8 ? ? ? ? 0F 28 7C 24 ? 4C 8D 5C 24", SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(Cmd_AddCommandInternal), "E8 ? ? ? ? 4C 8D 05 ? ? ? ? 48 8D 15 ? ? ? ? 48 8D 0D ? ? ? ? 48 8B 5C 24", SETUP_MOD(add(1).rip()));
@@ -28,8 +30,6 @@ void game::init() {
 		batch.add(SETUP_POINTER(UI_RefreshFullscreen), "E8 ? ? ? ? 83 3D ? ? ? ? ? 48 8B 7C 24", SETUP_MOD(add(1).rip()));
 	}
 
-	batch.add(SETUP_POINTER(unk_DWLog), "4C 8B DC 55 41 54 41 55");
-
 	batch.add(SETUP_POINTER(sharedUiInfo_assets), "48 8B 05 ? ? ? ? 0F B6 56 ? 48 89 44 24", SETUP_MOD(add(3).rip()));
 
 	batch.scan_all(true);
@@ -38,4 +38,9 @@ void game::init() {
 bool game::is_server() {
 	static bool is_server = utils::flags::has_flag("dedicated");
 	return is_server;
+}
+
+bool game::should_enable_demonware_emulator() {
+	static bool should_enable_demonware_emulator = utils::flags::has_flag("dw");
+	return should_enable_demonware_emulator;
 }

@@ -9,6 +9,7 @@
 namespace game {
 	void init();
 
+	inline functions::bdLogMessageT* bdLogMessage{};
 	inline functions::Cinematic_StartPlaybackT* Cinematic_StartPlayback{};
 	inline functions::CL_GetKeyBindingInternalT* CL_GetKeyBindingInternal{};
 	inline functions::Com_Frame_Try_Block_FunctionT* Com_Frame_Try_Block_Function{};
@@ -59,6 +60,7 @@ namespace game {
 	inline t7s::Font_s* unk_WatermarkFont{};
 
 	bool is_server();
+	bool should_enable_demonware_emulator();
 
 	int Com_LocalClient_GetControllerIndex(int local_client_num);
 	void lua_pop(t7s::lua_State* s, int n);

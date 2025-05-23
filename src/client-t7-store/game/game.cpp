@@ -10,6 +10,8 @@
 void game::init() {
 	memory::signature_store batch;
 
+	batch.add(SETUP_POINTER(bdLogMessage), "4C 8B DC 55 41 54 41 55 41 56 41 57");
+
 	batch.add(SETUP_POINTER(Cinematic_StartPlayback), "E8 ? ? ? ? 44 0F B6 05", SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(CL_GetKeyBindingInternal), "E8 ? ? ? ? 8B F8 4C 8B BC 24", SETUP_MOD(add(1).rip()));
@@ -115,6 +117,11 @@ void game::init() {
 bool game::is_server() {
 	static bool is_server = utils::flags::has_flag("dedicated");
 	return is_server;
+}
+
+bool game::should_enable_demonware_emulator() {
+	static bool should_enable_demonware_emulator = utils::flags::has_flag("dw");
+	return should_enable_demonware_emulator;
 }
 
 int game::Com_LocalClient_GetControllerIndex(int local_client_num) {

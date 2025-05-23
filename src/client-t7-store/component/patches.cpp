@@ -12,12 +12,28 @@
 
 namespace patches {
 	namespace {
+		utils::hook::detour bd_log_message_hook;
 		utils::hook::detour com_print_message_hook;
 
 		utils::hook::iat_detour create_window_ex_a_hook;
 		utils::hook::iat_detour set_window_text_a_hook;
 
 		HWND game_window = nullptr;
+
+		void bd_log_message_stub(int type, const char* category, const char* source, const char* source_file, const char* source_function, int a6,
+			const char* message, ...)
+		{
+			va_list args;
+			va_start(args, message);
+
+			char buffer[1024];
+			vsnprintf(buffer, sizeof(buffer), message, args);
+
+			va_end(args);
+
+			LOG("Component/Patches", DEBUG, "[DW] [{}{}] [{}/{}]: {}", category, type, source, source_function, buffer);
+			bd_log_message_hook.invoke<void>(type, category, source, source_file, source_function, a6, "%s", buffer);
+		}
 
 		void com_print_message_stub(int channel, int console_type, const char* message, int unk) {
 			std::string message_str = message;
@@ -64,6 +80,7 @@ namespace patches {
 		void post_load() override {
 			utils::nt::library game{};
 
+			bd_log_message_hook.create(game::bdLogMessage, bd_log_message_stub);
 			com_print_message_hook.create(game::Com_PrintMessage, com_print_message_stub);
 			create_window_ex_a_hook.create(game, "user32.dll", "CreateWindowExA", create_window_ex_a_stub);
 			set_window_text_a_hook.create(game, "user32.dll", "SetWindowTextA", set_window_text_a_stub);

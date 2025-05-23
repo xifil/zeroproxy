@@ -47,13 +47,11 @@ namespace demonware {
 			const auto& it = this->tasks_.find(this->task_id_);
 
 			if (it != this->tasks_.end()) {
-#				ifndef NDEBUG
-					printf("[DW] %s: executing task '%d'\n", name_.data(), this->task_id_);
-#				endif
+				LOG("Demonware/Service", DEBUG, "{}: executing task '{:d}'", this->name_, this->task_id_);
 				it->second(server, &buffer);
 			}
 			else {
-				printf("[DW] %s: missing task '%d'\n", name_.data(), this->task_id_);
+				LOG("Demonware/Service", DEBUG, "{}: missing task '{:d}'", this->name_, this->task_id_);
 
 				// return no error
 				server->create_reply(this->task_id_).send();

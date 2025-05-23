@@ -12,7 +12,7 @@
 
 namespace patches {
 	namespace {
-		utils::hook::detour unk_dw_log_hook;
+		utils::hook::detour bd_log_message_hook;
 
 		utils::hook::iat_detour create_window_ex_a_hook;
 
@@ -28,7 +28,7 @@ namespace patches {
 				h_menu, h_instance, lp_param);
 		}
 
-		void unk_dw_log_stub(int type, const char* category, const char* source, const char* source_file, const char* source_function, int a6,
+		void bd_log_message_stub(int type, const char* category, const char* source, const char* source_file, const char* source_function, int a6,
 			const char* message, ...)
 		{
 			va_list args;
@@ -40,13 +40,13 @@ namespace patches {
 			va_end(args);
 
 			LOG("Component/Patches", DEBUG, "[DW] [{}{}] [{}/{}]: {}", category, type, source, source_function, buffer);
-			unk_dw_log_hook.invoke<void>(type, category, source, source_file, source_function, a6, "%s", buffer);
+			bd_log_message_hook.invoke<void>(type, category, source, source_file, source_function, a6, "%s", buffer);
 		}
 	}
 
 	struct component final : generic_component {
 		void post_load() override {
-			unk_dw_log_hook.create(game::unk_DWLog, unk_dw_log_stub);
+			bd_log_message_hook.create(game::bdLogMessage, bd_log_message_stub);
 			create_window_ex_a_hook.create(utils::nt::library(), "user32.dll", "CreateWindowExA", create_window_ex_a_stub);
 		}
 	};
