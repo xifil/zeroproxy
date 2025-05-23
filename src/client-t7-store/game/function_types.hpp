@@ -2,6 +2,7 @@
 #include "common.hpp"
 
 #include <engine/t7s/ClientGameState.hpp>
+#include <engine/t7s/dvar_t.hpp>
 #include <engine/t7s/Font_s.hpp>
 #include <engine/t7s/GamePad.hpp>
 #include <engine/t7s/keyNumToNameMapping_t.hpp>
@@ -9,6 +10,7 @@
 #include <engine/t7s/luaL_Reg.hpp>
 #include <engine/t7s/vec3_t.hpp>
 #include <engine/t7s/XAssetHeader.hpp>
+#include <engine/t7s/enums/DvarSetSource.hpp>
 #include <engine/t7s/enums/scriptInstance_t.hpp>
 #include <engine/t7s/enums/XAssetType.hpp>
 #include <engine/t7s/hks/CClosure.hpp>
@@ -27,10 +29,13 @@ namespace functions {
 	using Content_HasEntitlementOwnershipByRefT = bool();
 	using CScrCmd_SetAllControllersLightbarColorT = void(std::uint32_t control);
 	using DB_FindXAssetHeaderT = t7s::XAssetHeader(t7s::XAssetType type, const char* name, bool error_if_missing, int wait_time);
+	using Dvar_SetFromStringByNameFromSourceT = t7s::dvar_t*(const char* dvar_name, const char* string, t7s::DvarSetSource source, std::uint32_t flags);
 	using FS_FindXZoneT = const char*(const char* file_name);
 	using GPad_ResetLightbarColorT = void();
 	using GPad_SetLightbarColorT = void(int controller_index, t7s::vec3_t* color);
 	using hks_obj_tolstringT = const char*(t7s::lua_State* s, t7s::hks::Object* obj, size_t* len);
+	using hks_vm_call_internalT = int(t7s::lua_State* s, int n_args, int n_results, const t7s::hks::Instruction* pc);
+	using hksI_hksL_loadbufferT = int(t7s::lua_State* s, t7s::hks::CompilerSettings* options, const char* buffer, std::size_t size, const char* name);
 	using hksI_openlibT = void(t7s::lua_State* s, const char* lib_name, const t7s::luaL_Reg l[], int n_up, int is_hks_func);
 	using Key_KeynumToStringT = const char*(int local_client_num, int key_num, bool translate);
 	using lua_pcallT = int(t7s::lua_State* s, long n_args, long n_results);

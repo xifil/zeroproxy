@@ -19,10 +19,13 @@ namespace game {
 	inline functions::Content_HasEntitlementOwnershipByRefT* Content_HasEntitlementOwnershipByRef{};
 	inline functions::CScrCmd_SetAllControllersLightbarColorT* CScrCmd_SetAllControllersLightbarColor{};
 	inline functions::DB_FindXAssetHeaderT* DB_FindXAssetHeader{};
+	inline functions::Dvar_SetFromStringByNameFromSourceT* Dvar_SetFromStringByNameFromSource{};
 	inline functions::FS_FindXZoneT* FS_FindXZone{};
 	inline functions::GPad_ResetLightbarColorT* GPad_ResetLightbarColor{};
 	inline functions::GPad_SetLightbarColorT* GPad_SetLightbarColor{};
 	inline functions::hks_obj_tolstringT* hks_obj_tolstring{};
+	inline functions::hks_vm_call_internalT* hks_vm_call_internal{};
+	inline functions::hksI_hksL_loadbufferT* hksI_hksL_loadbuffer{};
 	inline functions::hksI_openlibT* hksI_openlib{};
 	inline functions::Key_KeynumToStringT* Key_KeynumToString{};
 	inline functions::lua_pcallT* lua_pcall{};

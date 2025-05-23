@@ -31,6 +31,8 @@ void game::init() {
 
 	batch.add(SETUP_POINTER(DB_FindXAssetHeader), "E8 ? ? ? ? 4C 8B 70", SETUP_MOD(add(1).rip()));
 
+	batch.add(SETUP_POINTER(Dvar_SetFromStringByNameFromSource), "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 48 89 7C 24 ? 41 56 48 81 EC ? ? ? ? 45 8B F1");
+
 	batch.add(SETUP_POINTER(FS_FindXZone), "E8 ? ? ? ? 48 85 C0 48 8D 2D", SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(GPad_ResetLightbarColor), "E8 ? ? ? ? 48 83 EB ? 75 ? 48 8B 4C 24", SETUP_MOD(add(1).rip()));
@@ -38,6 +40,10 @@ void game::init() {
 	batch.add(SETUP_POINTER(GPad_SetLightbarColor), "E8 ? ? ? ? EB ? E8 ? ? ? ? 48 83 EB", SETUP_MOD(add(1).rip()));
 
 	batch.add(SETUP_POINTER(hks_obj_tolstring), "40 53 57 41 56 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 84 24 ? ? ? ? 4C 8B F1 49 8B D8");
+
+	batch.add(SETUP_POINTER(hks_vm_call_internal), "40 53 56 57 41 55 41 56 48 83 EC");
+
+	batch.add(SETUP_POINTER(hksI_hksL_loadbuffer), "40 57 41 54 41 56 41 57 48 81 EC");
 
 	batch.add(SETUP_POINTER(hksI_openlib), "40 53 56 57 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 84 24 ? ? ? ? 49 8B F0 48 8B FA 48 8B D9 48 85 D2");
 
