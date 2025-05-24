@@ -25,10 +25,10 @@ namespace patches {
 			if (force_sign_in_state_now && !signed_in) {
 				int arr_elem_size = 0;
 
-				if (identification::game::is(identification::game::version::iw8::v1_20_4_7623265_REPLAY, identification::game::version::iw8::v1_20_4_7623265_SHIP)) {
+				if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP)) {
 					arr_elem_size = 0x3A;
 				}
-				else if (identification::game::is(identification::game::version::iw8::v1_38_3_9489393, identification::game::version::iw8::v1_44_0_10435696)) {
+				else if (identification::game::is(iw8_version::v1_38_3_9489393, iw8_version::v1_44_0_10435696)) {
 					arr_elem_size = 0x46;
 				}
 

@@ -10,16 +10,16 @@
 void game::init() {
 	memory::signature_store batch;
 
-	if (identification::game::is(identification::game::version::t6_store::v2_0_0_43_MP, identification::game::version::t6_store::v2_0_0_43_ZM)) {
+	if (identification::game::is(t6_store_version::v2_0_0_43_MP, t6_store_version::v2_0_0_43_ZM)) {
 		batch.add(SETUP_POINTER(CL_DrawScreen), "40 57 48 81 EC ? ? ? ? 44 8B 0D");
 	}
-	else if (identification::game::is(identification::game::version::t6_store::v2_0_0_43_SP)) {
+	else if (identification::game::is(t6_store_version::v2_0_0_43_SP)) {
 		batch.add(SETUP_POINTER(CL_DrawScreen), "48 8B C4 55 48 81 EC ? ? ? ? 48 8B 15");
 	}
 
 	batch.add(SETUP_POINTER(R_AddCmdDrawTextWithCursorInternal), "E8 ? ? ? ? 41 0F 5A DA", SETUP_MOD(add(1).rip()));
 
-	if (identification::game::is(identification::game::version::t6_store::v2_0_0_43_SP)) {
+	if (identification::game::is(t6_store_version::v2_0_0_43_SP)) {
 		batch.add(SETUP_POINTER(sp::sharedUiInfo_assets), "48 8D 05 ? ? ? ? 49 3B D6", SETUP_MOD(add(3).rip()));
 	}
 	else {

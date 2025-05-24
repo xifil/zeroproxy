@@ -20,13 +20,13 @@ void game::init() {
 
 	batch.add(SETUP_POINTER(G_Glass_Update), "40 53 48 83 EC ? 4C 8B 0D ? ? ? ? 33 DB");
 
-	if (identification::game::is(identification::game::version::iw4_store::v2_0_6_MP)) {
+	if (identification::game::is(iw4_store_version::v2_0_6_MP)) {
 		batch.add(SETUP_POINTER(ScrPlace_EndFrame), "E8 ? ? ? ? E8 ? ? ? ? B9 ? ? ? ? E8 ? ? ? ? C6 05", SETUP_MOD(add(1).rip()));
 	}
 
 	batch.add(SETUP_POINTER(SEH_StringEd_GetString), "48 83 EC ? 48 8B 05 ? ? ? ? 48 85 C0 74 ? 80 78");
 
-	if (identification::game::is(identification::game::version::iw4_store::v2_0_6_SP)) {
+	if (identification::game::is(iw4_store_version::v2_0_6_SP)) {
 		batch.add(SETUP_POINTER(UI_RefreshFullscreen), "E8 ? ? ? ? 83 3D ? ? ? ? ? 48 8B 7C 24", SETUP_MOD(add(1).rip()));
 	}
 

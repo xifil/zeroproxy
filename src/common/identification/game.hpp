@@ -56,8 +56,11 @@ namespace identification::game {
 			inline constexpr std::uint32_t v1_03_0_7209368 = 0x641EA3EB;
 			inline constexpr std::uint32_t v1_20_4_7623265_REPLAY = 0xFF380251;
 			inline constexpr std::uint32_t v1_20_4_7623265_SHIP = 0x6E9C74C8;
+			inline constexpr std::uint32_t v1_30_0_8403677 = 0x7E37B0B9;
 			inline constexpr std::uint32_t v1_38_3_9489393 = 0xCE698CA4;
+			inline constexpr std::uint32_t v1_42_1_10125479 = 0x54FBBFD1;
 			inline constexpr std::uint32_t v1_44_0_10435696 = 0xD6C4C029;
+			inline constexpr std::uint32_t v1_46_0_10750827 = 0x5910A608;
 		}
 		
 		namespace t9 {
@@ -136,8 +139,11 @@ namespace identification::game {
 		{ version::iw8::v1_03_0_7209368, "Modern Warfare", "1.03.0.7209368" },
 		{ version::iw8::v1_20_4_7623265_REPLAY, "Modern Warfare", "1.20.4.7623265-replay" },
 		{ version::iw8::v1_20_4_7623265_SHIP, "Modern Warfare", "1.20.4.7623265-ship" },
+		{ version::iw8::v1_30_0_8403677, "Modern Warfare", "1.30.0.8403677" },
 		{ version::iw8::v1_38_3_9489393, "Modern Warfare", "1.38.3.9489393" },
+		{ version::iw8::v1_42_1_10125479, "Modern Warfare", "1.42.1.10125479" },
 		{ version::iw8::v1_44_0_10435696, "Modern Warfare", "1.44.0.10435696" },
+		{ version::iw8::v1_46_0_10750827, "Modern Warfare", "1.46.0.10750827" },
 		{ version::t9::v1_34_0_15931218, "Black Ops Cold War", "1.34.0.15931218" },
 		{ version::t9::v1_34_1_15931218, "Black Ops Cold War", "1.34.1.15931218" }
 	};
@@ -168,3 +174,13 @@ namespace identification::game {
 		return ((args == checksum) || ...);
 	}
 }
+
+namespace iw4_store_version = identification::game::version::iw4_store;
+namespace iw5_version = identification::game::version::iw5;
+namespace t6_version = identification::game::version::t6;
+namespace t6_store_version = identification::game::version::t6_store;
+namespace iw6_store_version = identification::game::version::iw6_store;
+namespace t7_store_version = identification::game::version::t7_store;
+namespace s2_store_version = identification::game::version::s2_store;
+namespace iw8_version = identification::game::version::iw8;
+namespace t9_version = identification::game::version::t9;

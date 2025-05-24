@@ -17,14 +17,14 @@ namespace splash {
 
 				int id;
 				switch (identification::game::get_version()) {
-				case identification::game::version::iw8::v1_20_4_7623265_REPLAY:
-				case identification::game::version::iw8::v1_20_4_7623265_SHIP:
+				case iw8_version::v1_20_4_7623265_REPLAY:
+				case iw8_version::v1_20_4_7623265_SHIP:
 					id = IMAGE_SPLASH_v1_20;
 					break;
-				case identification::game::version::iw8::v1_44_0_10435696:
+				case iw8_version::v1_44_0_10435696:
 					id = IMAGE_SPLASH_v1_44;
 					break;
-				case identification::game::version::iw8::v1_38_3_9489393:
+				case iw8_version::v1_38_3_9489393:
 					id = IMAGE_SPLASH_v1_38;
 					break;
 				default:

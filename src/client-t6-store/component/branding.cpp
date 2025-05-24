@@ -17,7 +17,7 @@ namespace branding {
 				identification::game::get_version().version_);
 
 			t6s::Font_s* font = nullptr;
-			if (identification::game::is(identification::game::version::t6_store::v2_0_0_43_SP)) {
+			if (identification::game::is(t6_store_version::v2_0_0_43_SP)) {
 				font = game::sp::sharedUiInfo_assets->small_font_;
 			}
 			else {

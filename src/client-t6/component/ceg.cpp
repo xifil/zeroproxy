@@ -208,7 +208,7 @@ namespace ceg {
 
 			utils::hook::nop(memory::sig_scan({}, "68 ? ? ? ? FF 15 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? C6 05").get(), 9);
 
-			if (identification::game::is(identification::game::version::t6::v1_0_44_1759941_MP)) {
+			if (identification::game::is(t6_version::v1_0_44_1759941_MP)) {
 				std::vector<std::uintptr_t> ceg_hook_stub_locations = {
 					0x405BB6, 0x43C95F, 0x4C7BB1, 0x4D473F, 0x4ED447, 0x4FECF6, 0x50490F, 0x510CE6, 0x564DE6, 0x5FD8E7, 0x680461,
 					0x6B80A1, 0x6D3526, 0x6F2D8F
