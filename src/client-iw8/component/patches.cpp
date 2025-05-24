@@ -1,10 +1,14 @@
 ﻿#include "common.hpp"
+#include "component/patches.hpp"
 
 #include "component/scheduler.hpp"
 #include "game/game.hpp"
 
+#include <component/localized_strings.hpp>
 #include <loader/component_loader.hpp>
 #include <utils/hook.hpp>
+
+#include <version.hpp>
 
 namespace patches {
 	namespace {
@@ -18,7 +22,7 @@ namespace patches {
 
 		int cl_get_local_client_sign_in_state_stub(int controller_index) {
 			static bool signed_in = false;
-			if (!signed_in) {
+			if (force_sign_in_state_now && !signed_in) {
 				int arr_elem_size = 0;
 
 				if (identification::game::is(identification::game::version::iw8::v1_20_4_7623265_REPLAY, identification::game::version::iw8::v1_20_4_7623265_SHIP)) {
@@ -136,9 +140,9 @@ namespace patches {
 		}
 
 		void post_unpack() override {
-			//cl_get_local_client_sign_in_state_hook.create(game::CL_GetLocalClientSignInState, cl_get_local_client_sign_in_state_stub);
-			dw_get_log_on_status_hook.create(game::dwGetLogOnStatus, dw_get_log_on_status_stub);
+			cl_get_local_client_sign_in_state_hook.create(game::CL_GetLocalClientSignInState, cl_get_local_client_sign_in_state_stub);
 			dvar_register_bool_hook.create(game::Dvar_RegisterBool, dvar_register_bool_stub);
+			dw_get_log_on_status_hook.create(game::dwGetLogOnStatus, dw_get_log_on_status_stub);
 			live_is_user_signed_in_to_demonware_hook.create(game::Live_IsUserSignedInToDemonware, live_is_user_signed_in_to_demonware_stub);
 			sv_update_user_info_f_hook.create(game::SV_UpdateUserinfo_f, sv_update_user_info_f_stub);
 			if (game::unk_IsUnsupportedGPU) {
@@ -147,6 +151,21 @@ namespace patches {
 			if (game::unk_IsUserSignedInToBNet) {
 				unk_is_user_signed_in_to_bnet_hook.create(game::unk_IsUserSignedInToBNet, unk_is_user_signed_in_to_bnet_stub);
 			}
+
+			localized_strings::override("MENU/STATUS", [](const localized_strings::original_localization& original) {
+				static bool forced_sign_in_state = false;
+				if (!forced_sign_in_state) {
+					std::thread thr([]() {
+						std::this_thread::sleep_for(1s);
+						force_sign_in_state_now = true;
+						LOG("Authentication", INFO, "Sign in state now 2.");
+					});
+					thr.detach();
+					forced_sign_in_state = true;
+				}
+
+				return std::format("{}: " GIT_DESCRIBE " - v{}", identification::client::get_client_name(), identification::game::get_version().version_);
+			});
 
 			scheduler::loop([] {
 				static bool finished_auth_patch = false;
