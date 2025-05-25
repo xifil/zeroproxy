@@ -106,10 +106,27 @@ namespace patches {
 		}
 
 		std::uintptr_t sub_142adf070_stub(std::uintptr_t a1) {
-			LOG("Component/Patches", DEBUG, "Calling 0x2adf070({}) -> {}", and_rel(a1), and_rel(PTR_AS(std::uintptr_t, _ReturnAddress())));
-			auto res = sub_142adf070_hook.invoke<std::uintptr_t>(a1);
-			LOG("Component/Patches", DEBUG, "Calling 0x2adf070({}) -> {} -> {}", and_rel(a1), and_rel(PTR_AS(std::uintptr_t, _ReturnAddress())), and_rel(res));
-			return res;
+			class a1_cls_2 {
+			private:
+				char pad_0000[0x03D0];	// 0x0000
+			public:
+				void* var1_;			// 0x03D0
+			};
+
+			class a1_cls {
+			private:
+				char pad_0000[0x0008];	// 0x0000
+			public:
+				a1_cls_2* var1_;		// 0x0008
+			};
+
+			a1_cls* a1_c = PTR_AS(a1_cls*, a1);
+			if (a1_c->var1_ == nullptr || a1_c->var1_->var1_ == nullptr) {
+				LOG("Component/Patches", DEBUG, "Calling 0x2adf070({}) -> {} -> null checked", and_rel(a1), and_rel(PTR_AS(std::uintptr_t, _ReturnAddress())));
+				return 0;
+			}
+
+			return sub_142adf070_hook.invoke<std::uintptr_t>(a1);
 		}
 
 		void sv_update_user_info_f_stub(iw8::SvClientMP* cl) {
