@@ -6,6 +6,7 @@
 #include <corecrt_io.h>
 #include <csetjmp>
 #include <d3d11.h>
+#include <d3d12.h>
 #include <d3d9.h>
 #include <DbgHelp.h>
 #include <direct.h>

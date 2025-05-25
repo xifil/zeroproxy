@@ -10,6 +10,15 @@
 void game::init() {
 	memory::signature_store batch;
 
+	if (identification::game::is(iw8_version::v1_20_4_7623265_SHIP, iw8_version::v1_20_4_7623265_REPLAY)) {
+		batch.add(SETUP_POINTER(AddBaseDrawTextCmd), "E8 ? ? ? ? 48 8B D0 48 85 C0 74 ? 48 8B 8C 24", SETUP_MOD(add(1).rip()));
+	}
+	else if (identification::game::is(iw8_version::v1_30_0_8403677, iw8_version::v1_38_3_9489393, iw8_version::v1_42_1_10125479, iw8_version::v1_44_0_10435696,
+		iw8_version::v1_46_0_10750827))
+	{
+		batch.add(SETUP_POINTER(AddBaseDrawTextCmd), "E8 ? ? ? ? 48 8B D0 48 85 C0 0F 84 ? ? ? ? 48 8B 8C 24", SETUP_MOD(add(1).rip()));
+	}
+
 	batch.add(SETUP_POINTER(CL_GetLocalClientSignInState), "E8 ? ? ? ? 85 C0 7F ? 8B CB", SETUP_MOD(add(1).rip()));
 
 	if (identification::game::is(iw8_version::v1_46_0_10750827)) {
@@ -122,8 +131,19 @@ void game::init() {
 		batch.add(SETUP_POINTER(s_presenceData), "48 8D 05 ? ? ? ? 4C 8D 05 ? ? ? ? 48 39 08 74 ? FF C2 48 05", SETUP_MOD(add(3).rip()));
 	}
 
+	if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP, iw8_version::v1_30_0_8403677)) {
+		batch.add(SETUP_POINTER(sharedUiInfo_assets), "48 89 05 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? B2 ? 48 89 05 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 33 D2",
+			SETUP_MOD(add(3).rip()));
+	}
+	else if (identification::game::is(iw8_version::v1_38_3_9489393, iw8_version::v1_42_1_10125479, iw8_version::v1_44_0_10435696,
+		iw8_version::v1_46_0_10750827))
+	{
+		batch.add(SETUP_POINTER(sharedUiInfo_assets), "48 89 05 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? B2 ? 48 89 05 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 80 3D",
+			SETUP_MOD(add(3).rip()));
+	}
+
 	if (identification::game::is(iw8_version::v1_46_0_10750827)) {
-		batch.add(SETUP_POINTER(unk_SignInState), "E8 ? ? ? ? 85 C0 7F ? 8B CB", SETUP_MOD(add(1).rip().add(14).rip()));
+		batch.add(SETUP_POINTER(unk_SignInState), "E8 ? ? ? ? 85 C0 7F ? 8B CB", SETUP_MOD(add(1).rip().add(5).rip().add(14).rip()));
 	}
 	else {
 		batch.add(SETUP_POINTER(unk_SignInState), "83 3D ? ? ? ? ? 7E ? 33 C9", SETUP_MOD(add(2).rip().add(1)));

@@ -44,12 +44,10 @@ namespace iw8 {
 	using FxWorld = void;
 	using FxWorldTransientZone = void;
 	using Gesture = void;
-	using GfxDecalVolumeMaterial = void;
 	using GfxDecalVolumeMask = void;
 	using GfxFogSpline = void;
 	using GfxGradingClut = void;
 	using GfxIESProfile = void;
-	using GfxImage = void;
 	using GfxLightDef = void;
 	using GfxWorld = void;
 	using GfxWorldTransientZone = void;
@@ -62,9 +60,6 @@ namespace iw8 {
 	using LuaFile = void;
 	using MapEdgeList = void;
 	using MapEnts = void;
-	using Material = void;
-	using MaterialSerializedShader = void;
-	using MaterialTechniqueSet = void;
 	using MayhemData = void;
 	using NativeScriptPatchFile = void;
 	using NavMeshData = void;
@@ -103,7 +98,6 @@ namespace iw8 {
 	using SvClientMP = void;
 	using TacticalGraphData = void;
 	using TracerDef = void;
-	using TTFDef = void;
 	using VectorField = void;
 	using VehicleDef = void;
 	using VirtualLeaderboardDef = void;

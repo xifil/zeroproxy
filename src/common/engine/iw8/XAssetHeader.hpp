@@ -1,6 +1,12 @@
 #pragma once
 #include "engine/engine_common.hpp"
+#include "engine/iw8/GfxDecalVolumeMaterial.hpp"
+#include "engine/iw8/GfxImage.hpp"
 #include "engine/iw8/LocalizeEntry.hpp"
+#include "engine/iw8/Material.hpp"
+#include "engine/iw8/MaterialSerializedShader.hpp"
+#include "engine/iw8/MaterialTechniqueSet.hpp"
+#include "engine/iw8/TTFDef.hpp"
 
 namespace iw8 {
 	union XAssetHeader {

@@ -1,6 +1,6 @@
 #pragma once
 #include "common.hpp"
 
-namespace patches {
+namespace auth {
 	inline bool force_sign_in_state_now = false;
 }

@@ -1,5 +1,4 @@
 ﻿#include "common.hpp"
-#include "component/patches.hpp"
 
 #include "component/lua_hook.hpp"
 #include "component/scheduler.hpp"
@@ -14,10 +13,7 @@
 
 namespace patches {
 	namespace {
-		utils::hook::detour cl_get_local_client_sign_in_state_hook;
 		utils::hook::detour dvar_register_bool_hook;
-		utils::hook::detour dw_get_log_on_status_hook;
-		utils::hook::detour live_is_user_signed_in_to_demonware_hook;
 		utils::hook::detour lua_shared_lua_call_is_demo_build_hook;
 		utils::hook::detour lui_cod_lua_call_is_battle_net_auth_ready_hook;
 		utils::hook::detour lui_cod_lua_call_is_battle_net_lan_only_hook;
@@ -29,29 +25,8 @@ namespace patches {
 		utils::hook::detour sub_142adf070_hook;
 		utils::hook::detour sv_update_user_info_f_hook;
 		utils::hook::detour unk_is_unsupported_gpu_hook;
-		utils::hook::detour unk_is_user_signed_in_to_bnet_hook;
 
 		utils::hook::iat_detour raise_exception_hook;
-
-		int cl_get_local_client_sign_in_state_stub(int controller_index) {
-			static bool signed_in = false;
-			if (force_sign_in_state_now && !signed_in) {
-				int arr_elem_size = 0;
-
-				if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP)) {
-					arr_elem_size = 0x3A;
-				}
-				else if (identification::game::is(iw8_version::v1_38_3_9489393, iw8_version::v1_44_0_10435696)) {
-					arr_elem_size = 0x46;
-				}
-
-				if (arr_elem_size != 0) {
-					game::unk_SignInState[arr_elem_size * controller_index] = 2;
-					signed_in = true;
-				}
-			}
-			return cl_get_local_client_sign_in_state_hook.invoke<int>(controller_index);
-		}
 
 		iw8::dvar_t* dvar_register_bool_stub(const char* dvar_name, bool value, std::uint32_t flags, const char* description) {
 			static std::map<std::pair<std::string, std::string>, bool> dvars_to_patch = {
@@ -97,14 +72,10 @@ namespace patches {
 			return dvar_register_bool_hook.invoke<iw8::dvar_t*>(dvar_name, value_patched, flags_patched, description);
 		}
 
-		iw8::DWOnlineStatus dw_get_log_on_status_stub(int controller_index) {
-			return iw8::DWOnlineStatus::DW_LIVE_CONNECTED;
-		}
-
-		bool live_is_user_signed_in_to_demonware_stub(int controller_index) {
-			return true;
-		}
-
+		/*
+		 * seems like a 1.46 exclusive thing - can't seem to find occurrences of this function in any previous version, so I couldn't find the name of it, the
+		 * parameter provided, or the structures used.
+		 */
 		std::uintptr_t sub_142adf070_stub(std::uintptr_t a1) {
 			class a1_cls_2 {
 			private:
@@ -149,10 +120,6 @@ namespace patches {
 
 		bool unk_is_unsupported_gpu_stub() {
 			return false;
-		}
-
-		bool unk_is_user_signed_in_to_bnet_stub() {
-			return true;
 		}
 
 		void mystery_function_stub() {
@@ -213,88 +180,16 @@ namespace patches {
 		}
 
 		void post_unpack() override {
-			cl_get_local_client_sign_in_state_hook.create(game::CL_GetLocalClientSignInState, cl_get_local_client_sign_in_state_stub);
 			dvar_register_bool_hook.create(game::Dvar_RegisterBool, dvar_register_bool_stub);
-			dw_get_log_on_status_hook.create(game::dwGetLogOnStatus, dw_get_log_on_status_stub);
-			live_is_user_signed_in_to_demonware_hook.create(game::Live_IsUserSignedInToDemonware, live_is_user_signed_in_to_demonware_stub);
 			sv_update_user_info_f_hook.create(game::SV_UpdateUserinfo_f, sv_update_user_info_f_stub);
+
 			if (game::unk_IsUnsupportedGPU) {
 				unk_is_unsupported_gpu_hook.create(game::unk_IsUnsupportedGPU, unk_is_unsupported_gpu_stub);
-			}
-			if (game::unk_IsUserSignedInToBNet) {
-				unk_is_user_signed_in_to_bnet_hook.create(game::unk_IsUserSignedInToBNet, unk_is_user_signed_in_to_bnet_stub);
 			}
 
 			if (identification::game::is(iw8_version::v1_46_0_10750827)) {
 				sub_142adf070_hook.create(0x2ADF070_b, sub_142adf070_stub);
 			}
-
-			localized_strings::override("MENU/STATUS", [](const localized_strings::original_localization& original) {
-				static bool forced_sign_in_state = false;
-				if (!forced_sign_in_state) {
-					std::thread thr([]() {
-						std::this_thread::sleep_for(1s);
-						force_sign_in_state_now = true;
-						LOG("Authentication", INFO, "Sign in state now 2.");
-					});
-					thr.detach();
-					forced_sign_in_state = true;
-				}
-
-				return std::format("{}: " GIT_DESCRIBE " - v{}", identification::client::get_client_name(), identification::game::get_version().version_);
-			});
-
-			localized_strings::override(std::regex(".*"), [](const localized_strings::original_localization& original, const std::smatch& match) {
-				return original.translation_key_;
-			});
-
-			scheduler::loop([] {
-				static bool finished_auth_patch = false;
-				if (finished_auth_patch) {
-					return;
-				}
-
-				static int frame_counter = 0;
-				if (frame_counter != 500) {
-					frame_counter++;
-					return;
-				}
-
-				iw8::XUID xuid;
-				xuid.random_xuid();
-				std::uint64_t xuid_magic = 0x11CB1243B8D7C31E;
-				std::uint64_t xuid_id = xuid.id_ * xuid.id_;
-
-				game::unk_BNetClass->finished_auth_ = true;
-
-				*game::unk_XUIDCheck1 = xuid_magic | xuid_id;
-
-				// the below patch (0x14F05ACE8 @ 1.20.4.7623265-replay) seems to be replay only, with this being xref 5 of 6, however only 5 exist
-				// in ship, and this is the one excluded.
-				if (game::unk_XUIDCheck2 != nullptr) {
-					*game::unk_XUIDCheck2 = xuid_magic | xuid_id;
-				}
-
-				if (game::s_presenceData != nullptr) {
-					(*game::s_presenceData)[0].current_.cross_title_presence_data_.platform_id_ = xuid_magic | xuid_id / 6;
-				}
-
-				*game::s_isContentEnumerationFinished = true;
-				game::unk_BNetClass->state_ = 2;
-				game::unk_BNetClass->finished_auth_ = true;
-
-				iw8::dvar_t* xp_dec_dc = game::Dvar_FindVarByName("NTTRLOPQKS");
-				if (xp_dec_dc != nullptr) {
-					xp_dec_dc->current_.enabled_ = false;
-				}
-
-				game::unk_BNetClass->var3_ = 0x795230F0;
-				game::unk_BNetClass->var4_ = 0x1F;
-				game::unk_BNetClass->var5_ = 0x00000000;
-
-				LOG("Component/Patches", INFO, "Patched auth.");
-				finished_auth_patch = true;
-			}, scheduler::pipeline::renderer);
 		}
 	};
 }

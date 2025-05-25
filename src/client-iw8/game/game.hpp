@@ -8,6 +8,7 @@ namespace game {
 	bool is_server();
 
 	// Functions
+	inline functions::AddBaseDrawTextCmdT* AddBaseDrawTextCmd{};
 	inline functions::CL_GetLocalClientSignInStateT* CL_GetLocalClientSignInState{};
 	inline functions::Com_GameInfo_GetGameTypeForInternalNameT* Com_GameInfo_GetGameTypeForInternalName{};
     inline functions::Com_GameInfo_GetMapInfoForLoadNameT* Com_GameInfo_GetMapInfoForLoadName{};
@@ -34,8 +35,18 @@ namespace game {
 	inline bool* s_isContentEnumerationFinished{};
 	inline bool* s_luaInFrontend{};
 	inline iw8::LocalUserPresenceData(*s_presenceData)[8]{};
+	inline iw8::CachedAssets_t* sharedUiInfo_assets{};
 	inline int* unk_SignInState{};
 	inline std::uint64_t* unk_XUIDCheck1{};
 	inline std::uint64_t* unk_XUIDCheck2{};
 	inline iw8::bnet_class* unk_BNetClass{};
+
+	inline void R_AddCmdDrawText(const char* text, int max_chars, iw8::GfxFont* font, int font_height, float x, float y, float x_scale, float y_scale,
+		float rotation, const iw8::vec4_t* color)
+	{
+		if (AddBaseDrawTextCmd != nullptr) {
+			AddBaseDrawTextCmd(text, max_chars, font, nullptr, font_height, x, y, x_scale, y_scale, '\0', rotation, color, -1, '\0', nullptr, false, 0, 0,
+				nullptr, false);
+		}
+	}
 }

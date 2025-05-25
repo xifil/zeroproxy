@@ -1,8 +1,10 @@
 ﻿#pragma once
 #include "common.hpp"
 
+#include <engine/iw8/CachedAssets_t.hpp>
 #include <engine/iw8/DB_AuthSignature.hpp>
 #include <engine/iw8/dvar_t.hpp>
+#include <engine/iw8/FontGlowStyle.hpp>
 #include <engine/iw8/gameTypeInfo.hpp>
 #include <engine/iw8/LocalUserPresenceData.hpp>
 #include <engine/iw8/lua_State.hpp>
@@ -16,6 +18,9 @@
 #include <engine/iw8/unknown/bnet_class.hpp>
 
 namespace functions {
+	using AddBaseDrawTextCmdT = void*(const char* text, int max_chars, iw8::GfxFont* font, iw8::Material* font_material, int font_height, float x, float y,
+		float x_scale, float y_scale, char tracking, float rotation, const iw8::vec4_t* color, int cursor_pos, char cursor, const iw8::FontGlowStyle* glow_style,
+		bool use_post, int allow_gpad_color, int allow_gpad_any_size, iw8::Material* icons_material, bool require_unique_cmd);
 	using CL_GetLocalClientSignInStateT = int(int controller_index);
 	using Com_GameInfo_GetGameTypeForInternalNameT = iw8::gameTypeInfo*(const char* game_type_name);
 	using Com_GameInfo_GetMapInfoForLoadNameT = iw8::mapInfo*(const char* map_name);
