@@ -14,7 +14,14 @@
 
 <h1 align="center"><a href="https://github.com/xifil">xifil</a>/<a href="https://github.com/xifil/zeroproxy">zeroproxy</a></h1>
 
-This repository contains a client mod for each of the following games:
+<p align="center">
+  <img src="assets/github/banner.png?raw=true" />
+</p>
+
+> [!WARNING]
+> You **must** legally own the Call of Duty® game you intend to run with this mod. Cracked/Pirated versions of the game are **NOT** supported.
+
+### This repository contains a client mod for each of the following games:
 
 Call of Duty®: Modern Warfare® 2 (2009)
 <a href="https://apps.microsoft.com/detail/9P31HFP7L9WT"><img height="15px" src="assets/github/microsoft.svg" /></a><br/>
@@ -37,17 +44,36 @@ Call of Duty®: Black Ops Cold War (2020)
 > \* - currently doesn't function  
 > \*\* - doesn't use Steam executable, uses executable of other platform
 
-<h2>Credits</h2>
+## Compile from source
 
-<ul>
-	<li>
-		<a href="https://github.com/Ezz-lol/boiii-free">boiii-free</a> - general codebase
-	</li>
-	<li>
-		<a href="https://github.com/momo5502">momo5502</a> - Arxan/Steam research, former lead developer of <a href="https://github.com/XLabsProject">XLabsProject</a>
-	</li>
-</ul>
+- Clone the Git repo. Do NOT download it as ZIP, that won't work.
+  > You can run
+  >
+  > ```
+  > git clone https://github.com/xifil/zeroproxy.git --recurse-submodules
+  > ```
+  >
+  > You always need the `--recurse-submodules` flag!
+- Update the submodules and run `premake5 vs2022` (if available in path, otherwise use `.\tools\premake\premake5`) or simply use the provided `generate.bat`.
+- Build via solution file in `ZeroProxy.sln` in Visual Studio 2022 (JetBrains Rider has not been tested!).
 
-<h2>Disclaimer</h2>
+## Download from Actions
+
+GitHub Actions automatically builds the DLL files on each
+commit, you can find the latest build of zeroproxy clients
+[here](https://xifil.github.io/zp-redirect).
+
+## Installation
+
+Download the correct client mod from the link above, then extract the zip and copy the `.dll` into the root of your game folder, then run the game's executable (make sure its not `<Game> Launcher.exe`, those are Battle.Net Launchers and are unsupported!)
+
+## Credits
+
+- [boiii-free](https://github.com/Ezz-lol/boiii-free) - general codebase
+- [momo5502](https://github.com/momo5502) - Arxan/Steam research, former lead developer of [XLabsProject](https://github.com/XLabsProject)
+
+## Disclaimer
 
 This software has been created purely for the purposes of academic research. It is not intended to be used to attack other systems. Project maintainers are not responsible or liable for misuse of the software. Use responsibly.
+
+Additionally this software is licensed under the Boost-Software-License 1.0, please read and respect the license when making forks. Also if you could give attributions back to ZeroProxy that would be pretty cool thanks.
