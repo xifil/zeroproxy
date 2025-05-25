@@ -52,21 +52,23 @@ namespace game {
 		lua_getfield(lua_vm, -1, "DAGFFDGFII");
 		lua_remove(lua_vm, -2);
 		lua_pushstring(lua_vm, str);
-		LuaShared_PCall(lua_vm, 1, 1);
+		return (void)LuaShared_PCall(lua_vm, 1, 1);
 	}
 
 	inline void Cbuf_AddText(const char* cmd) {
-		if (LUI_luaVM && *LUI_luaVM) {
-			LUI_CoD_LuaCall_ExecNow(*LUI_luaVM, cmd);
-		}
+		if (!LUI_luaVM || !*LUI_luaVM)
+			return;
+
+		return LUI_CoD_LuaCall_ExecNow(*LUI_luaVM, cmd);
 	}
 
 	inline void R_AddCmdDrawText(const char* text, int max_chars, iw8::GfxFont* font, int font_height, float x, float y, float x_scale, float y_scale,
 		float rotation, const iw8::vec4_t* color)
 	{
-		if (AddBaseDrawTextCmd != nullptr) {
-			AddBaseDrawTextCmd(text, max_chars, font, nullptr, font_height, x, y, x_scale, y_scale, '\0', rotation, color, -1, '\0', nullptr, false, 0, 0,
-				nullptr, false);
-		}
+		if (AddBaseDrawTextCmd == nullptr)
+			return;
+
+		return (void)AddBaseDrawTextCmd(text, max_chars, font, nullptr, font_height, x, y, x_scale, y_scale, '\0', rotation, color, -1, '\0', nullptr, false, 0, 0,
+			nullptr, false);
 	}
 }
