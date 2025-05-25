@@ -123,8 +123,8 @@ namespace patches {
 		}
 
 		void mystery_function_stub() {
-			return ;
 			// do nothing
+			return;
 		}
 
 		void raise_exception_stub(std::uint32_t exception_code_in, std::uint32_t exception_flags, std::uint32_t number_of_arguments,
