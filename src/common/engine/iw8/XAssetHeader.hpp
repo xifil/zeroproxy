@@ -1,5 +1,6 @@
 #pragma once
 #include "engine/engine_common.hpp"
+#include "engine/iw8/LocalizeEntry.hpp"
 
 namespace iw8 {
 	union XAssetHeader {

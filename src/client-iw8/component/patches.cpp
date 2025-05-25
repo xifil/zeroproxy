@@ -1,10 +1,12 @@
 ﻿#include "common.hpp"
 #include "component/patches.hpp"
 
+#include "component/lua_hook.hpp"
 #include "component/scheduler.hpp"
 #include "game/game.hpp"
 
 #include <component/localized_strings.hpp>
+#include <engine/msvc/thread_name_info.hpp>
 #include <loader/component_loader.hpp>
 #include <utils/hook.hpp>
 
@@ -16,9 +18,20 @@ namespace patches {
 		utils::hook::detour dvar_register_bool_hook;
 		utils::hook::detour dw_get_log_on_status_hook;
 		utils::hook::detour live_is_user_signed_in_to_demonware_hook;
+		utils::hook::detour lua_shared_lua_call_is_demo_build_hook;
+		utils::hook::detour lui_cod_lua_call_is_battle_net_auth_ready_hook;
+		utils::hook::detour lui_cod_lua_call_is_battle_net_lan_only_hook;
+		utils::hook::detour lui_cod_lua_call_is_connected_to_game_server_hook;
+		utils::hook::detour lui_cod_lua_call_is_game_mode_allowed_hook;
+		utils::hook::detour lui_cod_lua_call_is_game_mode_available_hook;
+		utils::hook::detour lui_cod_lua_call_is_premium_player_hook;
+		utils::hook::detour lui_cod_lua_call_is_premium_player_ready_hook;
+		utils::hook::detour sub_142adf070_hook;
 		utils::hook::detour sv_update_user_info_f_hook;
 		utils::hook::detour unk_is_unsupported_gpu_hook;
 		utils::hook::detour unk_is_user_signed_in_to_bnet_hook;
+
+		utils::hook::iat_detour raise_exception_hook;
 
 		int cl_get_local_client_sign_in_state_stub(int controller_index) {
 			static bool signed_in = false;
@@ -92,6 +105,13 @@ namespace patches {
 			return true;
 		}
 
+		std::uintptr_t sub_142adf070_stub(std::uintptr_t a1) {
+			LOG("Component/Patches", DEBUG, "Calling 0x2adf070({}) -> {}", and_rel(a1), and_rel(PTR_AS(std::uintptr_t, _ReturnAddress())));
+			auto res = sub_142adf070_hook.invoke<std::uintptr_t>(a1);
+			LOG("Component/Patches", DEBUG, "Calling 0x2adf070({}) -> {} -> {}", and_rel(a1), and_rel(PTR_AS(std::uintptr_t, _ReturnAddress())), and_rel(res));
+			return res;
+		}
+
 		void sv_update_user_info_f_stub(iw8::SvClientMP* cl) {
 			/*
 				More checks can be added here
@@ -107,7 +127,7 @@ namespace patches {
 				return;
 			}
 
-			return sv_update_user_info_f_hook.invoke<void>(cl);
+			sv_update_user_info_f_hook.invoke<void>(cl);
 		}
 
 		bool unk_is_unsupported_gpu_stub() {
@@ -121,22 +141,58 @@ namespace patches {
 		void mystery_function_stub() {
 			// do nothing
 		}
+
+		void raise_exception_stub(std::uint32_t exception_code_in, std::uint32_t exception_flags, std::uint32_t number_of_arguments,
+			const std::uint64_t* arguments)
+		{
+			LOG("Component/Patches", DEBUG, "Raising exception: 0x{:08X} (fl:0x{:08X}, na:0x{:08X}) and returning to {}",
+				exception_code_in, exception_flags, number_of_arguments, and_rel(PTR_AS(std::uintptr_t, _ReturnAddress())));
+
+			if (exception_code_in == 0x1337 || exception_code_in == 0x1338) {
+				LOG("Component/Patches", DEBUG, "RaiseException/DebugException -> Ignoring 0x{:08X} exception so we're chill", exception_code_in);
+				return;
+			}
+
+			if (exception_code_in == 0x406D1388) {
+				auto thread_name_info_in = PTR_AS(const msvc::thread_name_info*, arguments);
+				LOG("Component/Patches", DEBUG, "RaiseException/SetThreadName -> Setting name of thread with ID {} to {}",
+					thread_name_info_in->thread_id_, thread_name_info_in->name_ ? thread_name_info_in->name_ : "<null>");
+			}
+
+			raise_exception_hook.invoke<void>(exception_code_in, exception_flags, number_of_arguments, arguments);
+		}
+
+		int lua_return_true_stub(iw8::lua_State* lua_vm) {
+			game::lua_pushboolean(lua_vm, TRUE);
+			return 1;
+		}
 	}
 
 	struct component final : generic_component {
 		void post_load() override {
 			// stop the game from crashing on launch by skipping this one function - still unclear what it actually does.
 			switch (identification::game::get_version()) {
-			case identification::game::version::iw8::v1_20_4_7623265_REPLAY:
+			case iw8_version::v1_20_4_7623265_REPLAY:
 				utils::hook::set(0x2352548_b, mystery_function_stub);
 				break;
-			case identification::game::version::iw8::v1_20_4_7623265_SHIP:
+			case iw8_version::v1_20_4_7623265_SHIP:
 				utils::hook::set(0x3DF4548_b, mystery_function_stub);
 				break;
 			default:
 				LOG("Component/Patches", WARN, "Failed to patch \"mystery function\" - if you're on Windows 11, there is a crash most likely imminent.");
 				break;
 			}
+
+			raise_exception_hook.create({}, "kernel32.dll", "RaiseException", raise_exception_stub);
+
+			lua_hook::create(lua_shared_lua_call_is_demo_build_hook, "Engine.BGAAHHAGAC", lua_return_true_stub);
+			lua_hook::create(lui_cod_lua_call_is_battle_net_auth_ready_hook, "Engine.JBIHDJBH", lua_return_true_stub);
+			lua_hook::create(lui_cod_lua_call_is_battle_net_lan_only_hook, "Engine.BJGAADIDFH", lua_return_true_stub);
+			lua_hook::create(lui_cod_lua_call_is_connected_to_game_server_hook, "Engine.DHEJECBEE", lua_return_true_stub);
+			lua_hook::create(lui_cod_lua_call_is_game_mode_allowed_hook, "Engine.CEGDBDIIIE", lua_return_true_stub);
+			lua_hook::create(lui_cod_lua_call_is_game_mode_available_hook, "Engine.DBEGJIECGB", lua_return_true_stub);
+			lua_hook::create(lui_cod_lua_call_is_premium_player_hook, "Engine.CFHBIHABCB", lua_return_true_stub);
+			lua_hook::create(lui_cod_lua_call_is_premium_player_ready_hook, "Engine.ECFHDAEIDA", lua_return_true_stub);
 		}
 
 		void post_unpack() override {
@@ -152,6 +208,10 @@ namespace patches {
 				unk_is_user_signed_in_to_bnet_hook.create(game::unk_IsUserSignedInToBNet, unk_is_user_signed_in_to_bnet_stub);
 			}
 
+			if (identification::game::is(iw8_version::v1_46_0_10750827)) {
+				sub_142adf070_hook.create(0x2ADF070_b, sub_142adf070_stub);
+			}
+
 			localized_strings::override("MENU/STATUS", [](const localized_strings::original_localization& original) {
 				static bool forced_sign_in_state = false;
 				if (!forced_sign_in_state) {
@@ -165,6 +225,10 @@ namespace patches {
 				}
 
 				return std::format("{}: " GIT_DESCRIBE " - v{}", identification::client::get_client_name(), identification::game::get_version().version_);
+			});
+
+			localized_strings::override(std::regex(".*"), [](const localized_strings::original_localization& original, const std::smatch& match) {
+				return original.translation_key_;
 			});
 
 			scheduler::loop([] {
@@ -194,7 +258,9 @@ namespace patches {
 					*game::unk_XUIDCheck2 = xuid_magic | xuid_id;
 				}
 
-				(*game::s_presenceData)[0].current_.cross_title_presence_data_.platform_id_ = xuid_magic | xuid_id / 6;
+				if (game::s_presenceData != nullptr) {
+					(*game::s_presenceData)[0].current_.cross_title_presence_data_.platform_id_ = xuid_magic | xuid_id / 6;
+				}
 
 				*game::s_isContentEnumerationFinished = true;
 				game::unk_BNetClass->state_ = 2;

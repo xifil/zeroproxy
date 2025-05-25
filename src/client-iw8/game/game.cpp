@@ -28,6 +28,8 @@ void game::init() {
 			" E9");
 	}
 
+	batch.add(SETUP_POINTER(DB_FindXAssetHeader), "E8 ? ? ? ? 44 8B C5 8D 4D", SETUP_MOD(add(1).rip()));
+
 	if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP, iw8_version::v1_30_0_8403677)) {
 		batch.add(SETUP_POINTER(DB_LoadXFile), "E8 ? ? ? ? 8B F8 44 38 AB", SETUP_MOD(add(1).rip()));
 	}
@@ -65,6 +67,10 @@ void game::init() {
 		batch.add(SETUP_POINTER(Live_IsUserSignedInToDemonware), "E8 ? ? ? ? 84 C0 74 ? 4C 8D 43 ? 8B D7", SETUP_MOD(add(1).rip()));
 	}
 
+	batch.add(SETUP_POINTER(lua_pushboolean), "E8 ? ? ? ? EB ? 85 D2 78", SETUP_MOD(add(1).rip()));
+
+	batch.add(SETUP_POINTER(luaL_openlib), "48 89 5C 24 ? 55 56 41 56 48 83 EC ? 48 8B 41");
+
 	if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP, iw8_version::v1_30_0_8403677)) {
 		batch.add(SETUP_POINTER(R_EndFrame), "48 8B 15 ? ? ? ? 45 33 D2 4C 8B 0D");
 	}
@@ -82,7 +88,7 @@ void game::init() {
 		batch.add(SETUP_POINTER(SEH_StringEd_GetString), "E8 ? ? ? ? 48 8B D0 80 FB", SETUP_MOD(add(1).rip()));
 	}
 	else if (identification::game::is(iw8_version::v1_46_0_10750827)) {
-		// todo: find SEH_StringEd_GetString
+		// it got inlined on 1.46 lol, localized_strings uses DB_FindXAssetHeader in the abscense of SEH_StringEd_GetString
 	}
 
 	if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP)) {
@@ -110,7 +116,7 @@ void game::init() {
 	batch.add(SETUP_POINTER(s_luaInFrontend), "0F B6 05 ? ? ? ? 75", SETUP_MOD(add(3).rip()));
 
 	if (identification::game::is(iw8_version::v1_46_0_10750827)) {
-		// todo: find s_presenceData
+		// it doesn't exist anymore?
 	}
 	else {
 		batch.add(SETUP_POINTER(s_presenceData), "48 8D 05 ? ? ? ? 4C 8D 05 ? ? ? ? 48 39 08 74 ? FF C2 48 05", SETUP_MOD(add(3).rip()));

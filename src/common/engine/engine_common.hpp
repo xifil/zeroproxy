@@ -58,7 +58,6 @@ namespace iw8 {
 	using KeyValuePairs = void;
 	using LaserDef = void;
 	using LeaderboardDef = void;
-	using LocalizeEntry = void;
 	using LocDmgTable = void;
 	using LuaFile = void;
 	using MapEdgeList = void;

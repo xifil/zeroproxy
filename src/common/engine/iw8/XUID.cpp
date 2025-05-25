@@ -77,9 +77,16 @@ namespace iw8 {
 	}
 
 	XUID* XUID::random_xuid() {
-		static auto I_irand = memory::sig_scan<I_irandT*>({}, "69 05 ? ? ? ? ? ? ? ? 2B D1 48 63 D2").get();
-		static auto Sys_Microseconds = memory::sig_scan<Sys_MicrosecondsT*>({}, "83 3D ? ? ? ? ? 49 B8 ? ? ? ? ? ? ? ? F2 0F 10 15").get();
+		static utils::nt::library game{};
+
 		static auto I_irand_res = memory::sig_scan(game, "69 05 ? ? ? ? ? ? ? ? 2B D1 48 63 D2");
+		static auto I_irand = I_irand_res.as<I_irandT*>();
+		static auto holdrand = I_irand_res.add(2).rip().as<std::uint32_t*>();
+
+		static auto Sys_Microseconds = memory::sig_scan<Sys_MicrosecondsT*>(game, "83 3D ? ? ? ? ? 49 B8 ? ? ? ? ? ? ? ? F2 0F 10 15").get();
+		if (Sys_Microseconds == nullptr) {
+			Sys_Microseconds = memory::sig_scan<Sys_MicrosecondsT*>(game, "E8 ? ? ? ? 48 2B C3 48 8B C8").add(1).rip().get();
+		}
 
 		std::uint32_t* rand_seed = holdrand;
 		std::uint32_t backup_rand_seed = *rand_seed;
