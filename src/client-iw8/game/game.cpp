@@ -76,9 +76,32 @@ void game::init() {
 		batch.add(SETUP_POINTER(Live_IsUserSignedInToDemonware), "E8 ? ? ? ? 84 C0 74 ? 4C 8D 43 ? 8B D7", SETUP_MOD(add(1).rip()));
 	}
 
+	batch.add(SETUP_POINTER(lua_getfield), "48 89 5C 24 ? 57 48 83 EC ? 4D 8B D0 48 8B D9 E8 ? ? ? ? 48 8B F8 49 C7 C0 ? ? ? ? 90 49 FF C0 43 80 3C 02"
+		" ? 75 ? 49 8B D2 48 8B CB E8 ? ? ? ? 48 B9 ? ? ? ? ? ? ? ? 4C 8D 44 24 ? 48 0B C1 48 8B D7 48 8B CB 48 89 44 24 ? E8 ? ? ? ? 48 85 C0");
+
 	batch.add(SETUP_POINTER(lua_pushboolean), "E8 ? ? ? ? EB ? 85 D2 78", SETUP_MOD(add(1).rip()));
 
+	batch.add(SETUP_POINTER(lua_pushstring), "48 89 5C 24 ? 57 48 83 EC ? 48 8B FA 48 8B D9 48 85 D2 75 ? 48 8B 41");
+
+	if (identification::game::is(iw8_version::v1_46_0_10750827)) {
+		batch.add(SETUP_POINTER(lua_remove), "4C 8B C1 85 D2 7E ? 48 8B 41 ? 48 8B 49");
+	}
+	else {
+		batch.add(SETUP_POINTER(lua_remove), "4C 8B C1 85 D2 7E ? 8D 42 ? 48 63 D0 48 8B 41 ? 48 8B 49");
+	}
+
 	batch.add(SETUP_POINTER(luaL_openlib), "48 89 5C 24 ? 55 56 41 56 48 83 EC ? 48 8B 41");
+
+	if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP)) {
+		batch.add(SETUP_POINTER(LuaShared_PCall), "E8 ? ? ? ? 8B E8 F7 D6", SETUP_MOD(add(1).rip()));
+	}
+	else if (identification::game::is(iw8_version::v1_30_0_8403677, iw8_version::v1_38_3_9489393, iw8_version::v1_42_1_10125479, iw8_version::v1_44_0_10435696,
+		iw8_version::v1_46_0_10750827))
+	{
+		batch.add(SETUP_POINTER(LuaShared_PCall), "E8 ? ? ? ? 8B F8 85 C0 74 ? 4C 8D 44 24", SETUP_MOD(add(1).rip()));
+	}
+
+	batch.add(SETUP_POINTER(LUI_OpenMenu), "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 41 8B F1 41 8B D8");
 
 	if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP, iw8_version::v1_30_0_8403677)) {
 		batch.add(SETUP_POINTER(R_EndFrame), "48 8B 15 ? ? ? ? 45 33 D2 4C 8B 0D");
@@ -118,6 +141,16 @@ void game::init() {
 
 	if (identification::game::is(iw8_version::v1_42_1_10125479, iw8_version::v1_44_0_10435696)) {
 		batch.add(SETUP_POINTER(unk_IsUserSignedInToBNet), "40 53 48 83 EC ? 48 8B DA E8 ? ? ? ? 83 38 ? 75 ? E8 ? ? ? ? 84 C0");
+	}
+
+	if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP)) {
+		batch.add(SETUP_POINTER(LUI_luaVM), "4C 8B 05 ? ? ? ? 48 8D 0D ? ? ? ? 48 8B D0 E8 ? ? ? ? BA ? ? ? ? 48 8B CE E8 ? ? ? ? 4D 8D 7F",
+			SETUP_MOD(add(3).rip()));
+	}
+	else if (identification::game::is(iw8_version::v1_30_0_8403677, iw8_version::v1_38_3_9489393, iw8_version::v1_42_1_10125479, iw8_version::v1_44_0_10435696,
+		iw8_version::v1_46_0_10750827))
+	{
+		batch.add(SETUP_POINTER(LUI_luaVM), "48 8B 05 ? ? ? ? 45 33 C0 44 8B 4C 24 ? 48 89 44 24 ? 48 8B 5C 24", SETUP_MOD(add(3).rip()));
 	}
 
 	batch.add(SETUP_POINTER(s_isContentEnumerationFinished), "80 3D ? ? ? ? ? 74 ? 48 89 7C 24", SETUP_MOD(add(2).rip().add(1)));
