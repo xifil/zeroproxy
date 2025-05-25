@@ -61,7 +61,7 @@ namespace sce_pad {
 
 		void c_scr_cmd_set_all_controllers_lightbar_color_stub(std::uint32_t control) {
 			set_all_controllers_index = 0;
-			c_scr_cmd_set_all_controllers_lightbar_color_hook.invoke<void>(control);
+			return c_scr_cmd_set_all_controllers_lightbar_color_hook.invoke<void>(control);
 		}
 
 		void g_pad_reset_lightbar_color_stub() {
@@ -89,7 +89,7 @@ namespace sce_pad {
 				return;
 			}
 
-			sce_pad_reset_light_bar(sce_pad_handle);
+			return (void)sce_pad_reset_light_bar(sce_pad_handle);
 		}
 
 		void g_pad_set_lightbar_color_stub(int controller_index_in, t7s::vec3_t* color) {
@@ -118,7 +118,7 @@ namespace sce_pad {
 			}
 
 			sce_pad::sce_pad_color sce_color(color->x, color->y, color->z);
-			sce_pad_set_light_bar(sce_pad_handle, sce_color.get_this());
+			return (void)sce_pad_set_light_bar(sce_pad_handle, sce_color.get_this());
 		}
 
 		const char* key_key_num_to_string_stub(int local_client_num, int key_num, bool translate) {

@@ -19,7 +19,7 @@ namespace patches {
 			if ("error_popmenu_store_mismatch_user"s == menu_name) {
 				return;
 			}
-			lui_open_menu_hook.invoke<void>(local_client_num, menu_name, is_popup, is_modal, is_exclusive);
+			return lui_open_menu_hook.invoke<void>(local_client_num, menu_name, is_popup, is_modal, is_exclusive);
 		}
 
 		const char* seh_stringed_get_string_stub(const char* key) {

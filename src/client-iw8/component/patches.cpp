@@ -115,7 +115,7 @@ namespace patches {
 				return;
 			}
 
-			sv_update_user_info_f_hook.invoke<void>(cl);
+			return sv_update_user_info_f_hook.invoke<void>(cl);
 		}
 
 		bool unk_is_unsupported_gpu_stub() {
@@ -123,6 +123,7 @@ namespace patches {
 		}
 
 		void mystery_function_stub() {
+			return ;
 			// do nothing
 		}
 
@@ -143,7 +144,7 @@ namespace patches {
 					thread_name_info_in->thread_id_, thread_name_info_in->name_ ? thread_name_info_in->name_ : "<null>");
 			}
 
-			raise_exception_hook.invoke<void>(exception_code_in, exception_flags, number_of_arguments, arguments);
+			return raise_exception_hook.invoke<void>(exception_code_in, exception_flags, number_of_arguments, arguments);
 		}
 
 		int lua_return_true_stub(iw8::lua_State* lua_vm) {

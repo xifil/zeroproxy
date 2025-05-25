@@ -40,7 +40,7 @@ namespace patches {
 			va_end(args);
 
 			LOG("Component/Patches", DEBUG, "[DW] [{}{}] [{}/{}]: {}", category, type, source, source_function, buffer);
-			bd_log_message_hook.invoke<void>(type, category, source, source_file, source_function, a6, "%s", buffer);
+			return bd_log_message_hook.invoke<void>(type, category, source, source_file, source_function, a6, "%s", buffer);
 		}
 	}
 

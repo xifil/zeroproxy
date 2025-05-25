@@ -30,12 +30,12 @@ namespace lua_hook {
 				}
 			}
 
-			lua_l_open_lib_hook.invoke<void>(s, lib_name, l, n_up);
+			return lua_l_open_lib_hook.invoke<void>(s, lib_name, l, n_up);
 		}
 	}
 
 	void create(utils::hook::detour& detour, const std::string& name, void* target) {
-		queued_hooks.push_back({ detour, name, target });
+		return queued_hooks.push_back({ detour, name, target });
 	}
 
 	struct component final : generic_component {

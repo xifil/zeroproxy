@@ -10,7 +10,7 @@ namespace unpack_state {
 
 		void unk_init_sys_dvars_stub() {
 			unk_init_sys_dvars_hook.invoke<void>();
-			component_loader::post_unpack();
+			return component_loader::post_unpack();
 		}
 	}
 

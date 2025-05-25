@@ -32,7 +32,7 @@ namespace patches {
 			va_end(args);
 
 			LOG("Component/Patches", DEBUG, "[DW] [{}{}] [{}/{}]: {}", category, type, source, source_function, buffer);
-			bd_log_message_hook.invoke<void>(type, category, source, source_file, source_function, a6, "%s", buffer);
+			return bd_log_message_hook.invoke<void>(type, category, source, source_file, source_function, a6, "%s", buffer);
 		}
 
 		void com_print_message_stub(int channel, int console_type, const char* message, int unk) {
@@ -50,7 +50,7 @@ namespace patches {
 			message_str = utils::string::replace(message_str, "^7", ANSI_FG_RGB(255, 255, 255));
 
 			LOG("Component/Patches", DEBUG, "[game log@{}/{}]: {}", channel, console_type, message_str);
-			com_print_message_hook.invoke<void>(channel, console_type, message, unk);
+			return com_print_message_hook.invoke<void>(channel, console_type, message, unk);
 		}
 
 		HWND create_window_ex_a_stub(DWORD dw_ex_style, LPCSTR lp_class_name, LPCSTR lp_window_name, DWORD dw_style, int x, int y, int n_width, int n_height,
@@ -100,7 +100,7 @@ namespace patches {
 			utils::hook::copy(non_recursive_lock, mutex_patch, ARRAYSIZE(mutex_patch));
 			utils::hook::call(non_recursive_lock + ARRAYSIZE(mutex_patch), _mtx_init_in_situ);
 
-			scheduler::loop([] {
+			return scheduler::loop([] {
 				static int affinity_state = 0;
 				static ULONG_PTR process_affinity = 0;
 				static ULONG_PTR system_affinity = 0;

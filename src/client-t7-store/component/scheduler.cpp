@@ -21,13 +21,13 @@ namespace scheduler {
 		class task_pipeline {
 		public:
 			void add(task&& task) {
-				new_callbacks_.access([&task](task_list& tasks) {
+				return new_callbacks_.access([&task](task_list& tasks) {
 					tasks.emplace_back(std::move(task));
 				});
 			}
 
 			void execute() {
-				callbacks_.access([&](task_list& tasks) {
+				return callbacks_.access([&](task_list& tasks) {
 					this->merge_callbacks();
 
 					for (auto i = tasks.begin(); i != tasks.end();) {
@@ -57,8 +57,8 @@ namespace scheduler {
 			utils::concurrency::container<task_list, std::recursive_mutex> callbacks_;
 
 			void merge_callbacks() {
-				callbacks_.access([&](task_list& tasks) {
-					new_callbacks_.access([&](task_list& new_tasks) {
+				return callbacks_.access([&](task_list& tasks) {
+					return new_callbacks_.access([&](task_list& new_tasks) {
 						tasks.insert(tasks.end(), std::move_iterator(new_tasks.begin()), std::move_iterator(new_tasks.end()));
 						new_tasks = {};
 					});
@@ -76,14 +76,14 @@ namespace scheduler {
 
 		void com_frame_try_block_function_stub() {
 			com_frame_try_block_function_hook.invoke<void>();
-			execute(pipeline::main);
+			return execute(pipeline::main);
 		}
 
 		void snd_end_frame_stub() {
 			if (*game::com_quitInProgress == 0) {
 				execute(pipeline::renderer);
 			}
-			snd_end_frame_hook.invoke<void>();
+			return snd_end_frame_hook.invoke<void>();
 		}
 
 		std::int64_t unk_wait_for_objects_stub() {
@@ -94,7 +94,7 @@ namespace scheduler {
 
 	void execute(const pipeline type) {
 		assert(ENUM_UNDER(type) >= 0 && ENUM_UNDER(type) < ENUM_UNDER(pipeline::count));
-		pipelines[ENUM_UNDER(type)].execute();
+		return pipelines[ENUM_UNDER(type)].execute();
 	}
 
 	void schedule(const std::function<bool()>& callback, const pipeline type, const std::chrono::milliseconds delay) {
@@ -105,18 +105,18 @@ namespace scheduler {
 		task.interval = delay;
 		task.last_call = std::chrono::high_resolution_clock::now();
 
-		pipelines[ENUM_UNDER(type)].add(std::move(task));
+		return pipelines[ENUM_UNDER(type)].add(std::move(task));
 	}
 
 	void loop(const std::function<void()>& callback, const pipeline type, const std::chrono::milliseconds delay) {
-		schedule([callback]() {
+		return schedule([callback]() {
 			callback();
 			return cond_continue;
 		}, type, delay);
 	}
 
 	void once(const std::function<void()>& callback, const pipeline type, const std::chrono::milliseconds delay) {
-		schedule([callback]() {
+		return schedule([callback]() {
 			callback();
 			return cond_end;
 		}, type, delay);

@@ -113,7 +113,7 @@ namespace steam_proxy {
 		}
 
 		void clean_up_on_error() {
-			scheduler::schedule([] {
+			return scheduler::schedule([] {
 				if (perform_cleanup_if_needed()) {
 					return scheduler::cond_end;
 				}
@@ -217,23 +217,23 @@ namespace steam_proxy {
 				LOG("Component/SteamProxy", WARN, "Failed to initialize Steam presence.");
 			}
 			evaluate_ownership_state(res);
-			clean_up_on_error();
+			return clean_up_on_error();
 		}
 
 		void pre_destroy() override {
 			if (steam_client) {
 				if (global_user) {
-					steam_client->ReleaseUser(steam_pipe, global_user);
+					return steam_client->ReleaseUser(steam_pipe, global_user);
 				}
 
-				steam_client->BReleaseSteamPipe(steam_pipe);
+				return (void)steam_client->BReleaseSteamPipe(steam_pipe);
 			}
 			else if (steam_client_module && steam_pipe) {
 				if (global_user) {
-					steam_client_module.invoke<void>("Steam_ReleaseUser", steam_pipe, global_user);
+					return steam_client_module.invoke<void>("Steam_ReleaseUser", steam_pipe, global_user);
 				}
 
-				(void)steam_client_module.invoke<bool>("Steam_BReleaseSteamPipe", steam_pipe);
+				return (void)steam_client_module.invoke<bool>("Steam_BReleaseSteamPipe", steam_pipe);
 			}
 		}
 
