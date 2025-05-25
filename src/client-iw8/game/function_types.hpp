@@ -15,6 +15,7 @@
 #include <engine/iw8/XZoneMemory.hpp>
 #include <engine/iw8/enums/DB_FastFileFailureMode.hpp>
 #include <engine/iw8/enums/DWOnlineStatus.hpp>
+#include <engine/iw8/enums/LocalClientNum_t.hpp>
 #include <engine/iw8/unknown/bnet_class.hpp>
 
 namespace functions {
@@ -35,8 +36,13 @@ namespace functions {
 	using GamerProfile_SetDataByNameT = void(int controller_index, const char* setting_name, float setting_value);
 	using Info_ValueForKeyT = const char*(const char* s, const char* key);
 	using Live_IsUserSignedInToDemonwareT = bool(int controller_index);
+	using lua_getfieldT = void(iw8::lua_State* s, int idx, const char* k);
 	using lua_pushbooleanT = void(iw8::lua_State* s, int b);
+	using lua_pushstringT = void(iw8::lua_State* s, const char* str);
+	using lua_removeT = void(iw8::lua_State* s, int idx);
 	using luaL_openlibT = void(iw8::lua_State* s, const char* lib_name, const iw8::luaL_Reg* l, std::uint32_t n_up);
+	using LuaShared_PCallT = bool(iw8::lua_State* lua_vm, int n_args, int n_results);
+	using LUI_OpenMenuT = void(iw8::LocalClientNum_t local_client_num, const char* menu_name, int is_popup, int is_modal, int is_exclusive);
 	using R_EndFrameT = void();
 	using SEH_StringEd_GetStringT = const char*(const char* psz_reference);
 	using SV_Cmd_ArgvT = const char*(int arg_index);
