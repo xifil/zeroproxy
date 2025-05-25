@@ -27,7 +27,7 @@ Call of Duty®: Black Ops III (2015)
 <a href="https://apps.microsoft.com/detail/9P5QVB59FXRR"><img height="15px" src="assets/github/microsoft.svg" /></a>
 <a href="https://steampowered.com/app/311210"><img height="15px" src="assets/github/steam.svg" />\*\*</a><br/>
 Call of Duty®: WWII (2017)\*
-<a href="https://apps.microsoft.com/detail/"><img height="15px" src="assets/github/microsoft.svg" /></a><br/>
+<a href="https://apps.microsoft.com/detail/9P3QS4LX8BM9"><img height="15px" src="assets/github/microsoft.svg" /></a><br/>
 Call of Duty®: Modern Warfare® (2019)
 <a href="https://eu.shop.battle.net/en-us/product/call-of-duty-modern-warfare"><img height="15px" src="assets/github/battle_net.svg" /></a><br/>
 Call of Duty®: Black Ops Cold War (2020)
