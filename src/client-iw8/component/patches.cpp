@@ -23,6 +23,7 @@ namespace patches {
 		utils::hook::detour lui_cod_lua_call_is_premium_player_hook;
 		utils::hook::detour lui_cod_lua_call_is_premium_player_ready_hook;
 		utils::hook::detour lui_lua_call_lui_global_package_debug_print_hook;
+		utils::hook::detour lui_report_error_hook;
 		utils::hook::detour sub_142adf070_hook;
 		utils::hook::detour sv_update_user_info_f_hook;
 		utils::hook::detour unk_is_unsupported_gpu_hook;
@@ -159,6 +160,14 @@ namespace patches {
 			LOG("Component/Patches", DEBUG, "LuaGlobal:DebugPrint: {}", str && str_sz ? std::string(str, str_sz) : "<null>");
 			return lui_lua_call_lui_global_package_debug_print_hook.invoke<int>(lua_vm);
 		}
+
+		void lui_report_error_stub(const char* error, iw8::lua_State* lua_vm) {
+			std::size_t str_sz = 0;
+			const char* str = game::lua_tolstring(lua_vm, 1, &str_sz);
+
+			LOG("Component/Patches", DEBUG, "LUI_ReportError: {} -> {}", error ? error : "<null>", str && str_sz ? std::string(str, str_sz) : "<null>");
+			lui_report_error_hook.invoke<void>(error, lua_vm);
+		}
 	}
 
 	struct component final : generic_component {
@@ -191,6 +200,7 @@ namespace patches {
 
 		void post_unpack() override {
 			dvar_register_bool_hook.create(game::Dvar_RegisterBool, dvar_register_bool_stub);
+			lui_report_error_hook.create(game::LUI_ReportError, lui_report_error_stub);
 			sv_update_user_info_f_hook.create(game::SV_UpdateUserinfo_f, sv_update_user_info_f_stub);
 
 			if (game::unk_IsUnsupportedGPU) {

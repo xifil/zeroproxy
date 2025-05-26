@@ -114,6 +114,7 @@ namespace utils::string {
 	std::wstring convert(const std::string& str);
 
 	std::string replace(std::string str, const std::string& from, const std::string& to);
+	std::wstring replace(std::wstring str, const std::wstring& from, const std::wstring& to);
 
 	std::string join(std::vector<std::string> strings, std::string joiner);
 

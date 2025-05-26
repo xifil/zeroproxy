@@ -186,6 +186,20 @@ namespace utils::string {
 		return str;
 	}
 
+	std::wstring replace(std::wstring str, const std::wstring& from, const std::wstring& to) {
+		if (from.empty()) {
+			return str;
+		}
+
+		std::size_t start_pos = 0;
+		while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+			str.replace(start_pos, from.length(), to);
+			start_pos += to.length();
+		}
+
+		return str;
+	}
+
 	std::string join(std::vector<std::string> strings, std::string joiner) {
 		std::string joined;
 		for (std::size_t x = 0; x < strings.size(); x++) {

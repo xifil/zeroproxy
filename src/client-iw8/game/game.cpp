@@ -105,6 +105,8 @@ void game::init() {
 
 	batch.add(SETUP_POINTER(LUI_OpenMenu), "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 41 8B F1 41 8B D8");
 
+	batch.add(SETUP_POINTER(LUI_ReportError), "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 48 8B FA 45 33 C0");
+
 	if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP, iw8_version::v1_30_0_8403677)) {
 		batch.add(SETUP_POINTER(R_EndFrame), "48 8B 15 ? ? ? ? 45 33 D2 4C 8B 0D");
 	}
@@ -184,7 +186,9 @@ void game::init() {
 			SETUP_MOD(add(3).rip()));
 	}
 
-	batch.add(SETUP_POINTER(unk_EncryptionKey), "48 33 15 ? ? ? ? E8 ? ? ? ? 48 8B 57", SETUP_MOD(add(3).rip()));
+	if (!identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP)) {
+		batch.add(SETUP_POINTER(unk_EncryptionKey), "48 33 15 ? ? ? ? E8 ? ? ? ? 48 8B 57", SETUP_MOD(add(3).rip()));
+	}
 
 	if (identification::game::is(iw8_version::v1_46_0_10750827)) {
 		batch.add(SETUP_POINTER(unk_SignInState), "E8 ? ? ? ? 85 C0 7F ? 8B CB", SETUP_MOD(add(1).rip().add(5).rip().add(14).rip()));

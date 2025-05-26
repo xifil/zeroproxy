@@ -30,6 +30,7 @@ namespace game {
 	inline functions::luaL_openlibT* luaL_openlib{};
 	inline functions::LuaShared_PCallT* LuaShared_PCall{};
 	inline functions::LUI_OpenMenuT* LUI_OpenMenu{};
+	inline functions::LUI_ReportErrorT* LUI_ReportError{};
 	inline functions::R_EndFrameT* R_EndFrame{};
 	inline functions::SEH_StringEd_GetStringT* SEH_StringEd_GetString{};
 	inline functions::SV_Cmd_ArgvT* SV_Cmd_Argv{};
