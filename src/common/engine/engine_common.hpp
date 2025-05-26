@@ -58,6 +58,7 @@ namespace iw8 {
 	using LeaderboardDef = void;
 	using LocDmgTable = void;
 	using LuaFile = void;
+	using LUIGlobalPackage = void;
 	using MapEdgeList = void;
 	using MapEnts = void;
 	using MayhemData = void;

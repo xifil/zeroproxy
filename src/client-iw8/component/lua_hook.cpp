@@ -35,12 +35,26 @@ namespace lua_hook {
 	}
 
 	void create(utils::hook::detour& detour, const std::string& name, void* target) {
-		return queued_hooks.push_back({ detour, name, target });
+		queued_hooks.push_back({ detour, name, target });
 	}
 
 	struct component final : generic_component {
 		void post_unpack() override {
 			lua_l_open_lib_hook.create(game::luaL_openlib, lua_l_open_lib_stub);
+
+			iw8::LUIMethod<iw8::LUIGlobalPackage>* cmd = *game::LUIMethod_LUIGlobalPackage_list;
+			while (cmd) {
+				auto func_name = cmd->get_name(game::unk_EncryptionKey);
+				if (func_name) {
+					for (auto& [detour, name, target] : queued_hooks) {
+						if (name == func_name) {
+							detour.create(PTR_AS(std::uintptr_t, cmd->func_), target);
+							break;
+						}
+					}
+				}
+				cmd = cmd->next_;
+			}
 		}
 	};
 }

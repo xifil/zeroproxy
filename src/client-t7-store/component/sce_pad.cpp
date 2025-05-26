@@ -89,7 +89,7 @@ namespace sce_pad {
 				return;
 			}
 
-			return (void)sce_pad_reset_light_bar(sce_pad_handle);
+			sce_pad_reset_light_bar(sce_pad_handle);
 		}
 
 		void g_pad_set_lightbar_color_stub(int controller_index_in, t7s::vec3_t* color) {
@@ -118,7 +118,7 @@ namespace sce_pad {
 			}
 
 			sce_pad::sce_pad_color sce_color(color->x, color->y, color->z);
-			return (void)sce_pad_set_light_bar(sce_pad_handle, sce_color.get_this());
+			sce_pad_set_light_bar(sce_pad_handle, sce_color.get_this());
 		}
 
 		const char* key_key_num_to_string_stub(int local_client_num, int key_num, bool translate) {

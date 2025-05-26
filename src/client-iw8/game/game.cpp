@@ -90,6 +90,8 @@ void game::init() {
 		batch.add(SETUP_POINTER(lua_remove), "4C 8B C1 85 D2 7E ? 8D 42 ? 48 63 D0 48 8B 41 ? 48 8B 49");
 	}
 
+	batch.add(SETUP_POINTER(lua_tolstring), "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 49 8B F8 8B DA 48 8B F1");
+
 	batch.add(SETUP_POINTER(luaL_openlib), "48 89 5C 24 ? 55 56 41 56 48 83 EC ? 48 8B 41");
 
 	if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP)) {
@@ -153,6 +155,13 @@ void game::init() {
 		batch.add(SETUP_POINTER(LUI_luaVM), "48 8B 05 ? ? ? ? 45 33 C0 44 8B 4C 24 ? 48 89 44 24 ? 48 8B 5C 24", SETUP_MOD(add(3).rip()));
 	}
 
+	if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY)) {
+		batch.add(SETUP_POINTER(LUIMethod_LUIGlobalPackage_list), "48 8B 1D ? ? ? ? 48 8B 3D ? ? ? ? 48 85 DB", SETUP_MOD(add(3).rip()));
+	}
+	else {
+		batch.add(SETUP_POINTER(LUIMethod_LUIGlobalPackage_list), "48 8B 1D ? ? ? ? 48 8B 3D ? ? ? ? 89 05", SETUP_MOD(add(3).rip()));
+	}
+
 	batch.add(SETUP_POINTER(s_isContentEnumerationFinished), "80 3D ? ? ? ? ? 74 ? 48 89 7C 24", SETUP_MOD(add(2).rip().add(1)));
 	
 	batch.add(SETUP_POINTER(s_luaInFrontend), "0F B6 05 ? ? ? ? 75", SETUP_MOD(add(3).rip()));
@@ -174,6 +183,8 @@ void game::init() {
 		batch.add(SETUP_POINTER(sharedUiInfo_assets), "48 89 05 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? B2 ? 48 89 05 ? ? ? ? 48 8D 0D ? ? ? ? E8 ? ? ? ? 80 3D",
 			SETUP_MOD(add(3).rip()));
 	}
+
+	batch.add(SETUP_POINTER(unk_EncryptionKey), "48 33 15 ? ? ? ? E8 ? ? ? ? 48 8B 57", SETUP_MOD(add(3).rip()));
 
 	if (identification::game::is(iw8_version::v1_46_0_10750827)) {
 		batch.add(SETUP_POINTER(unk_SignInState), "E8 ? ? ? ? 85 C0 7F ? 8B CB", SETUP_MOD(add(1).rip().add(5).rip().add(14).rip()));

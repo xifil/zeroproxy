@@ -26,6 +26,7 @@ namespace game {
 	inline functions::lua_pushbooleanT* lua_pushboolean{};
 	inline functions::lua_pushstringT* lua_pushstring{};
 	inline functions::lua_removeT* lua_remove{};
+	inline functions::lua_tolstringT* lua_tolstring{};
 	inline functions::luaL_openlibT* luaL_openlib{};
 	inline functions::LuaShared_PCallT* LuaShared_PCall{};
 	inline functions::LUI_OpenMenuT* LUI_OpenMenu{};
@@ -38,10 +39,12 @@ namespace game {
 
 	// Fields
 	inline iw8::lua_State** LUI_luaVM{};
+	inline iw8::LUIMethod<iw8::LUIGlobalPackage>** LUIMethod_LUIGlobalPackage_list{};
 	inline bool* s_isContentEnumerationFinished{};
 	inline bool* s_luaInFrontend{};
 	inline iw8::LocalUserPresenceData(*s_presenceData)[8]{};
 	inline iw8::CachedAssets_t* sharedUiInfo_assets{};
+	inline std::uint64_t* unk_EncryptionKey{};
 	inline int* unk_SignInState{};
 	inline std::uint64_t* unk_XUIDCheck1{};
 	inline std::uint64_t* unk_XUIDCheck2{};
@@ -52,12 +55,13 @@ namespace game {
 		lua_getfield(lua_vm, -1, "DAGFFDGFII");
 		lua_remove(lua_vm, -2);
 		lua_pushstring(lua_vm, str);
-		return (void)LuaShared_PCall(lua_vm, 1, 1);
+		LuaShared_PCall(lua_vm, 1, 1);
 	}
 
 	inline void Cbuf_AddText(const char* cmd) {
-		if (!LUI_luaVM || !*LUI_luaVM)
+		if (!LUI_luaVM || !*LUI_luaVM) {
 			return;
+		}
 
 		return LUI_CoD_LuaCall_ExecNow(*LUI_luaVM, cmd);
 	}
@@ -65,10 +69,11 @@ namespace game {
 	inline void R_AddCmdDrawText(const char* text, int max_chars, iw8::GfxFont* font, int font_height, float x, float y, float x_scale, float y_scale,
 		float rotation, const iw8::vec4_t* color)
 	{
-		if (AddBaseDrawTextCmd == nullptr)
+		if (AddBaseDrawTextCmd == nullptr) {
 			return;
+		}
 
-		return (void)AddBaseDrawTextCmd(text, max_chars, font, nullptr, font_height, x, y, x_scale, y_scale, '\0', rotation, color, -1, '\0', nullptr, false, 0, 0,
-			nullptr, false);
+		AddBaseDrawTextCmd(text, max_chars, font, nullptr, font_height, x, y, x_scale, y_scale, '\0', rotation, color, -1, '\0', nullptr, false, 0, 0, nullptr,
+			false);
 	}
 }

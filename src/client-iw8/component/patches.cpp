@@ -22,6 +22,7 @@ namespace patches {
 		utils::hook::detour lui_cod_lua_call_is_game_mode_available_hook;
 		utils::hook::detour lui_cod_lua_call_is_premium_player_hook;
 		utils::hook::detour lui_cod_lua_call_is_premium_player_ready_hook;
+		utils::hook::detour lui_lua_call_lui_global_package_debug_print_hook;
 		utils::hook::detour sub_142adf070_hook;
 		utils::hook::detour sv_update_user_info_f_hook;
 		utils::hook::detour unk_is_unsupported_gpu_hook;
@@ -151,6 +152,13 @@ namespace patches {
 			game::lua_pushboolean(lua_vm, TRUE);
 			return 1;
 		}
+
+		int lui_lua_call_lui_global_package_debug_print_stub(iw8::lua_State* lua_vm) {
+			std::size_t str_sz = 0;
+			const char* str = game::lua_tolstring(lua_vm, 1, &str_sz);
+			LOG("Component/Patches", DEBUG, "LuaGlobal:DebugPrint: {}", str && str_sz ? std::string(str, str_sz) : "<null>");
+			return lui_lua_call_lui_global_package_debug_print_hook.invoke<int>(lua_vm);
+		}
 	}
 
 	struct component final : generic_component {
@@ -178,6 +186,7 @@ namespace patches {
 			lua_hook::create(lui_cod_lua_call_is_game_mode_available_hook, "Engine.DBEGJIECGB", lua_return_true_stub);
 			lua_hook::create(lui_cod_lua_call_is_premium_player_hook, "Engine.CFHBIHABCB", lua_return_true_stub);
 			lua_hook::create(lui_cod_lua_call_is_premium_player_ready_hook, "Engine.ECFHDAEIDA", lua_return_true_stub);
+			lua_hook::create(lui_lua_call_lui_global_package_debug_print_hook, "DebugPrint", lui_lua_call_lui_global_package_debug_print_stub);
 		}
 
 		void post_unpack() override {

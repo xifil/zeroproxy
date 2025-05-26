@@ -226,14 +226,16 @@ namespace steam_proxy {
 					return steam_client->ReleaseUser(steam_pipe, global_user);
 				}
 
-				return (void)steam_client->BReleaseSteamPipe(steam_pipe);
+				steam_client->BReleaseSteamPipe(steam_pipe);
+				return;
 			}
-			else if (steam_client_module && steam_pipe) {
+			
+			if (steam_client_module && steam_pipe) {
 				if (global_user) {
 					return steam_client_module.invoke<void>("Steam_ReleaseUser", steam_pipe, global_user);
 				}
 
-				return (void)steam_client_module.invoke<bool>("Steam_BReleaseSteamPipe", steam_pipe);
+				steam_client_module.invoke<bool>("Steam_BReleaseSteamPipe", steam_pipe);
 			}
 		}
 
