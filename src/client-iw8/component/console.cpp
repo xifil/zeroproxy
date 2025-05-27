@@ -32,18 +32,20 @@ namespace console {
 			}
 
 			if (input_cmd == "unlockall") {
-				return game::Cbuf_AddText("seta unlockAllItems 1");
+				game::Cbuf_AddText("seta unlockAllItems 1");
 			}
-
-			if (input_cmd == "openmenu" && input_has_n_params(input_parts, 1)) {
-				return scheduler::once([=] {
-					auto menu_name = input_params.at(0);
-					game::LUI_OpenMenu(iw8::LocalClientNum_t::LOCAL_CLIENT_0, menu_name.c_str(), FALSE, FALSE, FALSE);
-					LOG("Component/Console", DEBUG, "Opened menu: {}", menu_name);
-				}, scheduler::pipeline::renderer);
+			else if (input_cmd == "openmenu") {
+				if (input_has_n_params(input_parts, 1)) {
+					scheduler::once([=] {
+						auto menu_name = input_params.at(0);
+						game::LUI_OpenMenu(iw8::LocalClientNum_t::LOCAL_CLIENT_0, menu_name.c_str(), FALSE, FALSE, FALSE);
+						LOG("Component/Console", DEBUG, "Opened menu: {}", menu_name);
+					}, scheduler::pipeline::renderer);
+				}
 			}
-
-			return game::Cbuf_AddText(input.c_str());
+			else {
+				game::Cbuf_AddText(input.c_str());
+			}
 		}
 	}
 

@@ -13,8 +13,17 @@ namespace lua_hook {
 
 		std::vector<std::tuple<utils::hook::detour&, std::string, void*>> queued_hooks{};
 
-		void load_custom_lua(iw8::lua_State* s) {
-			std::string custom_code = R"(
+		void load_custom_lua(iw8::lua_State* s, const std::string& file) {
+			std::string custom_code = "";
+
+			if (file == "ui/widgets/mp/WarzoneOnboardingEndChoicePopup.lua") {
+				custom_code = R"(
+Fences_OfflineDataFetched_Original = Fences.BGCHCGICDB
+Fences.BGCHCGICDB = function(controller)
+	Fences_OfflineDataFetched_Original(controller)
+	return true -- funny
+end
+
 PlayerData_IO_Original = PlayerData.BFFBGAJGD
 PlayerData.BFFBGAJGD = function(controller, source)
 	if source ~= 0 then
@@ -35,16 +44,21 @@ end
 
 SPSharedUtils.GetMissionStateForLevel = function(level, controller)
 	return "complete"
-end)";
-			game::luaL_loadbuffer(s, custom_code.c_str(), custom_code.size(), custom_code.c_str());
+end
+
+DebugPrint("iw8-mod: Custom Lua loaded."))";
+			}
+
+			if (custom_code.size() > 0) {
+				LOG("Custom/LuaHook", DEBUG, "Injecting custom Lua code into file: {}", file);
+				game::luaL_loadbuffer(s, custom_code.c_str(), custom_code.size(), custom_code.c_str());
+			}
 		}
 
 		int lua_l_load_file_stub(iw8::lua_State* s, const char* file_name) {
 			auto res = lua_l_load_file_hook.invoke<int>(s, file_name);
 			if (file_name != nullptr) {
-				if ("ui/widgets/mp/WarzoneOnboardingEndChoicePopup.lua"s == file_name) {
-					load_custom_lua(s);
-				}
+				load_custom_lua(s, file_name);
 			}
 			return res;
 		}

@@ -62,7 +62,7 @@ namespace auth {
 			live_is_user_signed_in_to_demonware_hook.create(game::Live_IsUserSignedInToDemonware, live_is_user_signed_in_to_demonware_stub);
 
 			if (game::unk_IsUserSignedInToBNet) {
-				unk_is_user_signed_in_to_bnet_hook.create(game::unk_IsUserSignedInToBNet, unk_is_user_signed_in_to_bnet_stub);
+				//unk_is_user_signed_in_to_bnet_hook.create(game::unk_IsUserSignedInToBNet, unk_is_user_signed_in_to_bnet_stub);
 			}
 
 			localized_strings::override("MENU/STATUS", [](const localized_strings::original_localization& original) {
