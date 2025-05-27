@@ -27,6 +27,8 @@ namespace game {
 	inline functions::lua_pushstringT* lua_pushstring{};
 	inline functions::lua_removeT* lua_remove{};
 	inline functions::lua_tolstringT* lua_tolstring{};
+	inline functions::luaL_loadbufferT* luaL_loadbuffer{};
+	inline functions::luaL_loadfileT* luaL_loadfile{};
 	inline functions::luaL_openlibT* luaL_openlib{};
 	inline functions::LuaShared_PCallT* LuaShared_PCall{};
 	inline functions::LUI_OpenMenuT* LUI_OpenMenu{};

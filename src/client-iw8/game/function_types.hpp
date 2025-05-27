@@ -42,6 +42,8 @@ namespace functions {
 	using lua_pushstringT = void(iw8::lua_State* s, const char* str);
 	using lua_removeT = void(iw8::lua_State* s, int idx);
 	using lua_tolstringT = const char*(iw8::lua_State* s, int idx, std::size_t* len);
+	using luaL_loadbufferT = int(iw8::lua_State* s, const char* buf, std::size_t size, const char* name);
+	using luaL_loadfileT = int(iw8::lua_State* s, const char* file_name);
 	using luaL_openlibT = void(iw8::lua_State* s, const char* lib_name, const iw8::luaL_Reg* l, std::uint32_t n_up);
 	using LuaShared_PCallT = bool(iw8::lua_State* lua_vm, int n_args, int n_results);
 	using LUI_OpenMenuT = void(iw8::LocalClientNum_t local_client_num, const char* menu_name, int is_popup, int is_modal, int is_exclusive);

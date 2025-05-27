@@ -157,6 +157,7 @@ namespace patches {
 		int lui_lua_call_lui_global_package_debug_print_stub(iw8::lua_State* lua_vm) {
 			std::size_t str_sz = 0;
 			const char* str = game::lua_tolstring(lua_vm, 1, &str_sz);
+
 			LOG("Component/Patches", DEBUG, "LuaGlobal:DebugPrint: {}", str && str_sz ? std::string(str, str_sz) : "<null>");
 			return lui_lua_call_lui_global_package_debug_print_hook.invoke<int>(lua_vm);
 		}

@@ -92,6 +92,10 @@ void game::init() {
 
 	batch.add(SETUP_POINTER(lua_tolstring), "48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC ? 49 8B F8 8B DA 48 8B F1");
 
+	batch.add(SETUP_POINTER(luaL_loadbuffer), "4C 8B DC 53 57 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 84 24 ? ? ? ? 4D 85 C9");
+
+	batch.add(SETUP_POINTER(luaL_loadfile), "40 53 57 48 81 EC ? ? ? ? 48 8B 05 ? ? ? ? 48 33 C4 48 89 84 24 ? ? ? ? 48 8B 41");
+
 	batch.add(SETUP_POINTER(luaL_openlib), "48 89 5C 24 ? 55 56 41 56 48 83 EC ? 48 8B 41");
 
 	if (identification::game::is(iw8_version::v1_20_4_7623265_REPLAY, iw8_version::v1_20_4_7623265_SHIP)) {
